@@ -1,0 +1,92 @@
+.discoverSection {
+  text-align: center;
+  padding: 40px 20px 50px ;
+  background-color: #F9F4EC;
+}
+
+.placebody {
+  padding: 60px 100px;
+  background-color: #FEF9F5;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.slider {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.slideTrack {
+  display: flex;
+  animation: scroll 40s linear infinite;
+  width: calc(300px * 12);
+}
+
+.slider:hover .slideTrack {
+  animation-play-state: paused;
+}
+
+.discoverCard {
+  position: relative;
+  flex-shrink: 0;
+  width: 350px;
+  height: 220px;
+  margin-right: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  transition: transform 0.4s ease;
+}
+
+.discoverCard:hover .image {
+  transform: scale(1.08);
+}
+
+.label {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: 'Courier New', monospace;
+}
+
+@keyframes scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .discoverCard {
+    width: 250px;
+    height: 160px;
+  }
+  .slideTrack {
+    width: calc(250px * 12);
+  }
+}
+
+@media (max-width: 480px) {
+  .discoverCard {
+    width: 200px;
+    height: 130px;
+  }
+  .slideTrack {
+    width: calc(200px * 12);
+  }
+}

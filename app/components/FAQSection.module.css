@@ -1,0 +1,135 @@
+
+.faqSection {
+  background: #FEF9F5;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.faqHeader h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.faqHeader p {
+  font-size: 1rem;
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+.faqList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 1055px;
+  margin: 0 auto;
+}
+
+.faqCard {
+  background: #4B4B49;
+  color: #ffecec;
+  border-radius: 9px;
+  text-align: left;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+
+.faqCard:hover {
+  transform: translateY(-2px);
+}
+
+.open {
+  background: #4B4B49;
+}
+
+.faqTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+.faqTrigger:focus-visible {
+  box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.45);
+  border-radius: 8px;
+}
+
+.faqQuestion {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Plus/Minus icon using CSS bars */
+.faqIcon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 18px;
+  transition: transform 0.35s ease;
+}
+
+.faqIcon::before,
+.faqIcon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 2px;
+  background: #fff;
+  transform: translate(-50%, -50%);
+  transition: transform 0.35s ease, opacity 0.25s ease;
+}
+
+.faqIcon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.faqIcon.open {
+  transform: rotate(180deg);
+}
+
+.faqIcon.open::after {
+  transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  opacity: 0;
+}
+
+.faqAnswer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 25px;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.4s ease,
+    padding-top 0.3s ease,
+    padding-bottom 0.3s ease;
+  font-size: 0.95rem;
+  color: #f6dede;
+  line-height: 1.5;
+}
+
+.show {
+  max-height: 300px;
+  opacity: 1;
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+  .faqHeader h2 {
+    font-size: 2.4rem;
+  }
+  .faqHeader p {
+    font-size: 1.15rem;
+  }
+  .faqTrigger {
+    padding: 18px 24px 18px;
+  }
+  .faqQuestion {
+    font-size: 1.05rem;
+  }
+}

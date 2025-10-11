@@ -1,0 +1,82 @@
+.stepsSection {
+  width: 100%;
+  padding: 40px 100px; /* some breathing room */
+  background: #FEF9F5; /* optional background like your screenshot */
+  display: flex;
+  justify-content: center;
+}
+
+.contentWrapper {
+  max-width: 1300px;
+  width: 100%;
+  text-align: center;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 8px;
+}
+
+.subheading {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 24px;
+}
+
+/* Responsive image wrapper */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Image styling */
+.stepsImage {
+  width: 100%;     /* make it responsive */
+  height: auto;    /* keep aspect ratio */
+  display: block;  /* removes extra bottom spacing */
+  object-fit: contain; /* ensures full image is visible, no cropping */
+}
+
+/* Responsive text adjustments */
+@media (max-width: 1024px) {
+  .heading {
+    font-size: 1.75rem;
+  }
+  .subheading {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 1.5rem;
+  }
+  .subheading {
+    font-size: 0.9rem;
+  }
+  .stepsSection {
+    width: 100%;
+    padding: 60px 30px; /* some breathing room */
+    background: #FEF9F5; /* optional background like your screenshot */
+    display: flex;
+    justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 1.25rem;
+  }
+  .subheading {
+    font-size: 0.85rem;
+  }
+    .stepsSection {
+    width: 100%;
+    padding: 60px 20px; /* some breathing room */
+    background: #f5f0ef; /* optional background like your screenshot */
+    display: flex;
+    justify-content: center;
+    }
+}

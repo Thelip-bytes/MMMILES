@@ -1,0 +1,164 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 2rem;
+  background: #323232;
+  color: rgb(112, 109, 109);
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 1000;
+}
+
+/* Logo */
+.logo {
+  position: relative;
+  width: 130px;   /* Default size */
+  height: 55px;
+}
+.logoImg {
+  object-fit: contain;
+}
+
+/* Nav Links */
+.navLinks {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin-left: -90px;
+  margin-bottom: -5px;
+}
+.navLinks a {
+  display: block;
+  margin-bottom: 8px;
+  color: #f5e7e7;
+  font-size: 16px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.navLinks a {
+  cursor: pointer;
+  transition: font-weight 0.2s ease;
+}
+.navLinks a:hover {
+  font-weight: 600;
+}
+.navLinks li {
+  cursor: pointer;
+  transition: font-weight 0.2s ease;
+}
+.navLinks li:hover {
+  font-weight: 600;
+}
+
+/* Login Button */
+.loginBtn {
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  color: black;
+  padding: 0.66rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+  border: 1px solid #BF9860;
+}
+.loginBtn:hover {
+  background: linear-gradient(to right, #BF9860 0%, #D8B480 100%);
+}
+
+/* Mobile Menu Button */
+.mobileMenu {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: white;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .logo {
+    width: 110px;
+    height: 45px;
+  }
+}
+@media (max-width: 768px) {
+  .navLinks,
+  .loginBtn {
+    display: none;
+  }
+  .logo {
+    width: 90px;
+    height: 40px;
+  }
+  .mobileMenu {
+    display: block;
+  }
+}
+@media (max-width: 480px) {
+  .logo {
+    width: 70px;
+    height: 32px;
+  }
+}
+
+/* Backdrop */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 900;
+}
+
+/* Mobile Dropdown */
+.mobileDropdown {
+  position: absolute;
+  top: 89px;
+  left: 0;
+  right: 0;
+  background: #111;
+  color: white;
+  padding: 1rem;
+  margin: 0 0.5rem;
+  text-align: center;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 1001;
+}
+.mobileDropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mobileDropdown li {
+  padding: 0.8rem 0;
+  cursor: pointer;
+}
+.dropdownLogin {
+  background: white;
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Dropdown States */
+.dropdownOpen {
+  max-height: 300px;
+  opacity: 1;
+}
+.dropdownClosed {
+  max-height: 0;
+  opacity: 0;
+}

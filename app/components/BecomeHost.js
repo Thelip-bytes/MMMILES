@@ -1,0 +1,24 @@
+"use client";
+import Image from "next/image";
+import styles from "./BecomeHost.module.css";
+
+
+export default function BecomeHost() {
+  return (
+    <section className={styles.HostSection} >
+      <div className={styles.HostcontentWrapper}>
+        
+        <div className={styles.HostimageWrapper}>
+          <Image
+            src="/hostt.png"     // <-- put your image path here
+            alt="Car booking steps illustration"
+            width={1921}                 // large natural size
+            height={600}                 // height in proportion
+            className={styles.HoststepsImage}
+            priority
+          />
+        </div>
+      </div>
+    </section>
+  );
+}

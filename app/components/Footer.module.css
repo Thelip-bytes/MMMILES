@@ -1,0 +1,159 @@
+.footer {
+  background-color: #1b1b1b;
+  color: #e6e6e6;
+  padding: 40px 90px;
+  border-radius: 12px;
+  margin-top: 60px;
+}
+
+.footerbody {
+  margin: 20px;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Left section */
+.footerLeft {
+  max-width: 300px;
+  font-size: 14px;
+  margin-left: 70px;
+  margin-top: 15px;
+  line-height: 1.9;
+
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* Right section (Social + Links stacked) */
+/* Row for text + icons */
+.followRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  margin-bottom: 10px; /* space before links */
+}
+
+.followText {
+  font-size: 14px;
+  white-space: nowrap; /* keep it in one line */
+  margin-left: -100px;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  align-items: center;
+ 
+}
+.socialIcons img{
+  border: 1px solid #8e4444;
+  background: #EDE7E4;
+  border-radius: 8px;
+  padding: 3px 3px 2px;
+}
+
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-right: 80px;
+  font-size: 14px;
+}
+
+.footerLinks h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.footerLinks a {
+  display: block;
+  margin-bottom: 8px;
+  color: #e6e6e6;
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footerLinks a:hover {
+  color: #ffffff;
+}
+
+/*.footerLeft a {
+  color: white;
+  text-decoration:none;
+}
+.footerLeft p{
+  margin-bottom: 10px;
+}*/
+/* Target the anchor tags inside the footer */
+.footerLeft a {
+    /* 1. Remove the default underline */
+    text-decoration: none;
+
+    /* 2. Set the text color to inherit from the parent or use a specific color */
+    color: inherit; /* Inherits the color of the parent <p> or .footerLeft */
+    /* If you want a specific color like light gray: color: #bdbdbd; */
+    
+    /* 3. Ensure the font is consistent (optional, but good practice) */
+    /* font-weight: normal; */
+}
+
+/* Ensure the wrapper paragraphs are styled cleanly */
+.footerLeft p {
+    /* Remove default top/bottom margin from paragraphs */
+    margin: 5px 0; 
+    
+    /* Set the default text color for the contact info */
+    color: #bdbdbd; /* Use the color from your buttons, or your footer's text color */
+    font-size: 0.95rem; /* Adjust font size as needed */
+}
+
+
+/* Optional: Add a subtle hover effect back without the underline */
+.footerLeft a:hover {
+    color: #fff; /* Lighten text slightly on hover for feedback */
+}
+
+@media (max-width: 1024px) {
+  .footer {
+    padding: 30px 60px;
+  }
+
+  .footerLinks {
+    gap: 40px;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 20px 30px;
+  }
+
+  .footerContainer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footerLinks {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+}

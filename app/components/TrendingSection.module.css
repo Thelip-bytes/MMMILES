@@ -1,0 +1,147 @@
+
+.trendingSection {
+  text-align: center;
+  padding: 80px 100px;
+  background: #FEF9F5;
+  overflow: hidden;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.subheading {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 50px;
+}
+
+/* Carousel */
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+  
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  overflow: hidden;
+}
+
+/* Slides */
+.slide {
+  position: absolute;
+  top: 0;
+  width: 60%;
+  height: 100%;
+  border-radius: 16px;
+  transition: all 0.8s ease-in-out;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Active / Prev / Next */
+.activeSlide {
+  transform: translateX(0) scale(1);
+  opacity: 1;
+  z-index: 3;
+}
+.prevSlide {
+  transform: translateX(-70%) scale(0.8);
+  opacity: 0.6;
+  z-index: 2;
+}
+.nextSlide {
+  transform: translateX(70%) scale(0.8);
+  opacity: 0.6;
+  z-index: 2;
+}
+
+/* Overlay on non-active slides */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 16px;
+}
+
+/* Dots */
+.dots {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  background: #000;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.activeDot {
+  background: #BF9860;
+}
+
+/* Arrows under dots */
+.arrowsBottom {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.arrowBtn {
+  background: #111;
+  color: #BF9860;
+  border: none;
+  padding: 5px 13px;
+  border-radius: 44px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.arrowBtn:hover {
+  background: #BF9860;
+  color: #000;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .slide {
+    width: 80%;
+  }
+  .prevSlide {
+    transform: translateX(-60%) scale(0.75);
+  }
+  .nextSlide {
+    transform: translateX(60%) scale(0.75);
+  }
+}
+@media (max-width: 600px) {
+  .carouselWrapper {
+    height: 280px;
+  }
+  .slide {
+    width: 90%;
+  }
+  .heading {
+    font-size: 1.5rem;
+  }
+  .subheading {
+    font-size: 1rem;
+  }
+  .arrowBtn {
+    font-size: 0.9rem;
+    padding: 8px 14px;
+  }
+}

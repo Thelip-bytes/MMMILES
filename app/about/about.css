@@ -1,0 +1,79 @@
+.about-page {
+  font-family: Arial, sans-serif;
+  color: #111;
+  line-height: 1.6;
+}
+
+/* Banner */
+.about-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+  background: #f9f9f9;
+}
+.banner-text h1 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.banner-text p {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+/* About Section */
+.about-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3rem 2rem;
+}
+.about-text {
+  max-width: 50%;
+}
+.about-img {
+  flex: 1;
+  text-align: center;
+}
+
+/* Team */
+.team-section {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 2rem;
+  background: #eee;
+}
+.team-member {
+  text-align: center;
+}
+.team-img {
+  border-radius: 50%;
+}
+
+/* Vision & Mission */
+.vision-mission {
+  display: flex;
+  justify-content: space-around;
+  padding: 3rem 2rem;
+  background: #fafafa;
+}
+.vision, .mission {
+  max-width: 40%;
+  text-align: center;
+}
+
+/* Goals */
+.goals-section {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+.goals {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+.goal {
+  text-align: center;
+}

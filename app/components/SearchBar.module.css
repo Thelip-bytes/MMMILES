@@ -1,0 +1,93 @@
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F9F4EC;          /* soft background to match image */
+  
+  border-radius: 50px;           /* pill shape */
+  padding: 18px 20px;
+  max-width: 1200px;             /* same as screenshot */
+  margin: 0%;
+  font-family: sans-serif;
+  gap: 14px;                     /* spacing between items */
+  
+
+  background: 
+    linear-gradient(#f7f1f1, #f7f1f1) padding-box,  /* inner bg */
+    linear-gradient(90deg, #edd7b5,#e4c697, #d7b78a) border-box; /* border gradient */
+  border: 16px solid transparent;
+}
+
+
+.searchbody{
+  padding: 64px 200px;
+  background: #FEF9F5;
+}
+.searchItem {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  flex: 1;     
+  transition: hover;              /* evenly sized sections */
+}
+
+.searchItem strong {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #000;  
+  display: block;                 /* black text for label */
+}
+
+.searchItem span {
+  font-size: 13px;
+  color: #6c6c6c;                /* muted text for subtitle */
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.searchBtn {
+  background: linear-gradient(to right, #edd8bb 0%, #BF9860 100%);
+  color: #000000;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 20px;
+  width: 140px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  flex-shrink: 0;                /* prevent button from shrinking */
+  transition: background 0.3s ease;
+}
+
+.searchBtn:hover {
+  background: linear-gradient(to right, #BF9860 0%,#edd8bb 100%);
+  font-weight: 600;
+}
+
+/* Make it stack on small screens */
+@media (max-width: 768px) {
+  .searchWrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    border-radius: 20px;
+  }
+
+  .searchBtn {
+    width: 100%;
+    text-align: center;
+    transition:hover;
+  }
+}

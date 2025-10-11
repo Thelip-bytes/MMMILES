@@ -1,0 +1,231 @@
+.login-wrapper {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #FEF9F5;
+  padding: 0.1rem;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: row;
+  background: #faf6f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 900px;
+  width: 100%;
+  margin-top: -80px;
+  margin-bottom: -150px;
+  overflow: hidden;
+}
+
+/* Left Section */
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.banner-image,
+.car-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* fill without whitespace */
+  display: block;
+  margin: 0; /* remove gaps */
+}
+
+/* Right Section */
+.login-right {
+  flex: 1;
+  background: #F9F4EC;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-title {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.input-field {
+  padding: 0.8rem;
+  border: 1px solid #FEF9F5;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.continue-btn {
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.continue-btn:hover {
+  background: linear-gradient(to right, #BF9860 0%, #D8B480 100%);
+}
+
+.divider {
+  text-align: center;
+  margin: 1.5rem 0;
+  position: relative;
+  color: #6c6a6a;
+  font-size: 0.9rem;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #929191;
+}
+
+.divider::before {
+  left: 0;
+}
+.divider::after {
+  right: 0;
+}
+
+.google-btn {
+  background: transparent;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin: -15px 0 0;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.google-btn:hover {
+  background: #dbdbd6;
+}
+
+/* OTP Section */
+.otp-card {
+  background: #F9F4EC;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 320px;
+  margin: auto;
+}
+
+.otp-icon {
+  font-size: 2rem;
+  background: #F9F4EC;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.otp-subtitle {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 1.5rem;
+}
+.phone-otp{
+  font-size: 16px;
+  color: #000000;
+}
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.otp-box {
+  width: 55px;
+  height: 45px;
+  text-align: center;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #000000; /* dark brown */
+  color: #BF9860; /* white text */
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* Placeholder dash */
+.otp-box::placeholder {
+  color: #6b6161;
+  font-size: 1.5rem;
+  font-weight: bold;
+  opacity: 0.6;
+}
+
+.otp-box:focus {
+  border: 2px solid #BF9860; /* orange highlight */
+  background-color: #0a0806;
+}
+
+.resend-text {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.resend-link {
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.go-back {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #0c0c0b;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  .login-left, .login-right {
+    padding: 1.5rem;
+  }
+}

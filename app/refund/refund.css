@@ -1,0 +1,68 @@
+.refund-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: .5rem 1rem;
+  background: #FEF9F5;
+  color: #333;
+  line-height: 1.7;
+}
+
+.refund-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.1rem;
+  margin-top: -1rem;
+}
+
+.refund-subtitle {
+  text-align: center;
+  font-size: 1.5rem;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 650;
+  margin-bottom: 3rem;
+}
+
+.refund-section {
+  margin-bottom: 2rem;
+}
+
+.refund-section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #201f1f;
+}
+
+.refund-section ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+
+.refund-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* ✅ Responsive */
+@media (min-width: 768px) {
+  .refund-title {
+    font-size: 2.5rem;
+  }
+  .refund-container {
+    padding: 3rem 2rem 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .refund-title {
+    font-size: 3rem;
+  }
+  .refund-container {
+    padding: 3rem 2rem 1rem;
+  }
+}

@@ -1,0 +1,226 @@
+/* File: app/contact/contact.module.css */
+
+.ccontainer {
+  display: flex;
+  padding: 40px 130px 0px;
+  min-height: 100vh; /* Ensure it takes full viewport height */
+  background-color: #FEF9F5; /* A light background color */
+  font-family: Arial, sans-serif; /* Or your preferred font */
+}
+
+/* --- Left Section Styles --- */
+.cleftSection {
+  flex: 1; /* Takes up half the width */
+  background-color: #F9F4EC;
+   padding: 0px 40px 0px;/* Adjust padding as needed */
+  display: flex;
+  border-radius: 12px 0 0 12px;
+  margin-bottom: 7px;
+  flex-direction: column;
+  justify-content: center; /* Vertically center content */
+  /* Subtle shadow on the right edge */
+  position: relative;
+  z-index: 2; /* Ensure it's above the right section's content */
+}
+
+.cmainTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 6px;
+  
+}
+
+.cemail {
+  font-size: 1.1rem;
+  color: #666;
+}
+.cphone {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+.csectionTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
+  margin-top: 30px;
+  margin-bottom: 6px;
+}
+
+/* --- NEW Styles for Font Awesome Icons --- */
+.csocialIcons a {
+  /* Set the default color for the icons */
+  color: #BF9860; /* Gray/dim color initially */
+  transition: color 0.3s ease;
+  margin-right: 10px;
+  align-items: center;
+}
+
+.csocialIcons a:hover {
+  /* Change color on hover (use your primary brand color or white) */
+  color: #000;
+}
+
+/* Ensure the Font Awesome icons don't have default gray filters */
+.csocialIcons svg {
+    vertical-align: middle;
+}
+
+.caddress {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+
+
+/* --- Right Section Styles --- */
+.crightSection {
+   /* Slightly more width for the image side */
+  background: #F9F4EC; /* Subtle gradient as in image */
+  padding: 0px 0px ;
+  display: flex;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 7px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Center items horizontally */
+  position: relative;
+  overflow: hidden; /* To handle background patterns/images */
+}
+
+/* Background pattern from the image */
+
+
+
+
+
+.crightTitleBold {
+  font-size: 3.5rem; /* Larger for "Every Mile" */
+  font-weight: 800;
+  color: #333;
+  margin-bottom: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.cmainImageContainer {
+  width: 100%; /* Adjust width to fit the image properly */
+  max-width: 520px;
+  height: auto;
+  margin-bottom: -9px;
+  position: relative;
+  z-index: 2;
+}
+
+.cmainImageContainer img {
+  object-fit: contain; /* Ensure image fits without cropping */
+}
+
+.cfeatures {
+  display: flex;
+  gap: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.cfeatureItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cfeatureItem img {
+    filter: invert(30%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%); /* Make icons dark gray */
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1024px) {
+  .cleftSection, .crightSection {
+    padding: 60px 40px;
+  }
+  .cmainTitle {
+    font-size: 2.4rem;
+  }
+  .crightTitleBold {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ccontainer {
+    flex-direction: column; /* Stack sections vertically */
+  }
+  .cleftSection, .crightSection {
+    flex: none; /* Remove flex sizing */
+    width: 100%;
+    padding: 40px 30px;
+  }
+  .crightSection {
+      padding-top: 60px; /* More space at top when stacked */
+  }
+  .cmainTitle {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
+  .csectionTitle {
+    font-size: 1.4rem;
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+  .csocialIcons {
+    margin-bottom: 20px;
+  }
+  .caddress, .cemail {
+    margin-bottom: 25px;
+  }
+  .crightTitle, .crightTitleBold {
+    text-align: center;
+  }
+  .crightTitleBold {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+  }
+  .cmainImageContainer {
+    width: 80%;
+    margin-bottom: 40px;
+  }
+  .cfeatures {
+    flex-wrap: wrap; /* Wrap features on small screens */
+    justify-content: center;
+    gap: 15px;
+  }
+  .featureItem {
+      font-size: 0.85rem;
+      padding: 8px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+    .cleftSection, .crightSection {
+        padding: 30px 20px;
+    }
+    .cmainTitle {
+        font-size: 1.8rem;
+    }
+    .crightTitleBold {
+        font-size: 2rem;
+    }
+    .cfeatures {
+        flex-direction: column;
+        align-items: stretch; /* Stretch items to fill width */
+    }
+    .cfeatureItem {
+        padding: 12px 15px; /* Increase padding for better tap target */
+        justify-content: center; /* Center content in stretched items */
+    }
+}

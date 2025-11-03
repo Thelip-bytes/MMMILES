@@ -374,18 +374,18 @@ export default function Car2Page() {
            
 
 
-           {/* --- Animated Card Section with three cards --- */}
+           {/* --- Animated Card Section with three cards --- 
            <h1 className={animatedCardStyles.sectionTitle}>Our Key Features</h1>
             <div className={animatedCardStyles.animatedCardSection}>
               
-              {/* First Card */}
+              
               <div className={animatedCardStyles.card}>
                 <h3 className={animatedCardStyles.cardTitle}>Why Choose Us?</h3>
                 <div className={animatedCardStyles.border}></div>
                 <div className={animatedCardStyles.content}>
                   <div className={animatedCardStyles.logo}>
                     <div className={animatedCardStyles.logo1}>
-                      {/* SVG 1 */}
+                      
                       <svg viewBox="0 0 29.667 31.69" xmlns="/http://www.w3.org/2000/svg" id="logo-main">
                         <path transform="translate(0 0)" d="M12.827,1.628A1.561,1.561,0,0,1,14.31,0h2.964a1.561,1.561,0,0,1,1.483,1.628v11.9a9.252,9.252,0,0,1-2.432,6.852q-2.432,2.409-6.963,2.409T2.4,20.452Q0,18.094,0,13.669V1.628A1.561,1.561,0,0,1,1.483,0h2.98A1.561,1.561,0,0,1,5.947,1.628V13.191a5.635,5.635,0,0,0,.85,3.451,3.153,3.153,0,0,0,2.632,1.094,3.032,3.032,0,0,0,2.582-1.076,5.836,5.836,0,0,0,.816-3.486Z" data-name="Path 6" id="Path_6"></path>
                         <path transform="translate(-45.91 0)" d="M75.207,20.857a1.561,1.561,0,0,1-1.483,1.628h-2.98a1.561,1.561,0,0,1-1.483-1.628V1.628A1.561,1.561,0,0,1,70.743,0h2.98a1.561,1.561,0,0,1,1.483,1.628Z" data-name="Path 7" id="Path_7"></path>
@@ -393,7 +393,7 @@ export default function Car2Page() {
                       </svg>
                     </div>
                     <div className={animatedCardStyles.logo2}>
-                      {/* SVG 2 */}
+                     
                       <svg viewBox="0 0 101.014 23.535" xmlns="http://www.w3.org/2000/svg" id="logo-second">
                         <g transform="translate(-1029.734 -528.273)">
                           <path transform="translate(931.023 527.979)" d="M109.133,14.214l3.248-11.706A1.8,1.8,0,0,1,114.114,1.2h2.229a1.789,1.789,0,0,1,1.7,2.358L111.884,21.71a1.8,1.8,0,0,1-1.7,1.216h-3a1.8,1.8,0,0,1-1.7-1.216L99.317,3.554a1.789,1.789,0,0,1,1.7-2.358h2.229a1.8,1.8,0,0,1,1.734,1.312l3.248,11.706a.468.468,0,0,0,.9,0Z" data-name="Path 1" id="Path_1"></path>
@@ -411,13 +411,13 @@ export default function Car2Page() {
                 <span className={animatedCardStyles.bottomText}>universe of ui</span>
               </div>
 
-              {/* Second Card */}
+              
               <div className={animatedCardStyles.card}>
                 <div className={animatedCardStyles.border}></div>
                 <div className={animatedCardStyles.content}>
                   <div className={animatedCardStyles.logo}>
                     <div className={animatedCardStyles.logo1}>
-                      {/* SVG 1 */}
+                      
                       <svg viewBox="0 0 29.667 31.69" xmlns="http://www.w3.org/2000/svg" id="logo-main">
                         <path transform="translate(0 0)" d="M12.827,1.628A1.561,1.561,0,0,1,14.31,0h2.964a1.561,1.561,0,0,1,1.483,1.628v11.9a9.252,9.252,0,0,1-2.432,6.852q-2.432,2.409-6.963,2.409T2.4,20.452Q0,18.094,0,13.669V1.628A1.561,1.561,0,0,1,1.483,0h2.98A1.561,1.561,0,0,1,5.947,1.628V13.191a5.635,5.635,0,0,0,.85,3.451,3.153,3.153,0,0,0,2.632,1.094,3.032,3.032,0,0,0,2.582-1.076,5.836,5.836,0,0,0,.816-3.486Z" data-name="Path 6" id="Path_6"></path>
                         <path transform="translate(-45.91 0)" d="M75.207,20.857a1.561,1.561,0,0,1-1.483,1.628h-2.98a1.561,1.561,0,0,1-1.483-1.628V1.628A1.561,1.561,0,0,1,70.743,0h2.98a1.561,1.561,0,0,1,1.483,1.628Z" data-name="Path 7" id="Path_7"></path>
@@ -425,7 +425,7 @@ export default function Car2Page() {
                       </svg>
                     </div>
                     <div className={animatedCardStyles.logo2}>
-                      {/* SVG 2 */}
+                      
                       <svg viewBox="0 0 101.014 23.535" xmlns="http://www.w3.org/2000/svg" id="logo-second">
                         <g transform="translate(-1029.734 -528.273)">
                           <path transform="translate(931.023 527.979)" d="M109.133,14.214l3.248-11.706A1.8,1.8,0,0,1,114.114,1.2h2.229a1.789,1.789,0,0,1,1.7,2.358L111.884,21.71a1.8,1.8,0,0,1-1.7,1.216h-3a1.8,1.8,0,0,1-1.7-1.216L99.317,3.554a1.789,1.789,0,0,1,1.7-2.358h2.229a1.8,1.8,0,0,1,1.734,1.312l3.248,11.706a.468.468,0,0,0,.9,0Z" data-name="Path 1" id="Path_1"></path>
@@ -443,13 +443,13 @@ export default function Car2Page() {
                 <span className={animatedCardStyles.bottomText}>universe of ui</span>
               </div>
 
-              {/* Third Card */}
+            
               <div className={animatedCardStyles.card}>
                 <div className={animatedCardStyles.border}></div>
                 <div className={animatedCardStyles.content}>
                   <div className={animatedCardStyles.logo}>
                     <div className={animatedCardStyles.logo1}>
-                      {/* SVG 1 */}
+                      
                       <svg viewBox="0 0 29.667 31.69" xmlns="http://www.w3.org/2000/svg" id="logo-main">
                         <path transform="translate(0 0)" d="M12.827,1.628A1.561,1.561,0,0,1,14.31,0h2.964a1.561,1.561,0,0,1,1.483,1.628v11.9a9.252,9.252,0,0,1-2.432,6.852q-2.432,2.409-6.963,2.409T2.4,20.452Q0,18.094,0,13.669V1.628A1.561,1.561,0,0,1,1.483,0h2.98A1.561,1.561,0,0,1,5.947,1.628V13.191a5.635,5.635,0,0,0,.85,3.451,3.153,3.153,0,0,0,2.632,1.094,3.032,3.032,0,0,0,2.582-1.076,5.836,5.836,0,0,0,.816-3.486Z" data-name="Path 6" id="Path_6"></path>
                         <path transform="translate(-45.91 0)" d="M75.207,20.857a1.561,1.561,0,0,1-1.483,1.628h-2.98a1.561,1.561,0,0,1-1.483-1.628V1.628A1.561,1.561,0,0,1,70.743,0h2.98a1.561,1.561,0,0,1,1.483,1.628Z" data-name="Path 7" id="Path_7"></path>
@@ -457,7 +457,7 @@ export default function Car2Page() {
                       </svg>
                     </div>
                     <div className={animatedCardStyles.logo2}>
-                      {/* SVG 2 */}
+                      
                       <svg viewBox="0 0 101.014 23.535" xmlns="http://www.w3.org/2000/svg" id="logo-second">
                         <g transform="translate(-1029.734 -528.273)">
                           <path transform="translate(931.023 527.979)" d="M109.133,14.214l3.248-11.706A1.8,1.8,0,0,1,114.114,1.2h2.229a1.789,1.789,0,0,1,1.7,2.358L111.884,21.71a1.8,1.8,0,0,1-1.7,1.216h-3a1.8,1.8,0,0,1-1.7-1.216L99.317,3.554a1.789,1.789,0,0,1,1.7-2.358h2.229a1.8,1.8,0,0,1,1.734,1.312l3.248,11.706a.468.468,0,0,0,.9,0Z" data-name="Path 1" id="Path_1"></path>

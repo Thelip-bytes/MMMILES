@@ -23,8 +23,9 @@
 
 .slideTrack {
   display: flex;
-  animation: scroll 40s linear infinite;
-  width: calc(300px * 12);
+  animation: scroll 90s linear infinite;
+  width: calc(300px * 50);
+  will-change: transform;
 }
 
 .slider:hover .slideTrack {

@@ -70,7 +70,7 @@ export default function Footer() {
 
               <div>
                 <h4>Handy Links</h4>
-                <Link href="/explore">Explore Places</Link>
+                <a href="https://www.thrillophilia.com/places-to-visit-in-south-india">Explore Places</a>
                 <Link href="/steps">Steps to Book</Link>
                 <Link href="/top-cars">Top Rented Cars</Link>
               </div>

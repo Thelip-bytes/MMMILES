@@ -4,28 +4,64 @@ import styles from "./ReviewSlider.module.css";
 
 const reviews = [
   {
-    text: "The ability to see the entire teams workflow and collaborate behind the scenes creates a better experience for the user and the team.",
-    name: "Alex C.",
-    title: "Enterprise (1,000 emp.)",
-    img: "/r1.png",
+    text: "The booking was super easy, got a clean, comfortable car for our girls’ weekend. Having GPS and Bluetooth made the trip stress-free and fun.",
+    name: "Priya S.",
+    title: "Friends Trip (4 members)",
+    img: "/profile1.jpg",
   },
   {
-    text: "With Urban Drive, we’ve seen amazing growth. We’re rolling it out across the entire customer lifecycle.",
-    name: "Yvonne Chen",
-    title: "VP of Marketing, Udemy",
-    img: "/r2.png",
+    text: "MM Miles made our family road trip smooth from start to finish. The spacious SUV fit all our luggage, and the customer support was always available.",
+    name: "Rohan K.",
+    title: "Family (5 members)",
+    img: "/profile2.jpg",
   },
   {
-    text: "By engaging visitors on our website, we’ve increased conversion rates by 45%.",
-    name: "Jesus Regama",
-    title: "Director of Growth Marketing, Unity",
-    img: "/r3.png",
+    text: "Our car broke down suddenly, but I got a replacement vehicle within an hour. Fast response and professional team — truly a lifesaver.",
+    name: "Sneha L.",
+    title: "Emergency Booking",
+    img: "/profile3.jpg",
   },
   {
-    text: "Would massively recommend Urban Drive as a support product — great UX, very powerful.",
-    name: "acouRx",
-    title: "@acouRx",
-    img: "/r4.png",
+    text: "Even during the holiday rush, MM Miles had cars ready on short notice. We appreciated how easy it was to pick up and drop off without delays.",
+    name: "Arjun P.",
+    title: "Frequent Traveler",
+    img: "/profile4.jpg",
+  },
+   {
+    text: "I often rent for work trips, and MM Miles is the most reliable. The process is seamless and the cars are always in excellent condition.",
+    name: "Kavita D.",
+    title: "Corporate Client",
+    img: "/profile1.jpg",
+  },
+   {
+    text: "Got stuck in the rain with no transport, and MM Miles helped me get a car within minutes. Smooth pickup and great service even in bad weather.",
+    name: "Neha V.",
+    title: "Daily Commuter",
+    img: "/profile2.jpg",
+  },
+  {
+    text: "Needed a car to pick up family from the airport. Booking took just 2 minutes, and the car was ready right on time. Excellent coordination!",
+    name: "Harish T.",
+    title: "Local Resident",
+    img: "/profile3.jpg",
+  },
+  {
+    text: "Drove from Bangalore to Goa using MM Miles. The car handled beautifully the entire way, and there were no hidden charges at all.",
+    name: "Deepa S.",
+    title: "Road Trip Traveler",
+    img: "/profile4.jpg",
+  },
+  {
+    text: "Our company car went for servicing, and MM Miles provided an immediate replacement. Flexible plans and professional support.",
+    name: "Rajesh K.",
+    title: "Fleet Manager",
+    img: "/profile1.jpg",
+  },
+  {
+    text: "I Booked just an hour before my trip and still got a clean, reliable vehicle. I'm super impressed with MM miles a quick turn around.",
+    name: "Ananya D.",
+    title: "Solo Traveler",
+    img: "/profile2.jpg",
   },
 ];
 
@@ -63,3 +99,5 @@ export default function ReviewSlider() {
     </div>
   );
 }
+
+

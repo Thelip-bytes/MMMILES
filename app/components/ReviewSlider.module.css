@@ -1,11 +1,11 @@
 .reviewslide {
   padding: 80px 100px 130px;
-  background: #FEF9F5;
+  background: #fef9f5;
 }
 
 .reviewSection {
   padding: 40px 50px;
-  background: #F9F4EC; /* Background color like example */
+  background: #f9f4ec;
   overflow: hidden;
 }
 
@@ -24,21 +24,28 @@
   overflow: hidden;
 }
 
-/* Continuous track */
+/* Track */
 .sliderTrack {
   display: flex;
-  animation: scroll 15s linear infinite; /* Speed can be adjusted */
+  width: calc(250px * 50); /* Adjust if card width changes */
+  animation: scroll 85s linear infinite;
+  will-change: transform;
 }
 
 /* Cards */
 .card {
-  background: #FEF9F5;
+  background: #fef9f5;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 20px;
   width: 250px;
   margin-right: 20px;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.03);
 }
 
 .text {
@@ -63,27 +70,27 @@
   color: #777;
 }
 
-/* Hover pause */
+/* Pause scroll when hovered */
 .slider:hover .sliderTrack {
   animation-play-state: paused;
 }
 
-/* Keyframes for seamless continuous scroll */
+
+/* Keyframes for endless continuous scroll */
 @keyframes scroll {
-  0% {
+  from {
     transform: translateX(0);
   }
-  100% {
-    transform: translateX(-50%); /* Slide exactly half the content width */
+  to {
+    transform: translateX(-50%);
   }
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 768px) {
   .reviewslide {
     padding: 40px 40px;
   }
-
   .card {
     width: 200px;
     padding: 16px;

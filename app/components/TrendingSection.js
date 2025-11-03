@@ -8,6 +8,10 @@ const carImages = [
   { src: "/car-trending.png", link: "/car1" },
   { src: "/hero1.png", link: "/car2" },
   { src: "/about.jpg", link: "/car3" },
+  { src: "/chennai-map.png", link: "/car4"},
+  { src: "/car5.png", link: "/car5"},
+  { src: "/car6.png", link: "/car6"},
+  { src: "/car7.png", link: "/car7"},
 ];
 
 export default function TrendingSection() {

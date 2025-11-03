@@ -5,6 +5,16 @@
   overflow: hidden;
 }
 
+
+.marqueeTrack {
+  display: flex;
+  width: calc(200%); /* doubled width for seamless loop */
+  height: 100%;
+  animation: scrollSlides 30s linear infinite;
+}
+
+
+
 .slidesWrapper {
   display: flex;
   height: 100%;
@@ -16,8 +26,6 @@
   min-width: 100%;
   height: 100%;
 }
-
-
 
 
 

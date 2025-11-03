@@ -8,11 +8,12 @@ import "./Navbar.css";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  const router = useRouter(); // <-- Add router
+  const router = useRouter();
 
+  // Close mobile menu when clicking outside
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
         setMenuOpen(false);
       }
     }
@@ -21,30 +22,25 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div>
-      {/* Navbar */}
+    <div ref={menuRef}>
       <nav className="navbar">
+        {/* Logo */}
         <div className="logo">
           <Link href="/">
-            <Image
-              src="/goldlogo.png"
-              alt="Urban Drive"
-              fill
-              className="logoImg"
-              priority
-            />
+            <Image src="/mlogo.png" alt="MM Miles Logo" width={130} height={37} />
           </Link>
         </div>
 
+        {/* Desktop Nav Links */}
         <ul className="navLinks">
-          <Link href="/about">About us</Link>
-          <Link href="/reviews">Reviews</Link>
-          <Link href="#faq-navigation">FAQ's</Link>
-          <Link href="/contact">Contact us</Link>
-          
+          <li><Link href="/about">About Us</Link></li>
+          <li><Link href="/reviews">Reviews</Link></li>
+          <li><Link href="/faq">FAQ’s</Link></li>
+          <li><Link href="/contact">Contact Us</Link></li>
         </ul>
 
-        {/* Updated Login Button */}
+
+        {/* Desktop Login */}
         <button
           className="loginBtn"
           onClick={() => router.push("/login")}
@@ -52,42 +48,33 @@ export default function Navbar() {
           Login/Signup
         </button>
 
+        {/* Mobile Menu Button */}
         <button
           className="mobileMenu"
+          aria-label="Toggle menu"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? "✖" : "☰"}
         </button>
       </nav>
 
-      {/* Backdrop */}
+      {/* Mobile Dropdown */}
       {menuOpen && (
-        <div className="backdrop" onClick={() => setMenuOpen(false)} />
+        <>
+          <div className="backdrop" onClick={() => setMenuOpen(false)} />
+          <div className={`mobileDropdown ${menuOpen ? "dropdownOpen" : "dropdownClosed"}`}>
+            <ul>
+              <li><Link href="/about" onClick={() => setMenuOpen(false)}>About Us</Link></li>
+              <li><Link href="/reviews" onClick={() => setMenuOpen(false)}>Reviews</Link></li>
+              <Link href="/faq">FAQ's</Link>
+              <li><Link href="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link></li>
+            </ul>
+             <button className="bg-white text-black px-4 py-2 rounded-lg shadow">
+        Login/Signup
+      </button>
+          </div>
+        </>
       )}
-
-      {/* Dropdown */}
-      <div
-        ref={menuRef}
-        className={`mobileDropdown ${menuOpen ? "dropdownOpen" : "dropdownClosed"}`}
-      >
-        <ul>
-          <li>About Us</li>
-          <li>Reviews</li>
-          <li>FAQ’s</li>
-          <li>Contact Us</li>
-        </ul>
-
-        {/* Updated Dropdown Login Button */}
-        <button
-          className="dropdownLogin"
-          onClick={() => {
-            setMenuOpen(false);  // closes menu
-            router.push("/login"); // navigates to login
-          }}
-        >
-          Login/Signup
-        </button>
-      </div>
     </div>
   );
 }

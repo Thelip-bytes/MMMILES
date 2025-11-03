@@ -1,78 +1,71 @@
-"use client";
-import Image from "next/image";
+// File: app/contact/page.jsx
+
+import React from 'react';
+import Link from 'next/link';
+// Remove the Image import since we are using FA icons
+import Image from 'next/image'; 
+import styles from './contact.module.css'; // Import the CSS module
+
+// --- NEW IMPORTS FOR FONT AWESOME ---
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { 
+  faLinkedinIn, 
+  faInstagram, 
+  faPinterestP, 
+  faFacebookF, 
+  faTwitter 
+} from '@fortawesome/free-brands-svg-icons';
+// Note: faTwitter is used instead of faX-twitter for wider compatibility and a cleaner look.
+// You can use faXTwitter if you specifically install that icon pack.
+// ------------------------------------
 
 export default function ContactPage() {
   return (
-    <main className="w-full bg-white">
-      {/* Contact Section */}
-      <section className="w-full px-6 md:px-16 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          
-          {/* Left Column - Keep image + text */}
-          <div className="space-y-6">
-            {/* Left image exactly as screenshot */}
-            <div className="relative w-full h-56 md:h-64 lg:h-72">
-              <Image
-                src="/Customer.png" // replace with your left-side image
-                alt="Customer Support"
-                height={500}
-                width={500}
-                className="object-contain"
-              />
-            </div>
-
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Customer Support
-            </h2>
-            <p className="text-gray-700">
-              Email: <span className="font-medium">support@swigg.in</span>
-            </p>
-
-            {/* Corporate Office Info */}
-            <div className="space-y-2 text-gray-700">
-              <h3 className="font-semibold text-lg">Corporate Office</h3>
-              <p className="text-sm leading-relaxed">
-                No. 55, 1st Main, Ground Floor, L.J. Block, Embassy TechVillage, 
-                Outer Ring Road, Devarabisanahalli, Bengaluru 560103, Karnataka, India.
-              </p>
-              <p className="text-sm">
-                CIN: U63090KA2020PTC135123 | PAN: AASCP2345R | GST: 29AASCP2345R1Z5
-              </p>
-            </div>
-
-            <button className="bg-orange-500 text-white px-6 py-2 rounded-md shadow hover:bg-orange-600">
-              Get Directions
-            </button>
-          </div>
-
-          {/* Right Banner - As shown in screenshot */}
-          <div className="relative w-full h-96 md:h-[450px] rounded-xl overflow-hidden shadow-lg">
-            <Image
-              src="/reach customer.png" // replace with your banner image
-              alt="Reach On Time Banner"
-              height={500}
-              width={500}
-              className="object-cover"
-            />
-          </div>
+    <div className={styles.ccontainer}>
+      {/* Left Section: Customer Support & Contact Info */}
+      <div className={styles.cleftSection}>
+        <h1 className={styles.cmainTitle}>Customer Support</h1>
+        
+        <p className={styles.cphone}>Phone: 9790609111</p>
+        <p className={styles.cemail}>Email: mmmiles.chennai@gmail.com</p>
+        
+        <h2 className={styles.csectionTitle}>Find us on</h2>
+        <div className={styles.csocialIcons}>
+          {/* Replaced Image tags with FontAwesomeIcon components */}
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faLinkedinIn} style={{ width: '24px', height: '24px' }} />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faInstagram} style={{ width: '24px', height: '24px' }} />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faPinterestP} style={{ width: '24px', height: '24px' }} />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faFacebookF} style={{ width: '24px', height: '24px' }} />
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faTwitter} style={{ width: '24px', height: '24px' }} />
+          </a>
         </div>
-      </section>
+        
+        <h2 className={styles.csectionTitle}>Corporate Office</h2>
+        <p className={styles.caddress}>
+          Plot No: 51, VGN Nagar phase-4, No: 62, Gurusamy Road, Nolambur, Ambattur Taluk, Tiruvallur district, Chennai-95, Tamilnadu.
+        </p>
+        
+        
+      </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-800 text-gray-300 px-6 md:px-16 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-          {/* Left - Logo & Address */}
-          <div>
-            <h2 className="text-xl font-bold text-white mb-3">URBAN DRIVE</h2>
-            <p className="text-sm leading-relaxed">
-              The 1st, 1st Floor, VGP Layout, Phase-2, <br />
-              2nd Main, Road No-10, Bengaluru, <br />
-              Karnataka 560078.
-            </p>
-            <p className="mt-3 text-sm">Email: urban.drive@gmail.com</p>
-          </div>
+      {/* Right Section: Image and Features */}
+      <div className={styles.crightSection}>
+        
+        <div className={styles.cmainImageContainer}>
+          {/* Use Image for the main car photo */}
+          <Image src="/car-on-phone.jpg" alt="Car on Phone" layout="responsive" width={500} height={400} />
         </div>
-      </footer>
-    </main>
+        
+      </div>
+    </div>
   );
 }

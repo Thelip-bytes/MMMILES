@@ -1,93 +1,195 @@
-.searchWrapper {
+/* Cleaned & consolidated CSS — preserves your golden theme while removing duplicate rules */
+
+/* Container holding the whole bar centered */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background: #FEF9F5;
+}
+
+/* main pill-like box */
+.box {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #F9F4EC;          /* soft background to match image */
-  
-  border-radius: 50px;           /* pill shape */
-  padding: 18px 20px;
-  max-width: 1200px;             /* same as screenshot */
-  margin: 0%;
-  font-family: sans-serif;
-  gap: 14px;                     /* spacing between items */
-  
-
-  background: 
-    linear-gradient(#f7f1f1, #f7f1f1) padding-box,  /* inner bg */
-    linear-gradient(90deg, #edd7b5,#e4c697, #d7b78a) border-box; /* border gradient */
-  border: 16px solid transparent;
+  gap: 20px;
+  background: #f7f3f1;
+  border: 5px solid #e0c28f;
+  border-radius: 50px;
+  padding: 18px 28px;
+  width: 92%;
+  max-width: 1100px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04);
+  font-family: "Poppins", sans-serif;
 }
 
-
-.searchbody{
-  padding: 64px 200px;
-  background: #FEF9F5;
-}
-.searchItem {
+/* each column */
+.field {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  flex: 1;     
-  transition: hover;              /* evenly sized sections */
+  min-width: 160px;
+  font-size: 13px;
+  color: #111;
 }
 
-.searchItem strong {
+/* label style */
+.field label {
   font-weight: 600;
   margin-bottom: 6px;
-  color: #000;  
-  display: block;                 /* black text for label */
-}
-
-.searchItem span {
   font-size: 13px;
-  color: #6c6c6c;                /* muted text for subtitle */
 }
 
+/* input wrapper (icon + input) */
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  background: #fffaf3;
+  border: 1px solid #e0c28f;
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* icon */
 .icon {
+  color: #d4a762;
   margin-right: 8px;
   font-size: 16px;
 }
 
+/* text input */
 .input {
-  flex: 1;
   border: none;
   background: transparent;
-  font-size: 14px;
-  color: #333;
   outline: none;
+  font-size: 14px;
+  padding: 5px;
+  width: 160px;
+  color: #222;
 }
 
-.searchBtn {
-  background: linear-gradient(to right, #edd8bb 0%, #BF9860 100%);
-  color: #000000;
+/* Date input styling — react-datepicker will override additional parts */
+.cdateInput {
   border: none;
-  border-radius: 50px;
-  padding: 15px 20px;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  padding: 4px;
   width: 140px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
-  flex-shrink: 0;                /* prevent button from shrinking */
-  transition: background 0.3s ease;
 }
 
-.searchBtn:hover {
-  background: linear-gradient(to right, #BF9860 0%,#edd8bb 100%);
+/* Search button */
+.csearchBtn {
+  background: linear-gradient(135deg, #e6c68a, #c79a58);
+  border: none;
+  color: #000;
   font-weight: 600;
+  border-radius: 25px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 2px 5px rgba(199, 154, 88, 0.28);
 }
 
-/* Make it stack on small screens */
-@media (max-width: 768px) {
-  .searchWrapper {
+/* disabled state */
+.csearchBtn[disabled],
+.csearchBtn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.csearchBtn:not([disabled]):hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(199, 154, 88, 0.35);
+}
+
+
+/* React date picker golden theme adjustments (keeps your look) */
+.react-datepicker {
+  border: 1px solid #e0c28f !important;
+  border-radius: 12px !important;
+  background-color: #fffaf3 !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08) !important;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.react-datepicker__header {
+  background-color: #f9f3e8 !important;
+  border-bottom: 1px solid #e0c28f !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: linear-gradient(135deg, #e6c68a, #c79a58) !important;
+  color: #fff !important;
+}
+
+/* Combined Google & Popular Cities Suggestions */
+.customSuggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 250, 243, 0.95);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid #e0c28f;
+  border-top: none;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 6px 16px rgba(199, 154, 88, 0.25);
+  font-family: "Poppins", sans-serif;
+  z-index: 99999;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.customSuggestionItem {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: #222;
+  transition: background 0.2s ease;
+}
+
+.customSuggestionItem:hover {
+  background: rgba(225, 195, 140, 0.5);
+  color: #000;
+}
+
+/* Google default dropdown styling (optional) */
+.pac-container {
+  z-index: 99999 !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+}
+
+
+/* responsive: stack on small screens */
+@media (max-width: 800px) {
+  .box {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: 12px;
+    padding: 14px;
     border-radius: 20px;
+  }
+
+  .field {
+    width: 100%;
+  }
+
+  .input,
+  .dateInput {
+    width: 100%;
   }
 
   .searchBtn {
     width: 100%;
-    text-align: center;
-    transition:hover;
+    padding: 12px 16px;
   }
 }

@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.3rem 2rem;
+  padding: 0.5rem 2rem 0.4rem;
   background: #323232;
   color: rgb(112, 109, 109);
   position: sticky;
@@ -17,7 +17,7 @@
 .logo {
   position: relative;
   width: 130px;   /* Default size */
-  height: 55px;
+  margin-top: 5px;
 }
 .logoImg {
   object-fit: contain;

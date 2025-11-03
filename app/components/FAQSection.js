@@ -4,9 +4,17 @@ import React, { useState } from "react";
 import styles from "./FAQSection.module.css";
 
 export default function FAQSection() {
-  const faqs = [
-    
-    
+ const faqs = [
+    {
+      question: "What documents do I need to rent a car?",
+      answer:
+        "You need a valid Driving License and a government-issued ID proof (Aadhar / Passport / PAN).",
+    },
+    {
+      question: "What is the minimum age to rent a car?",
+      answer:
+        "The minimum age is 21 years.",
+    },
     {
       question: "Do I need to pay a security deposit?",
       answer:
@@ -15,28 +23,13 @@ export default function FAQSection() {
     {
       question: "How does fuel policy work?",
       answer:
-        "Vehicles are provided with fuel, and you must return them with the same fuel level. Any shortage will be charged",
+        "Vehicles are provided with fuel, and you must return them with the same fuel level. Any shortage will be charged.",
     },
-    {
+
+     {
       question: "Is there a kilometer limit?",
       answer:
         "Yes. Each rental includes a fixed km/day. Extra kilometers will be charged at the rate specified during booking.",
-    },
-    {
-      question: "What happens if I return the car late?",
-      answer:
-        "Delay up to 4 hours → Hourly late fee applies. Delay beyond 4 hours → Full-day rental charge applies."
-    },
-   
-    {
-      question: "Can someone else drive the car I rented?",
-      answer:
-        "No. Only the registered renter (and any approved co-driver added at booking) can drive. Unauthorized drivers will void insurance and attract penalties",
-    },
-    {
-      question: "Can I cancel my booking?",
-      answer:
-        "Yes. More than 24 hrs. before trip: 90% refund.Within 24 hrs. 50% refund.No-show: No refund."
     },
   ];
 

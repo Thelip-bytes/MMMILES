@@ -44,17 +44,28 @@
   justify-content: center;
   padding-left: 25px;
 }
-.advantage-card:hover{
-    
+
+.advantage-card:hover {
   background-color: #F9F4EC;
   border: 1px solid #594d38;
+  transform: translateY(-3px);
+}
+.advantage-card:hover {
+  background-color: #F9F4EC;
+  border: 1px solid #594d38;
+  transform: translateY(-3px);
 }
 
 
 .advantage-card img {
   width: 50px;
   height: 50px;
+  background: transparent;
   margin-bottom: 15px;
+  border: none;
+   mix-blend-mode: multiply; /* removes white bg effect */
+  box-shadow: none;
+  object-fit: contain;
 }
 
 .advantage-card p {
@@ -63,5 +74,10 @@
   line-height: 1.4;
   margin-left: 10px;
   width: 160px;
-  
+}
+
+@media (max-width: 768px) {
+  .advantage-body {
+    padding: 40px 20px;
+  }
 }

@@ -81,7 +81,7 @@ export default function SearchBar() {
           
           {/* Location */}
           <div className={styles.field} ref={dropdownRef}>
-            <label className={styles.label}>Location</label>
+            <label className={styles.label}>City</label>
             <div 
               className={styles.inputWrapper}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -117,7 +117,7 @@ export default function SearchBar() {
 
           {/* Pick Up */}
           <div className={styles.field}>
-            <label className={styles.label}>Pick Up</label>
+            <label className={styles.label}> Location</label>
             <div className={styles.inputWrapper}>
               <input
                 type="text"

@@ -1,140 +1,99 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaMapMarkerAlt, FaCalendarAlt } from "react-icons/fa";
-import { toast } from "react-hot-toast"; // ✅ for better alerts
+import { toast } from "react-hot-toast";
 import styles from "./SearchBar.module.css";
-
-
 
 export default function SearchBar() {
   const router = useRouter();
-  const inputRef = useRef(null);
-  const autocompleteRef = useRef(null);
 
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState("Detecting location...");
+  const [coords, setCoords] = useState(null);
   const [pickupDate, setPickupDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [filteredCities, setFilteredCities] = useState([]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const popularCities = [
-    "Mumbai, India",
-    "Delhi, India",
-    "Bengaluru, India",
-    "Chennai, India",
-    "Kolkata, India",
-    "Pune, India",
-    "Hyderabad, India",
-  ];
-
-  // ✅ Date formatter
-  const formatDate = (date) => {
+  // ✅ Format date + time (dd/mm/yyyy hh:mm)
+  const formatDateTime = (date) => {
     if (!date) return "";
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
-  // ✅ Debounce helper to improve performance
-  const debounce = (func, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const handleFilterCities = useCallback(
-    debounce((value) => {
-      const filtered = popularCities.filter((city) =>
-        city.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredCities(filtered);
-      setShowSuggestions(true);
-    }, 300),
-    []
-  );
-
-  // ✅ Google Places Autocomplete initialization
-  useEffect(() => {
-    const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-    const scriptId = "google-maps-places";
-
-    const initAutocomplete = () => {
-      if (!window.google || !window.google.maps || !window.google.maps.places) return;
-      if (!inputRef.current) return;
-
-      autocompleteRef.current =
-        autocompleteRef.current ||
-        new window.google.maps.places.Autocomplete(inputRef.current, {
-          types: ["(cities)"],
-          componentRestrictions: { country: "in" },
-        });
-
-      autocompleteRef.current.addListener("place_changed", () => {
-        const place = autocompleteRef.current.getPlace();
-        const address = place?.formatted_address || inputRef.current.value || "";
-        setLocation(address);
-        setShowSuggestions(false);
-      });
-    };
-
-    if (!document.getElementById(scriptId)) {
-      const script = document.createElement("script");
-      script.id = scriptId;
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
-      script.async = true;
-      script.defer = true;
-      script.onload = initAutocomplete;
-      script.onerror = () => toast.error("Failed to load Google Maps API.");
-      document.head.appendChild(script);
-    } else {
-      initAutocomplete();
+  // ✅ Get user’s current location
+  const getCurrentLocation = useCallback(() => {
+    if (!navigator.geolocation) {
+      toast.error("Geolocation not supported by your browser.");
+      setLocation("Location unavailable");
+      return;
     }
 
-    return () => {
-      autocompleteRef.current = null;
-    };
+    setLocation("Detecting your location...");
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        setCoords({ latitude, longitude });
+
+        const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+        try {
+          const res = await fetch(
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`
+          );
+          const data = await res.json();
+          if (data.results?.[0]) {
+            const address = data.results[0].formatted_address;
+            setLocation(address);
+          } else {
+            setLocation(`Lat: ${latitude}, Lng: ${longitude}`);
+          }
+        } catch {
+          toast.error("Failed to retrieve address.");
+          setLocation("Unknown location");
+        }
+      },
+      () => {
+        toast.error("Please allow location access.");
+        setLocation("Permission denied");
+      }
+    );
   }, []);
 
-  // ✅ Input events
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setLocation(value);
-    handleFilterCities(value);
-  };
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
 
-  const handleFocus = () => {
-    handleFilterCities(location);
-  };
-
-  // ✅ Handle Search Click
+  // ✅ Handle search
   const handleSearch = () => {
-    if (!location.trim()) {
-      toast.error("Please enter a location.");
+    if (!location || location.includes("Detecting")) {
+      toast.error("Please confirm your location first.");
       return;
     }
     if (!pickupDate || !returnDate) {
-      toast.error("Please select pick-up and return dates.");
+      toast.error("Please select both pick-up and return date & time.");
       return;
     }
     if (returnDate < pickupDate) {
-      toast.error("Return date cannot be before pick-up date.");
+      toast.error("Return date cannot be before pick-up date & time.");
       return;
     }
 
     const params = new URLSearchParams({
-      location: location.trim(),
-      pickup: formatDate(pickupDate),
-      return: formatDate(returnDate),
+      location,
+      lat: coords?.latitude || "",
+      lng: coords?.longitude || "",
+      pickup: formatDateTime(pickupDate),
+      return: formatDateTime(returnDate),
     });
 
     router.push(`/search?${params.toString()}`);
@@ -143,51 +102,31 @@ export default function SearchBar() {
   return (
     <div className={styles.container}>
       <div className={styles.box} role="search" aria-label="Car search bar">
-        {/* Location */}
-        <div className={styles.field} style={{ position: "relative" }}>
-          <label htmlFor="location">Location</label>
+        
+        {/* 🌍 Location */}
+        <div className={styles.field}>
+          <label>Location</label>
           <div className={styles.inputWrapper}>
             <FaMapMarkerAlt className={styles.icon} aria-hidden="true" />
             <input
-              id="location"
-              ref={inputRef}
               type="text"
-              placeholder="Choose your location"
               value={location}
-              onChange={handleInputChange}
-              onFocus={handleFocus}
-              autoComplete="off"
+              readOnly
               className={styles.input}
-              aria-label="Enter location"
             />
+            <button
+              type="button"
+              onClick={getCurrentLocation}
+              className={styles.locBtn}
+            >
+              Use My Location
+            </button>
           </div>
-
-          {/* Custom City Suggestions */}
-          {showSuggestions && filteredCities.length > 0 && (
-            <div className={styles.customSuggestions}>
-              {filteredCities.map((city, idx) => (
-                <div
-                  key={idx}
-                  className={styles.customSuggestionItem}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    setLocation(city);
-                    setShowSuggestions(false);
-                  }}
-                  tabIndex={0}
-                  role="button"
-                  aria-label={`Select ${city}`}
-                >
-                  {city}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
-        {/* Pick-Up Date */}
+        {/* 📅 Pick-Up Date & Time */}
         <div className={styles.field}>
-          <label htmlFor="pickup">Pick-Up Date</label>
+          <label htmlFor="pickup">Pick-Up Date & Time</label>
           <div className={styles.inputWrapper}>
             <FaCalendarAlt className={styles.icon} aria-hidden="true" />
             <DatePicker
@@ -197,8 +136,10 @@ export default function SearchBar() {
                 setPickupDate(date);
                 if (returnDate && date && returnDate < date) setReturnDate(null);
               }}
-              placeholderText="From Date"
-              dateFormat="dd/MM/yyyy"
+              placeholderText="Select pick-up date & time"
+              dateFormat="dd/MM/yyyy h:mm aa"
+              showTimeSelect
+              timeIntervals={30}
               minDate={today}
               className={styles.cdateInput}
               onChangeRaw={(e) => e.preventDefault()}
@@ -206,17 +147,19 @@ export default function SearchBar() {
           </div>
         </div>
 
-        {/* Return Date */}
+        {/* 📆 Return Date & Time */}
         <div className={styles.field}>
-          <label htmlFor="return">Return Date</label>
+          <label htmlFor="return">Return Date & Time</label>
           <div className={styles.inputWrapper}>
             <FaCalendarAlt className={styles.icon} aria-hidden="true" />
             <DatePicker
               id="return"
               selected={returnDate}
               onChange={(date) => setReturnDate(date)}
-              placeholderText="To Date"
-              dateFormat="dd/MM/yyyy"
+              placeholderText="Select return date & time"
+              dateFormat="dd/MM/yyyy h:mm aa"
+              showTimeSelect
+              timeIntervals={30}
               minDate={pickupDate || today}
               className={styles.cdateInput}
               onChangeRaw={(e) => e.preventDefault()}
@@ -224,7 +167,7 @@ export default function SearchBar() {
           </div>
         </div>
 
-        {/* Search Button */}
+        {/* 🔍 Search Button */}
         <button
           onClick={handleSearch}
           className={styles.csearchBtn}

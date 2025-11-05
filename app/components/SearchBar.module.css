@@ -9,7 +9,7 @@
   background: #FEF9F5;
 }
 
-/* main pill-like box */
+
 .box {
   display: flex;
   align-items: center;
@@ -192,4 +192,35 @@
     width: 100%;
     padding: 12px 16px;
   }
+}
+
+
+.locBtn {
+  background: linear-gradient(135deg, #f6d58f, #c89a5a);
+  border: none;
+  border-radius: 12px;
+  padding: 8px 14px;
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 5px rgba(199, 154, 88, 0.3);
+}
+
+.locBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(199, 154, 88, 0.4);
+}
+
+
+.cdateInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  padding: 4px;
+  width: 160px; /* increased from 140px */
+  cursor: pointer;
 }

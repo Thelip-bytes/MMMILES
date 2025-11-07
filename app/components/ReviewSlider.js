@@ -34,7 +34,7 @@ const reviews = [
     img: "/profile1.jpg",
   },
    {
-    text: "Got stuck in the rain with no transport, and MM Miles helped me get a car within minutes. Smooth pickup and great service even in bad weather.",
+    text: "Got stuck in the rain with no transport, and MM Miles helped me get a car. Smooth pickup and great service even in bad weather.",
     name: "Neha V.",
     title: "Daily Commuter",
     img: "/profile2.jpg",

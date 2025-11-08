@@ -8,7 +8,7 @@ import "./ReviewSection.css";
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyMV0ZA7qkz8JJmCCyHy-iWBG43HXHHQr-9MXKaoVRONlnfZ9PUkcp9pdUTCvQmFByz/exec'; 
 
 export default function ReviewSection() {
-    const RATING_URL = 'https://www.google.com/maps/place/MM+Miles+Self-Drive+Car+Rental+Chennai/@13.0734852,80.1639008,17z/data=!4m6!3m5!1s0x3a5261d706428fe1:0xeffde64f1e5b38fd!8m2!3d13.0735033!4d80.1637973!16s%2Fg%2F11yk1rwwv3?entry=ttu&g_ep=EgoyMDI1MTAyOS4yIKXMDSoASAFQAw%3D%3D';
+    const RATING_URL = 'https://g.page/r/Cf04Wx5P5v3vEAE/review';
     const [isModalOpen, setIsModalOpen] = useState(false);
     
     const handleCloseModal = () => setIsModalOpen(false);

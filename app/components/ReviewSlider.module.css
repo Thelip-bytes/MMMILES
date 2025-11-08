@@ -27,7 +27,7 @@
 /* Track */
 .sliderTrack {
   display: flex;
-  width: calc(250px * 50); /* Adjust if card width changes */
+  width: calc(120px * 50);  /*Adjust if card width changes */
   animation: scroll 85s linear infinite;
   will-change: transform;
 }
@@ -89,11 +89,16 @@
 /* Responsive */
 @media (max-width: 768px) {
   .reviewslide {
-    padding: 40px 40px;
+    padding: 20px 20px 40px;
   }
   .card {
-    width: 200px;
+    width: 240px !important;
     padding: 16px;
+  }
+  .text {
+    font-size: 14px;
+    margin-bottom: 16px;
+    color: #444;
   }
 }
 
@@ -102,7 +107,12 @@
     padding: 40px 20px;
   }
   .card {
-    width: 180px;
+    width: 140px;
     font-size: 0.85rem;
+  }
+  .text {
+    font-size: 14px;
+    margin-bottom: 16px;
+    color: #444;
   }
 }

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -38,7 +39,6 @@ export default function Navbar() {
 
     checkToken();
 
-    // ✅ Re-check on token changes (manual events + storage listener)
     window.addEventListener("auth-change", checkToken);
     window.addEventListener("storage", checkToken);
 
@@ -48,13 +48,13 @@ export default function Navbar() {
     };
   }, []);
 
-  // Close mobile menu when clicking outside
+  // ✅ Close dropdown when clicking outside
   useEffect(() => {
-    function handleClickOutside(e) {
+    const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setMenuOpen(false);
       }
-    }
+    };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -64,7 +64,6 @@ export default function Navbar() {
     else router.push("/login");
   };
 
-  // 🚫 Prevent hydration mismatch by not rendering until client is ready
   if (!mounted) return null;
 
   return (
@@ -76,8 +75,8 @@ export default function Navbar() {
             <Image
               src="/mlogo.png"
               alt="MM Miles Logo"
-              width={130}
-              height={37}
+              width={110}
+              height={33}
               priority
             />
           </Link>
@@ -91,12 +90,12 @@ export default function Navbar() {
           <li><Link href="/contact">Contact Us</Link></li>
         </ul>
 
-        {/* ✅ Dynamic Button (changes based on login state) */}
+        {/* Login/Dashboard Button */}
         <button className="loginBtn" onClick={handleMainButtonClick}>
           {isLoggedIn ? "Dashboard" : "Login / Signup"}
         </button>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Toggle */}
         <button
           className="mobileMenu"
           aria-label="Toggle menu"
@@ -106,50 +105,79 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* ✅ Mobile Dropdown */}
-      {menuOpen && (
-        <>
-          <div className="backdrop" onClick={() => setMenuOpen(false)} />
-          <div
-            className={`mobileDropdown ${
-              menuOpen ? "dropdownOpen" : "dropdownClosed"
-            }`}
-          >
-            <ul>
-              <li>
-                <Link href="/about" onClick={() => setMenuOpen(false)}>
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/reviews" onClick={() => setMenuOpen(false)}>
-                  Reviews
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" onClick={() => setMenuOpen(false)}>
-                  FAQ&apos;s
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" onClick={() => setMenuOpen(false)}>
-                  Contact Us
-                </Link>
-              </li>
-            </ul>
-
-            <button
-              className="bg-white text-black px-4 py-2 rounded-lg shadow"
-              onClick={() => {
-                handleMainButtonClick();
-                setMenuOpen(false);
-              }}
+      {/* Mobile Dropdown with Animation */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <motion.div
+              className="backdrop"
+              onClick={() => setMenuOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.6 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.div
+              className="mobileDropdown"
+              initial={{ opacity: 0, y: -15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
             >
-              {isLoggedIn ? "Dashboard" : "Login / Signup"}
-            </button>
-          </div>
-        </>
-      )}
+              <motion.ul
+                initial="hidden"
+                animate="show"
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: {
+                    opacity: 1,
+                    transition: { staggerChildren: 0.12 },
+                  },
+                }}
+              >
+                {[
+                  { name: "About Us", link: "/about" },
+                  { name: "Reviews", link: "/reviews" },
+                  { name: "FAQ's", link: "/faq" },
+                  { name: "Contact Us", link: "/contact" },
+                ].map((item, index) => (
+                  <motion.li
+                    key={index}
+                    variants={{
+                      hidden: { opacity: 0, y: 15 },
+                      show: { opacity: 1, y: 0 },
+                    }}
+                    whileHover={{
+                      
+                    }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <Link href={item.link} onClick={() => setMenuOpen(false)}>
+                      {item.name}
+                    </Link>
+                  </motion.li>
+                ))}
+              </motion.ul>
+
+              <motion.button
+                className="dropdownLogin"
+                onClick={() => {
+                  handleMainButtonClick();
+                  setMenuOpen(false);
+                }}
+                whileHover={{
+                  scale: 1.05,
+                  backgroundColor: "#D8B480",
+                  color: "#111",
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                {isLoggedIn ? "Dashboard" : "Login / Signup"}
+              </motion.button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

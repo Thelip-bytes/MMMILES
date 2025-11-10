@@ -74,8 +74,8 @@
   }
     .HostSection {
     width: 100%;
-    padding: 60px 20px; /* some breathing room */
-    background: #f5f0ef; /* optional background like your screenshot */
+    padding: 60px 23px; /* some breathing room */
+    background: #FEF9F5; /* optional background like your screenshot */
     display: flex;
     justify-content: center;
     }

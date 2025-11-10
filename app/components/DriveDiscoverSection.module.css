@@ -80,6 +80,10 @@
   .slideTrack {
     width: calc(250px * 12);
   }
+  .placebody {
+  padding: 60px 40px;
+  background-color: #FEF9F5;
+}
 }
 
 @media (max-width: 480px) {
@@ -89,5 +93,9 @@
   }
   .slideTrack {
     width: calc(200px * 12);
+  }
+  .placebody {
+    padding: 60px 20px;
+    background-color: #FEF9F5;
   }
 }

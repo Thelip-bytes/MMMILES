@@ -133,3 +133,34 @@
     font-size: 1.05rem;
   }
 }
+
+
+
+@media (max-width: 768px) {
+   .faqHeader h2 {
+    font-size: 22px;
+  }
+  .faqHeader p {
+    font-size: 14px;
+  }
+  .faqTrigger {
+    padding: 12px 20px 12px;
+  }
+  .faqQuestion {
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .faqAnswer {
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: -5px;
+  }
+  .faqIcon {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    flex: 0 0 15px;
+    transition: transform 0.65s ease;
+  }
+  
+}

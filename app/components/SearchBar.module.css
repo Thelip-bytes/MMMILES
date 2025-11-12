@@ -402,7 +402,7 @@
   margin-left: auto;
   border-left: 2px solid #f4e6c8;
   border-radius: 8px;
-  background: #fffaf3;
+  background: transparent;
 }
 
 /* Optional subtle animation for detecting text */

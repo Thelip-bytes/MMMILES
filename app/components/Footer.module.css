@@ -260,19 +260,35 @@
 }
 
 .footerLinks h4 {
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 10px;
   font-weight: bold;
-  color: #b98156;
+  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
 }
 
 .footerLinks a {
   display: block;
   margin-bottom: 8px;
   color: #e6e6e6;
-  font-size: 12px;
+  font-size: 13px;
   text-decoration: none;
   transition: color 0.3s ease;
+}
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.footerLeft p {
+    /* Remove default top/bottom margin from paragraphs */
+    margin: 5px 0; 
+    
+    /* Set the default text color for the contact info */
+    color: #bdbdbd; /* Use the color from your buttons, or your footer's text color */
+    font-size: 13px; /* Adjust font size as needed */
 }
 
 }

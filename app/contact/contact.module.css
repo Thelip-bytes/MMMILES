@@ -160,7 +160,26 @@
   .ccontainer {
     flex-direction: column; /* Stack sections vertically */
   }
-  .cleftSection, .crightSection {
+    .ccontainer {
+    display: flex;
+    padding: 20px 20px 0px;
+    min-height: 50vh; /* Ensure it takes full viewport height */
+    background-color: #FEF9F5; /* A light background color */
+    font-family: Arial, sans-serif; /* Or your preferred font */
+  }
+  .cemail {
+  font-size: 14px;
+  color: #666;
+}
+.cphone {
+  font-size: 14px;
+  color: #666;
+  
+}
+  .crightSection {
+    display: none;
+  }
+  .cleftSection{
     flex: none; /* Remove flex sizing */
     width: 100%;
     padding: 40px 30px;
@@ -170,18 +189,18 @@
   }
   .cmainTitle {
     font-size: 2.2rem;
-    margin-bottom: 20px;
+    margin-bottom: 7px;
   }
   .csectionTitle {
-    font-size: 1.4rem;
+    font-size: 24px;
     margin-top: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
   .csocialIcons {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
   .caddress, .cemail {
-    margin-bottom: 25px;
+    margin-bottom: 5px;
   }
   .crightTitle, .crightTitleBold {
     text-align: center;
@@ -203,14 +222,20 @@
       font-size: 0.85rem;
       padding: 8px 12px;
   }
+  .caddress {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
 }
 
 @media (max-width: 480px) {
     .cleftSection, .crightSection {
-        padding: 30px 20px;
+        padding: 30px 20px 10px;
     }
     .cmainTitle {
-        font-size: 1.8rem;
+        font-size: 24px;
     }
     .crightTitleBold {
         font-size: 2rem;

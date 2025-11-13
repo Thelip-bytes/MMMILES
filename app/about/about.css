@@ -46,7 +46,62 @@
   .about-section{
     padding: 2rem 8rem !important;
   }
+  
 }
+@media (max-width: 768px){
+   .about-section h2 {
+      font-size: 20px;
+    }
+    .about-section {
+      padding: 20px 30px !important;
+    }
+    .about-section p {
+      font-size: 14px !important;
+      text-align: justify;
+      line-height: 21px;
+    }
+    .team-section {
+        background: #fef9f5;
+        justify-content: center;
+        gap: 3rem;
+        padding: 20px !important;
+        display: flex;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .team-member p{
+      font-size: 12px;
+    }
+    .team-member h4{
+      font-size: 15px;
+    }
+
+    .card p{
+      font-size: 13px !important;
+    }
+
+    .card h3{
+      font-size: 16px !important;
+      background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+    }
+
+    .team-img {
+      height: 70px !important;
+      width: 70px !important;
+    }
+
+    .unsdg h1 {
+    
+    font-size: 20px !important;
+    font-weight: 600;
+}
+    
+}
+
+
 .about-section {
   justify-content: center;
   text-align: justify;
@@ -70,6 +125,7 @@
   background: #FEF9F5; /* Light gray background */
   overflow: hidden;
 }
+
 
 /* Team Member styling */
 .team-member {
@@ -114,6 +170,11 @@
   z-index: 1;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+.card h3{
+      background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+    }
 
 /* Hover effect */
 .card:hover {
@@ -320,6 +381,7 @@ body {
   .vision-mission-section {
     flex-direction: column;
     align-items: center;
+    padding: 30px 20px ;
   }
 
   .card {
@@ -345,7 +407,7 @@ body {
 /* Mobile */
 @media (max-width: 600px) {
   .unsdg {
-    padding: 2rem 1rem;
+    padding: 2rem 30px;
   }
 
   .unsdg h2 {
@@ -361,14 +423,22 @@ body {
   }
 
   .stats {
-    gap: 1.5rem;
+    gap: 2rem;
   }
 
   .stat h4 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .stat p {
     font-size: 0.8rem;
   }
+  
+}
+
+@media (max-width: 480px){
+   #stat {
+    margin-top: 25px;
+    
+}
 }

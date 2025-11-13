@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -9,7 +8,7 @@ import styles from "./Checkout.module.css";
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // safe — page is client-only now
   const carId = searchParams.get("car");
   const pickup = searchParams.get("pickup");
   const returnTime = searchParams.get("return");
@@ -35,11 +34,25 @@ export default function CheckoutPage() {
 
   const [loggedInUser, setLoggedInUser] = useState(null);
 
-  // ✅ Check login and fetch user info
+  // load Razorpay script dynamically (if needed)
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
+    if (typeof window === "undefined") return;
+    if (window.Razorpay) return;
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      // do not remove script — leave it for reuse
+    };
+  }, []);
+
+  // Check login and fetch user info
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
     if (!token) {
-      router.push("/login?redirect=/checkout");
+      // redirect preserving query so login can send back
+      router.push(`/login?redirect=${encodeURIComponent(window?.location?.pathname + window?.location?.search || "/checkout")}`);
       return;
     }
     try {
@@ -48,11 +61,12 @@ export default function CheckoutPage() {
       );
       setLoggedInUser(payload);
     } catch {
-      router.push("/login?redirect=/checkout");
+      router.push(`/login?redirect=${encodeURIComponent(window?.location?.pathname + window?.location?.search || "/checkout")}`);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
-  // ✅ Fetch car + host details
+  // Fetch car + host details
   useEffect(() => {
     async function fetchCar() {
       try {
@@ -73,21 +87,31 @@ export default function CheckoutPage() {
     if (carId) fetchCar();
   }, [carId]);
 
-  // ✅ Fetch customer details if exist
+  // Fetch customer details if exist
   useEffect(() => {
     async function fetchCustomer() {
       if (!loggedInUser?.sub) return;
-      const { data } = await supabase
-        .from("customers")
-        .select("*")
-        .eq("user_id", loggedInUser.sub)
-        .single();
-      if (data) setCustomer(data);
+      try {
+        const { data } = await supabase
+          .from("customers")
+          .select("*")
+          .eq("user_id", loggedInUser.sub)
+          .single();
+        if (data) setCustomer({
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          email: data.email || "",
+          address: data.address || "",
+          phone: data.phone || loggedInUser.phone || "",
+        });
+      } catch (err) {
+        // ignore if none
+      }
     }
     fetchCustomer();
   }, [loggedInUser]);
 
-  // ✅ Calculate total price
+  // Calculate total price
   useEffect(() => {
     if (!car) return;
 
@@ -100,9 +124,9 @@ export default function CheckoutPage() {
 
     baseRate = Number(baseRate) || 0;
 
-    const gst = baseRate * 0.18; // 18% GST
+    const gst = +(baseRate * 0.18).toFixed(2); // 18% GST
     const convFee = 100; // hardcoded convenience fee
-    const total = baseRate + gst + convFee;
+    const total = +(baseRate + gst + convFee).toFixed(2);
 
     setPriceSummary({
       basePrice: baseRate,
@@ -112,60 +136,71 @@ export default function CheckoutPage() {
     });
   }, [plan, car]);
 
-  // ✅ Handle save/update customer info
+  // Handle save/update customer info
   async function handleSave() {
     if (!loggedInUser?.sub) return;
 
-    const { data: existing } = await supabase
-      .from("customers")
-      .select("id")
-      .eq("user_id", loggedInUser.sub)
-      .single();
-
-    if (existing) {
-      await supabase
+    try {
+      const { data: existing } = await supabase
         .from("customers")
-        .update({
-          first_name: customer.first_name,
-          last_name: customer.last_name,
-          email: customer.email,
-          address: customer.address,
-        })
-        .eq("user_id", loggedInUser.sub);
-    } else {
-      await supabase.from("customers").insert([
-        {
-          user_id: loggedInUser.sub,
-          first_name: customer.first_name,
-          last_name: customer.last_name,
-          email: customer.email,
-          phone: loggedInUser.phone,
-          address: customer.address,
-        },
-      ]);
+        .select("id")
+        .eq("user_id", loggedInUser.sub)
+        .single();
+
+      if (existing) {
+        await supabase
+          .from("customers")
+          .update({
+            first_name: customer.first_name,
+            last_name: customer.last_name,
+            email: customer.email,
+            address: customer.address,
+          })
+          .eq("user_id", loggedInUser.sub);
+      } else {
+        await supabase.from("customers").insert([
+          {
+            user_id: loggedInUser.sub,
+            first_name: customer.first_name,
+            last_name: customer.last_name,
+            email: customer.email,
+            phone: customer.phone || loggedInUser.phone,
+            address: customer.address,
+          },
+        ]);
+      }
+      setEditing(false);
+    } catch (err) {
+      console.error("Error saving customer:", err);
     }
-    setEditing(false);
   }
 
-  // ✅ Razorpay Integration
+  // Razorpay Integration
   const handlePayment = async () => {
-    if (!priceSummary.total) return;
+    if (!priceSummary.total || !car) return;
 
+    if (typeof window === "undefined" || !window.Razorpay) {
+      alert("Payment gateway not loaded. Try again in a moment.");
+      return;
+    }
+
+    // create order on your backend ideally (server-side) — skipping here for demo, using client flow
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: Math.round(priceSummary.total * 100), // in paise
       currency: "INR",
       name: "MMmiles Rentals",
-      description: `${car?.make} ${car?.model} booking`,
+      description: `${car?.make} ${car?.model} booking (${plan})`,
       image: "/logo.png",
       handler: function (response) {
+        // You should verify payment server-side before confirming booking.
         alert("Payment Successful! Razorpay ID: " + response.razorpay_payment_id);
         router.push("/booking-success");
       },
       prefill: {
-        name: `${customer.first_name} ${customer.last_name}`,
-        email: customer.email,
-        contact: customer.phone,
+        name: `${customer.first_name || ""} ${customer.last_name || ""}`.trim(),
+        email: customer.email || "",
+        contact: customer.phone || "",
       },
       theme: {
         color: "#d4a762",

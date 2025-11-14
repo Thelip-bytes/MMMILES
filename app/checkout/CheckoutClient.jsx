@@ -7,12 +7,82 @@ import { makeAuthenticatedRequest } from "../../lib/customSupabaseClient";
 import { testAuth } from "../../lib/authTest";
 import styles from "./Checkout.module.css";
 
+/**
+ * Robust parser for the common date formats we expect from the URL
+ * Supports:
+ *  - "17/11/2025 09:00"  (dd/mm/yyyy hh:mm)
+ *  - "17-11-2025 09:00"
+ *  - "2025-11-17 09:00"  (yyyy-mm-dd)
+ *  - ISO strings
+ *  - epoch milliseconds
+ */
+function parseDateInput(raw) {
+  if (!raw) return null;
+  try {
+    let s = decodeURIComponent(String(raw)).trim();
+
+    // If it's a pure number (epoch ms or seconds)
+    if (/^\d+$/.test(s)) {
+      const asNum = Number(s);
+      // if seconds, convert to ms (10-digit), if ms keep
+      return asNum < 1e12 ? new Date(asNum * 1000) : new Date(asNum);
+    }
+
+    // First try native parse (ISO and other recognized formats)
+    const native = new Date(s);
+    if (!isNaN(native.getTime())) return native;
+
+    // dd/mm/yyyy hh:mm or dd-mm-yyyy hh:mm
+    const dmy = s.match(
+      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:[T\s]+(\d{1,2}):(\d{2}))?$/
+    );
+    if (dmy) {
+      const day = Number(dmy[1]);
+      const month = Number(dmy[2]) - 1;
+      const year = Number(dmy[3]);
+      const hour = Number(dmy[4] || 0);
+      const minute = Number(dmy[5] || 0);
+      return new Date(year, month, day, hour, minute);
+    }
+
+    // yyyy/mm/dd or yyyy-mm-dd hh:mm
+    const ymd = s.match(
+      /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})(?:[T\s]+(\d{1,2}):(\d{2}))?$/
+    );
+    if (ymd) {
+      const year = Number(ymd[1]);
+      const month = Number(ymd[2]) - 1;
+      const day = Number(ymd[3]);
+      const hour = Number(ymd[4] || 0);
+      const minute = Number(ymd[5] || 0);
+      return new Date(year, month, day, hour, minute);
+    }
+
+    // Last resort: try replacing dots with hyphens and parse
+    const tryAlt = new Date(s.replace(/\./g, "-"));
+    if (!isNaN(tryAlt.getTime())) return tryAlt;
+  } catch (err) {
+    console.warn("parseDateInput error", err);
+  }
+  return null;
+}
+
+/** Clean numeric string like "₹500" or "500.00 " -> 500 */
+function toNumberClean(v) {
+  if (v === undefined || v === null) return 0;
+  const s = String(v).trim();
+  // Remove any non-digit except dot and minus
+  const cleaned = s.replace(/[^\d.\-]/g, "");
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : 0;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const carId = searchParams.get("car");
-  const pickup = searchParams.get("pickup");
-  const returnTime = searchParams.get("return");
+  const pickup = searchParams.get("pickup"); // e.g. "17/11/2025 09:00"
+  const returnTime = searchParams.get("return"); // e.g. "19/11/2025 17:00"
   const plan = searchParams.get("plan") || "BASIC";
 
   const [car, setCar] = useState(null);
@@ -31,8 +101,10 @@ export default function CheckoutPage() {
   const [priceSummary, setPriceSummary] = useState({
     basePrice: 0,
     gst: 0,
-    convFee: 0,
+    convFee: 100,
     total: 0,
+    hours: 0,
+    error: null,
   });
 
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -63,23 +135,16 @@ export default function CheckoutPage() {
     }
 
     try {
-      // Fix JWT payload parsing - handle base64 padding correctly
       const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/").padEnd(
-        base64Url.length + (4 - base64Url.length % 4) % 4,
-        "="
-      );
+      const base64 = base64Url
+        .replace(/-/g, "+")
+        .replace(/_/g, "/")
+        .padEnd(base64Url.length + (4 - base64Url.length % 4) % 4, "=");
       const payload = JSON.parse(atob(base64));
-
       setLoggedInUser(payload);
 
-      // 🚫 REMOVED SESSION SETTING - GoTrueClient expects auth.users table
-      // RLS will now work with the RLS policy changes (custom JWT claims)
-      console.log("✅ Custom JWT loaded, RLS will work with policy fixes");
-      
-      // Test authentication after JWT is loaded
       setTimeout(() => {
-        testAuth().then(success => {
+        testAuth().then((success) => {
           if (success) {
             console.log("✅ Authentication test passed!");
           } else {
@@ -87,7 +152,6 @@ export default function CheckoutPage() {
           }
         });
       }, 1000);
-
     } catch (err) {
       console.error("JWT parsing error:", err);
       router.push("/login?redirect=/checkout");
@@ -98,32 +162,35 @@ export default function CheckoutPage() {
   useEffect(() => {
     async function fetchCar() {
       try {
-        // Fetch vehicles with related data using direct fetch
         const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/vehicles?id=eq.${carId}&select=*,hosts(*),vehicle_images(*)`;
         const response = await fetch(url, {
           headers: {
-            "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
             "Content-Type": "application/json",
           },
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const data = await response.json();
         if (data.length > 0) {
           const carData = data[0];
           setCar(carData);
           setHost(carData.hosts);
+        } else {
+          setCar(null);
         }
       } catch (err) {
         console.error("Error fetching car:", err);
+        setCar(null);
       } finally {
         setLoading(false);
       }
     }
     if (carId) fetchCar();
+    else setLoading(false);
   }, [carId]);
 
   // Fetch customer details
@@ -147,30 +214,73 @@ export default function CheckoutPage() {
           });
         }
       } catch (err) {
-        console.log("No customer record yet.");
+        console.log("No customer record yet.", err);
       }
     }
     fetchCustomer();
   }, [loggedInUser]);
 
-  // Calculate total price
+  // Calculate total price (robust)
   useEffect(() => {
-    if (!car) return;
+    // Safe defaults
+    if (!car) return setPriceSummary((s) => ({ ...s, error: "Car data not loaded yet" }));
 
-    let baseRate =
+    const start = parseDateInput(pickup);
+    const end = parseDateInput(returnTime);
+
+    if (!start || !end) {
+      // Provide helpful error & zeroed numbers (avoid NaN)
+      setPriceSummary({
+        basePrice: 0,
+        gst: 0,
+        convFee: 100,
+        total: 0,
+        hours: 0,
+        error: "Invalid pickup/return datetime format. Use dd/mm/yyyy hh:mm or ISO.",
+      });
+      console.warn("Invalid date(s): pickup=", pickup, " return=", returnTime);
+      return;
+    }
+
+    // Convert DB rates to numbers safely
+    let hourlyRateRaw =
       plan === "MAX"
         ? car.price_max
         : plan === "PLUS"
         ? car.price_plus
         : car.price_basic;
 
-    baseRate = Number(baseRate) || 0;
-    const gst = +(baseRate * 0.18).toFixed(2);
-    const convFee = 100;
-    const total = +(baseRate + gst + convFee).toFixed(2);
+    const hourlyRate = toNumberClean(hourlyRateRaw);
 
-    setPriceSummary({ basePrice: baseRate, gst, convFee, total });
-  }, [plan, car]);
+    const diffMs = end.getTime() - start.getTime();
+    if (diffMs <= 0) {
+      setPriceSummary({
+        basePrice: 0,
+        gst: 0,
+        convFee: 100,
+        total: 0,
+        hours: 0,
+        error: "Return must be after pickup",
+      });
+      return;
+    }
+
+    const hours = Math.ceil(diffMs / (1000 * 60 * 60)); // round up to next hour
+
+    const basePrice = +(hours * hourlyRate).toFixed(2);
+    const gst = +(basePrice * 0.18).toFixed(2);
+    const convFee = 100;
+    const total = +(basePrice + gst + convFee).toFixed(2);
+
+    setPriceSummary({
+      basePrice,
+      gst,
+      convFee,
+      total,
+      hours,
+      error: null,
+    });
+  }, [plan, car, pickup, returnTime]);
 
   // Insert or update customer info
   async function handleSave() {
@@ -180,65 +290,47 @@ export default function CheckoutPage() {
     }
 
     try {
-      console.log("💾 Saving customer data...");
-      
-      // Check if customer exists
-      console.log("🔍 Checking for existing customer...");
       const existingData = await makeAuthenticatedRequest(
         "GET",
         `customers?user_id=eq.${loggedInUser.sub}&select=id`
       );
-      
-      console.log("Existing data:", existingData);
 
       if (existingData && existingData.length > 0) {
-        console.log("🔄 Updating existing customer...");
-        // Update existing customer
-        const updateData = {
-          first_name: customer.first_name,
-          last_name: customer.last_name,
-          email: customer.email,
-          address: customer.address,
-        };
-        
         await makeAuthenticatedRequest(
           "PATCH",
           `customers?user_id=eq.${loggedInUser.sub}`,
           {
             headers: {
               "Content-Type": "application/json",
-              "Prefer": "return=minimal",
+              Prefer: "return=minimal",
             },
-            body: JSON.stringify(updateData),
+            body: JSON.stringify({
+              first_name: customer.first_name,
+              last_name: customer.last_name,
+              email: customer.email,
+              address: customer.address,
+            }),
           }
         );
-        
-        console.log("✅ Customer updated successfully");
       } else {
-        console.log("🆕 Creating new customer...");
-        // Insert new customer
-        const insertData = {
-          user_id: loggedInUser.sub,
-          first_name: customer.first_name,
-          last_name: customer.last_name,
-          email: customer.email,
-          phone: customer.phone || loggedInUser.phone_number,
-          address: customer.address,
-        };
-        
         await makeAuthenticatedRequest(
           "POST",
           "customers",
           {
             headers: {
               "Content-Type": "application/json",
-              "Prefer": "return=minimal",
+              Prefer: "return=minimal",
             },
-            body: JSON.stringify(insertData),
+            body: JSON.stringify({
+              user_id: loggedInUser.sub,
+              first_name: customer.first_name,
+              last_name: customer.last_name,
+              email: customer.email,
+              phone: customer.phone || loggedInUser.phone_number,
+              address: customer.address,
+            }),
           }
         );
-        
-        console.log("✅ Customer created successfully");
       }
 
       setEditing(false);
@@ -250,11 +342,14 @@ export default function CheckoutPage() {
 
   // Handle payment
   const handlePayment = () => {
-    if (!priceSummary.total) return;
+    if (!priceSummary.total || priceSummary.total <= 0) {
+      alert("Invalid payment amount. Check trip details.");
+      return;
+    }
 
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: priceSummary.total * 100,
+      amount: Math.round(priceSummary.total * 100), // in paise
       currency: "INR",
       name: "MMmiles Rentals",
       description: `${car.make} ${car.model} booking`,
@@ -344,6 +439,14 @@ export default function CheckoutPage() {
       <div className={styles.priceSection}>
         <h3>Trip Summary</h3>
         <p><strong>Selected Plan:</strong> {plan}</p>
+        <p><strong>Pickup:</strong> {pickup}</p>
+        <p><strong>Return:</strong> {returnTime}</p>
+
+        {priceSummary.error && (
+          <p style={{ color: "crimson" }}>{priceSummary.error}</p>
+        )}
+
+        <p><strong>Duration:</strong> {priceSummary.hours} hours</p>
         <div className={styles.priceBreakdown}>
           <p>Base Price: ₹{priceSummary.basePrice}</p>
           <p>Convenience Fee: ₹{priceSummary.convFee}</p>

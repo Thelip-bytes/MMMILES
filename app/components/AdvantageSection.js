@@ -6,7 +6,7 @@ const AdvantageSection = () => {
     <div className="advantage-body">
     <section className="advantage-section">
       <div className="advantage-container">
-        <h2>Smart Choice, Drive More, Worry Less</h2>
+        <h2>Smart Choice, Drive More, Worry Less </h2>
         <p className="subtitle">The Self-Drive Advantage</p>
 
         <div className="advantage-grid">

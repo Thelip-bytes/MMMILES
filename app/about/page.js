@@ -114,7 +114,7 @@ export default function Hero() {
             <h4>15k+</h4>
             <p>Kilo-meters in a Month</p>
           </div>
-          <div className="stat">
+          <div className="stat" id="stat">
             <h4>24/7</h4>
             <p>We’re just a call away</p>
           </div>

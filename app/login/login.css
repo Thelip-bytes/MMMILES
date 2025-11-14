@@ -224,8 +224,37 @@
   .login-card {
     flex-direction: column;
     text-align: center;
+    padding: 40px 1rem;
   }
-  .login-left, .login-right {
-    padding: 1.5rem;
+  .otp-card {
+    flex-direction: column;
+    text-align: center;
+    padding:1rem;
+
+  }
+  .login-right {
+    padding: 40px 1.5rem;
+  }
+  .login-left{
+    display: none;
+  }
+  .form-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  letter-spacing: 1px;
+}
+  .login-wrapper {
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #FEF9F5;
+    padding: 1rem;
+    margin-top: -20px;
   }
 }

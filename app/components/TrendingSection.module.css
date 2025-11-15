@@ -229,7 +229,7 @@
   background: linear-gradient(to right, #D8B480 50%, #BF9860 100%);
   color: white;
   border: none;
-  margin-left: 26px !important;
+  margin-left: 29px !important;
   border-radius: 8px;
   padding: 10px 5px;
   font-weight: 600;
@@ -239,10 +239,10 @@
   .trendy-price-row {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
   margin-bottom: 12px;
   background:linear-gradient(to right bottom, #f0dec3, rgb(223, 223, 213));
-  padding: 8px 12px 8px 21px;
+  padding: 8px 10px 8px 18px;
   border-radius: 12px;
 }
   .trendy-image-wrapper {

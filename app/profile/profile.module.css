@@ -1,122 +1,56 @@
-/* ===========================================
-   THEME VARIABLES
-=========================================== */
-:root {
-  --bg: #0e0e0e;
-  --text: #ffffff;
-  --text-secondary: rgba(255,255,255,0.7);
-  --card-bg: rgba(255,255,255,0.08);
-  --card-border: rgba(255,255,255,0.14);
-  --accent: #fbbf24;
-}
 
-:global([data-theme="light"]) {
-  --bg: #f5f5f5;
-  --text: #111;
-  --text-secondary: #444;
-  --card-bg: #ffffff;
-  --card-border: #e5e5e5;
-  --accent: #eab308;
-}
-
-/* Fade on theme change */
-:global([data-theme="dark"]),
-:global([data-theme="light"]) {
-  transition: all 0.35s ease;
-}
-
-/* ===========================================
-   APP WRAPPER & HEADER
-=========================================== */
+/* APP WRAPPER */
 .appWrapper {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
+  min-height: 70vh;
+  background: #FEF9F5;
+  color: #111;
 }
 
-/* Sticky top bar */
-.appHeader {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--card-bg);
-  padding: 16px 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--card-border);
-  backdrop-filter: blur(10px);
-}
-
-.headerTitle {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.headerToggle {
-  padding: 10px;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text);
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.headerToggle:hover {
-  transform: scale(1.08);
-}
-
-/* ===========================================
-   MAIN APP CONTAINER
-=========================================== */
+/* MAIN CONTAINER */
 .appContainer {
-  padding: 30px;
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
-  background: var(--bg);
-  animation: slideUp 0.4s ease;
+  padding: 50px 90px 10px;
+  background: #FEF9F5;
+  animation: fadeUp 0.4s ease;
 }
 
-@keyframes slideUp {
+@keyframes fadeUp {
   from { opacity: 0; transform: translateY(15px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===========================================
-   TOP PROFILE SECTION
-=========================================== */
+/* TOP SECTION */
 .topSection {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  padding: 28px 26px;
+  justify-content: center;
+  background: #f9f4ec;
+  border: 1px solid #e2e2e2;
+  padding: 22px 26px;
   border-radius: 22px;
   margin-bottom: 40px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  
+  margin-top: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
 }
 
-/* Avatar + upload */
+/* Avatar */
 .avatarBox {
   position: relative;
 }
 
 .avatar {
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.25);
+  border: 2px solid #ddd;
 }
 
 .uploadBadge {
   position: absolute;
-  bottom: -6px;
+  bottom: -2px;
   right: -6px;
-  background: var(--accent);
+  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
   color: #111;
   font-size: 12px;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
@@ -139,9 +73,9 @@
 }
 
 .userSubtitle {
-  margin-top: 6px;
+  margin-top: 2px;
   font-size: 14px;
-  color: var(--text-secondary);
+  color: #777;
 }
 
 /* Buttons */
@@ -150,39 +84,35 @@
   gap: 14px;
 }
 
-.editBtn,
-.downloadBtn {
+.editBtn {
   padding: 10px 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  color: var(--text);
+  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
+  border: 1px solid #e2e2e2;
+  color: #111;
   border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: 0.3s ease;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
-.editBtn:hover,
-.downloadBtn:hover {
-  background: rgba(255,255,255,0.15);
+.editBtn:hover {
+  
   transform: translateY(-2px);
 }
 
-/* ===========================================
-   SECTION TITLE
-=========================================== */
+/* Section Title */
 .sectionTitle {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 18px;
-  color: var(--accent);
+  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* ===========================================
-   JOURNEY SUMMARY (CLEAN + ALIGNED)
-=========================================== */
+/* JOURNEY GRID */
 .journeyGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -191,17 +121,16 @@
 }
 
 .journeyCard {
-  background: var(--card-bg);
+  background: #f9f4ec;
   border-radius: 20px;
   padding: 26px;
-  border: 1px solid var(--card-border);
+  border: 1px solid #e2e2e2;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 140px;
 }
 
-/* Top row */
 .journeyTopRow {
   display: flex;
   align-items: baseline;
@@ -211,8 +140,7 @@
 .journeyIcon {
   width: 26px;
   height: 26px;
-  color: var(--accent);
-  margin-right: 6px;
+  color: #d4a556;
 }
 
 .journeyNumber {
@@ -223,19 +151,16 @@
 .journeyUnit {
   font-size: 15px;
   margin-left: 3px;
-  color: var(--text-secondary);
+  color: #777;
 }
 
 .journeyBottomText {
   font-size: 14px;
   margin-top: 10px;
-  color: var(--text-secondary);
-  max-width: 170px;
+  color: #777;
 }
 
-/* ===========================================
-   PROFILE INFORMATION (CLEANED)
-=========================================== */
+/* INFO GRID */
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -243,20 +168,19 @@
 }
 
 .infoCard {
-  background: var(--card-bg);
-  border-radius: 20px;
-  border: 1px solid var(--card-border);
-  padding: 26px;
+  background: #f9f4ec;
+  border-radius: 12px;
+  border: 1px solid #e2e2e2;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 110px;
+  min-height: 80px;
 }
 
 .infoLabel {
   font-size: 14px;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
+  color: #777;
+  margin-bottom: 4px;
 }
 
 .infoValue {
@@ -268,17 +192,13 @@
 }
 
 .infoIcon {
-  color: var(--accent);
-  flex-shrink: 0;
+  color: #d4a556;
 }
 
-/* ===========================================
-   MOBILE RESPONSIVENESS
-=========================================== */
+/* RESPONSIVE */
 @media (max-width: 820px) {
   .journeyGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
   }
 }
 
@@ -298,10 +218,9 @@
     width: 100%;
   }
 
-  .editBtn,
-  .downloadBtn {
-    justify-content: center;
+  .editBtn {
     width: 100%;
+    justify-content: center;
   }
 }
 
@@ -312,9 +231,43 @@
 
   .infoGrid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .appContainer {
-    padding: 22px;
+    padding: 5px 25px;
   }
+}
+
+
+/* --- DRAG & DROP AVATAR ZONE --- */
+.avatarDropZone {
+  position: relative;
+  width: 95px;
+  height: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dragActive {
+  border: 2px dashed #d4a556;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.dragOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6a4d2f;
+  border: 1px dashed #d4a556;
 }

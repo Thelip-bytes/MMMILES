@@ -80,6 +80,8 @@ export default function CheckoutPage() {
   const [editing, setEditing] = useState(false);
 
   const [priceSummary, setPriceSummary] = useState({
+    rentalCost: 0,
+    insuranceCost: 0,
     basePrice: 0,
     gst: 0,
     convFee: 100,
@@ -250,6 +252,8 @@ export default function CheckoutPage() {
 
     if (!start || !end) {
       return setPriceSummary({
+        rentalCost: 0,
+        insuranceCost: 0,
         basePrice: 0,
         gst: 0,
         convFee: 100,
@@ -262,6 +266,8 @@ export default function CheckoutPage() {
     const diffMs = end - start;
     if (diffMs <= 0) {
       return setPriceSummary({
+        rentalCost: 0,
+        insuranceCost: 0,
         basePrice: 0,
         gst: 0,
         convFee: 100,
@@ -273,17 +279,22 @@ export default function CheckoutPage() {
 
     const hours = Math.ceil(diffMs / 3600000);
 
-    const rate =
+    // New pricing model: hourly_rate for rental + insurance cost
+    const hourlyRate = toNumberClean(car.hourly_rate);
+    const insuranceCost =
       plan === "MAX" ? toNumberClean(car.price_max)
       : plan === "PLUS" ? toNumberClean(car.price_plus)
       : toNumberClean(car.price_basic);
 
-    const basePrice = +(hours * rate).toFixed(2);
+    const rentalCost = +(hours * hourlyRate).toFixed(2);
+    const basePrice = +(rentalCost + insuranceCost).toFixed(2);
     const gst = +(basePrice * 0.18).toFixed(2);
     const convFee = 100;
     const total = +(basePrice + gst + convFee).toFixed(2);
 
     setPriceSummary({
+      rentalCost,
+      insuranceCost,
       basePrice,
       gst,
       convFee,
@@ -899,7 +910,7 @@ export default function CheckoutPage() {
       <div className={styles.priceSection}>
         <h3>Trip Summary</h3>
 
-        <p><strong>Plan:</strong> {plan}</p>
+        <p><strong>Insurance Plan:</strong> {plan}</p>
         <p><strong>Pickup:</strong> {pickup}</p>
         <p><strong>Return:</strong> {returnTime}</p>
 
@@ -910,7 +921,8 @@ export default function CheckoutPage() {
         <p><strong>Duration:</strong> {priceSummary.hours} hours</p>
 
         <div className={styles.priceBreakdown}>
-          <p>Base Price: ₹{priceSummary.basePrice}</p>
+          <p>Rental ({priceSummary.hours} hrs × ₹{car?.hourly_rate || 0}/hr): ₹{priceSummary.rentalCost}</p>
+          <p>Insurance ({plan} Plan): ₹{priceSummary.insuranceCost}</p>
           <p>Convenience Fee: ₹{priceSummary.convFee}</p>
           <p>GST (18%): ₹{priceSummary.gst}</p>
           <hr />

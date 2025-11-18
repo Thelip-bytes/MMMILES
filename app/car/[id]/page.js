@@ -75,22 +75,25 @@ export default function CarPage() {
   if (loading) return <p className={styles.loading}>Loading...</p>;
   if (!car) return <p className={styles.error}>Car not found</p>;
 
-  // Pricing tiers from DB
-  const pricingPlans = [
+  // Insurance plans from DB
+  const insurancePlans = [
     {
       name: "MAX",
-      price: car.price_max || 80,
-      description: "Long trip — unlimited km.",
+      price: car.price_max || 699,
+      deductible: car.deductible_max || 1000,
+      description: `Only pay ₹${car.deductible_max || 1000} in case of any incidentals`,
     },
     {
       name: "PLUS",
-      price: car.price_plus || 70,
-      description: `Up to ${car.max_km_plus || 400} km.`,
+      price: car.price_plus || 489,
+      deductible: car.deductible_plus || 3000,
+      description: `Only pay ₹${car.deductible_plus || 3000} in case of any incidentals`,
     },
     {
       name: "BASIC",
-      price: car.price_basic || 60,
-      description: `Up to ${car.max_km_basic || 200} km.`,
+      price: car.price_basic || 299,
+      deductible: car.deductible_basic || 5000,
+      description: `Only pay ₹${car.deductible_basic || 5000} in case of any incidentals`,
     },
   ];
 
@@ -139,16 +142,16 @@ export default function CarPage() {
           <p className={styles.priceTag}>
             <span className={styles.startingAt}>STARTING AT</span>
             <br />
-            <span className={styles.priceValue}>₹{car.price_basic}</span>
+            <span className={styles.priceValue}>₹{car.hourly_rate || car.price_basic}</span>
             <span className={styles.priceUnit}>/hour</span>
           </p>
 
           <p className={styles.description}>{car.description || "TODO: Add car description."}</p>
 
           <div className={styles.insuranceSection}>
-            <p className={styles.travelConfident}>Choose Your Plan</p>
+            <p className={styles.travelConfident}>Choose Your Insurance Plan</p>
             <div className={styles.plansContainer}>
-              {pricingPlans.map((plan) => (
+              {insurancePlans.map((plan) => (
                 <div
                   key={plan.name}
                   className={`${styles.planBox} ${
@@ -156,8 +159,8 @@ export default function CarPage() {
                   }`}
                   onClick={() => setActivePlan(plan.name)}
                 >
-                  <span className={styles.planName}>{plan.name}</span>
-                  <p className={styles.planPrice}>₹{plan.price}/hr</p>
+                  <span className={styles.planName}>{plan.name} PLAN</span>
+                  <p className={styles.planPrice}>₹{plan.price}</p>
                   <p className={styles.planDesc}>{plan.description}</p>
                 </div>
               ))}

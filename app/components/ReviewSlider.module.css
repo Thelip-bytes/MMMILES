@@ -117,3 +117,78 @@
     color: #444;
   }
 }
+
+
+
+
+
+/* === New Slider System (Matching TrendingSection) === */
+
+.reviewSliderWrapper {
+  position: relative;
+}
+
+.carouselViewport {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.carouselTrack {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+/* arrows */
+.reviewArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all .3s ease;
+}
+
+.reviewArrow:hover {
+  transform: translateY(-50%) scale(1.1);
+  background: #f6e8d4;
+}
+
+.left {
+  left: 20px;
+}
+
+.right {
+  right: 20px;
+}
+
+/* dots */
+.reviewDots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.reviewDot {
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  transition: .3s ease;
+  cursor: pointer;
+}
+
+.activeDot {
+  background: #bf9860;
+  transform: scale(1.4);
+}

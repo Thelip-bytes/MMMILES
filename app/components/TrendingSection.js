@@ -198,7 +198,9 @@ export default function TrendingSection() {
   // Main render with carousel
   return (
     <section className={styles["trendy-section"]}>
-      <h2 className={styles["trendy-heading"]}>Drive What's Trending in {selectedCity}</h2>
+
+      <h2 className={styles["trendy-heading"]}>Drives What’s Trending</h2>
+
       <p className={styles["trendy-subheading"]}>Hot Rides, High Demand</p>
 
       <div

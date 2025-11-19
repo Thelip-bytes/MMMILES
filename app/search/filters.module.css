@@ -5,7 +5,7 @@
   padding: 18px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
-  background: #f8fafc;
+  background: #fef9f5;
   min-height: 100vh;
   color: #111827;
 }
@@ -94,7 +94,7 @@
 .main {
   margin-top: 18px;
   display: flex;
-  gap: 20px;
+  gap: 30px;
   align-items: flex-start;
 }
 
@@ -102,12 +102,12 @@
 .sidebar {
   width: 320px;
   min-width: 260px;
-  max-height: calc(100vh - 120px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
   background: #fff;
   border-radius: 12px;
-  padding: 14px;
-  border: 1px solid #e6e9ee;
+  padding: 15px;
+  border: 6px solid #eeede6;
   flex-shrink: 0;
 }
 
@@ -125,17 +125,18 @@
 }
 
 .reset {
-  color: #ef4444;
-  background: none;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* generic block used throughout */
 .block {
-  margin-top: 16px;
-  padding: 12px;
+  margin-top: 9px;
+  padding: 8px;
   border-radius: 10px;
   background: #ffffff;
 }
@@ -144,7 +145,7 @@
 .label {
   font-size: 14px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .labelSmall {
@@ -298,8 +299,8 @@
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  border: 4px solid #446dff;
-  box-shadow: 0 4px 16px rgba(68,109,255,0.18);
+  border: 4px solid #BF9860;
+  
   cursor: pointer;
   margin-top: -4px;
 }
@@ -327,8 +328,8 @@
 .priceValues {
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
-  font-size: 13px;
+  margin-top: 1px;
+  font-size: 12px;
   color: #6b7280;
 }
 
@@ -423,24 +424,26 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .selectCard {
-  background: #f3f4f6;
+  background: #ffffff;
   padding: 8px 10px;
   border-radius: 10px;
   border: 1px solid #e6e9ee;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 13px;
 }
 
 .selectCardActive {
-  background: #f3f8ff;
-  color: #2b5bff;
-  border-color: #dfe9ff;
-  transform: translateY(-2px);
+   background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  font-weight: 700;
+  -webkit-text-fill-color: transparent;
+  border:1.4px solid #000000;
+  
   box-shadow: 0 10px 20px rgba(66, 98, 255, 0.06);
 }
 
@@ -454,30 +457,34 @@
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 8px;
+  /*display: flex;
+  flex-direction: row;*/
 }
 
 .tags {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
+  margin-left: -140px;
   flex-wrap: wrap;
 }
 
 .tag {
-  background: #f3f4f6;
-  padding: 8px 12px;
-  border-radius: 999px;
-  border: none;
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 10px;
+  padding: 8px 44px;
+  width: 100%;
   cursor: pointer;
   font-weight: 600;
-  color: #111827;
+  color: #272311;
 }
 
 /* grid */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 12px;
 }
 
 /* card */
@@ -488,9 +495,13 @@
 
 .card {
   background: #fff;
-  border: 1px solid #e6e9ee;
+  border: 1px solid #f1f6fe;
   border-radius: 12px;
-  padding: 16px;
+  padding: 13px;
+  width: 100%;
+  max-width: 370px;
+  height: 97%;
+  max-height: 390px !important;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
   cursor: pointer;
   animation: fadeIn 0.4s ease;
@@ -515,49 +526,150 @@
 .carType {
   font-size: 13px;
   color: #6b7280;
-  margin-top: 6px;
+  margin-top: 0px;
 }
 
 .carImg {
   width: 100%;
-  margin: 12px 0;
+  margin: -12px 0 -20px;
+  max-height: 230px;
+  height: 50% !important;
 }
 
 .bookmark {
   width: 20px;
-  color: #446dff;
+  color: #b49b78;
 }
 
+
+
+.starTag {
+  color: #000000;
+  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
+  padding: 3px 11px;
+  border-radius: 8px 0px 0px 8px;
+  font-size: 10px;
+  margin-top: -5px;
+}
 /* badge tags */
-.blueTag {
-  color: #2b5bff;
-  background: #eef4ff;
+.iTag {
+  color: #000000;
+  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: -5px;
+}
+
+.iiTag {
+  color: #000000;
+   background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: -5px;
+}
+
+.iiiTag {
+  color: #000000;
+  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-bottom: -5px;
+}
+.ivTag {
+  color: #000000;
+  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
   padding: 6px 10px;
   border-radius: 8px;
   font-size: 12px;
 }
 
-.greenTag {
-  color: #059669;
-  background: #ecfdf5;
+.vTag {
+  color: #000000;
+   background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
   padding: 6px 10px;
   border-radius: 8px;
   font-size: 12px;
 }
 
-.redTag {
-  color: #ef4444;
-  background: #fff1f2;
+.viTag {
+  color: #000000;
+  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
   padding: 6px 10px;
   border-radius: 8px;
   font-size: 12px;
 }
+
+
+
+
 
 .price {
   font-size: 18px;
-  font-weight: 700;
-  margin-top: 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-bottom: 12px;
+  background:linear-gradient(to right bottom, #f0dec3, rgb(223, 223, 213));
+  padding: 8px 10px 8px 18px;
+  border-radius: 12px;
 }
+
+
+
+
+
+/* --- Price Row --- */
+.trendy-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 12px;
+  
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.trendy-price {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  margin-left: 7px;
+}
+
+.trendy-per-day {
+  font-size: 0.98rem;
+  color: #777;
+  font-weight: 600;
+}
+
+/* --- Button --- */
+.trendy-reserve-btn {
+  width: 40%;
+  background: linear-gradient(to right, #D8B480 50%, #BF9860 100%);
+  color: white;
+  border: none;
+  margin-left: 18px;
+  border-radius: 8px;
+  padding: 10px 5px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+
+.trendy-reserve-btn:hover {
+  
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(228, 192, 44, 0.5);
+}
+
+
+
+
+
 
 /* fade-in animation */
 @keyframes fadeIn {
@@ -597,7 +709,7 @@
     width: 100%;
   }
   .grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

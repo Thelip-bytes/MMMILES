@@ -61,9 +61,73 @@
   width: 20px;
   position: absolute;
   left: 12px;
-  top: 10px;
+  top: 11px;
   color: #6b7280;
 }
+
+
+.tags {
+  width: 40%;
+  min-width: 460px;
+  position: absolute;
+  left: 550;
+  top: 85;
+}
+
+.tag {
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 10px;
+  padding: 11px 19px 11px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 600;
+  color: #7c7b77;
+  font-size: 13px;
+}
+
+.tagDate{
+  font-weight: bold;
+  font-size: 13px;
+  color: #000;
+}
+.tagpromoted{ 
+  position: absolute;
+  right: 25;
+  top: 80;
+}
+.promoted{
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 10px;
+  padding: 9px 19px 9px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+  color: #7c7b77;
+  font-size: 13px;
+}
+
+.taglocation{ 
+  width: 40%;
+  min-width: 260px;
+  position: absolute;
+  right: -125;
+  top: 79;
+}
+
+.location{
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 10px;
+  padding: 9px 19px 9px;
+  width: 35%;
+  cursor: pointer;
+  font-weight: 500;
+  color: #7c7b77;
+  font-size: 13px;
+}
+
 
 /* Filter + Sort */
 .filterSort {
@@ -459,25 +523,6 @@
   margin-bottom: 8px;
   /*display: flex;
   flex-direction: row;*/
-}
-
-.tags {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 0px;
-  margin-left: -140px;
-  flex-wrap: wrap;
-}
-
-.tag {
-  background: #ffffff;
-  border: 1px solid #e6e9ee;
-  border-radius: 10px;
-  padding: 8px 44px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: 600;
-  color: #272311;
 }
 
 /* grid */

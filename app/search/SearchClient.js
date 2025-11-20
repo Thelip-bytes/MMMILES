@@ -206,10 +206,26 @@ export default function SearchPage() {
            {pickup && returndate && (
             <div className={styles.tags}>
               <span className={styles.tag}>
-                <FaClock /> {pickup} - <FaClock />{returndate}
+               From <span className={styles.tagDate}>{pickup}</span> - To <span className={styles.tagDate}>{returndate}</span>
               </span>
             </div>
           )}
+        </div>
+        
+
+
+
+        <div className={styles.taglocation}>
+          <div className={styles.location}>
+            {loading ? 'Your Location...' : 'Looking in Other Cities'}
+          </div>
+        </div>
+
+
+        <div className={styles.tagpromoted}>
+          <div className={styles.promoted}>
+            Most Recommended
+          </div>
         </div>
         
         

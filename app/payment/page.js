@@ -46,10 +46,10 @@ export default function Page() {
             <div className={styles.carImageStage}>
               {/* Use your image path; next/image preferred */}
               <Image
-                src="/B1.jpg"
+                src="/payment.png"
                 alt="White Jaguar XF"
-                width={520}
-                height={300}
+                width={400}
+                height={320}
                 className={styles.carImage}
                 priority
               />
@@ -57,18 +57,28 @@ export default function Page() {
             </div>
 
             <div className={styles.carMeta}>
-              <h1 className={styles.title}>White Jaguar XF 2 Car</h1>
-              <div className={styles.subtitle}>Sedan</div>
+              <h1 className={styles.title}>MARUTHI SUZUKI FRONX</h1>
+              
 
               <div className={styles.features}>
-                <span>📍 Parking</span>
-                <span>👥 4 Seat</span>
-                <span>❄ AC</span>
+                <span>✔ Serviced</span>
+                <span>✔ 4 Seat</span>
+                <span>✔ AC</span>
               </div>
+              <div className={styles.features}>
+                <span>✔ 2025 model </span>
+                <span>✔ good tyre condition</span>
+              </div>
+              <div className={styles.features}>
+                <span>✔ Insurance covered</span>
+                <span>✔ Laugage space</span>
+                
+              </div>
+              
 
               <div className={styles.priceRow}>
-                <div className={styles.discount}>25% OFF</div>
-                <div className={styles.price}>$473</div>
+                
+                <div className={styles.price}>Rs.2466 <span className={styles.priceper}>For 32hours</span></div>
               </div>
             </div>
           </div>
@@ -77,9 +87,11 @@ export default function Page() {
             <div className={styles.infoCard}>
               <h3>Inclusion / Exclusions</h3>
               <ul className={styles.infoList}>
-                <li>❌ Fuel not included. Guest should return the car with the same fuel level as at start.</li>
-                <li>❌ Toll/Fastag charges not included. Check with host for Fastag recharge.</li>
-                <li>❌ Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</li>
+                <p><span className={styles.infoListicon}>✖</span> Fuel not included. Guest should return the car with the same fuel level as at start.</p>
+                <p><span className={styles.infoListicon}>✖</span> Toll/Fastag charges not included. Check with host for Fastag recharge.</p>
+                <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</p>
+                <p><span className={styles.infoListicongreen}>✔</span> You need to carry ID proof while starting the Drive for Host verification.</p>
+
               </ul>
             </div>
 
@@ -90,11 +102,12 @@ export default function Page() {
 
               <div className={styles.refundLabel}>Refund upon cancellation</div>
               <div className={styles.refundBar}>
-                <div className={styles.refundFill}>50% Refund</div>
-                <div className={styles.refundEmpty}>0%</div>
+                <div className={styles.refundFill}></div>
+                <div className={styles.refundEmpty}></div>
               </div>
 
-              <div className={styles.refundTime}>Nov 19 • 07:00 PM</div>
+              <div className={styles.refundTime}>50% Refund before Nov 19 • 07:00 PM</div>
+              <p className={styles.refundTimebelow}><b>Important</b><span className={styles.refundTimebelowstar}>*</span> :(MMMiles may revise the cancellation policy to align with the regulations of each city.)</p>
             </div>
           </div>
         </div>

@@ -1,14 +1,32 @@
-/* ===== Import fonts ===== */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;700;900&display=swap");
 
 /* ===== Root & page background (cream luxury) ===== */
 .pageWrap {
   min-height: 100vh;
   padding: 40px 48px;
   box-sizing: border-box;
-  background: linear-gradient(145deg, #f8f3e9 0%, #efe4d4 100%);
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: #FEF9F5;
   color: #102030;
+}
+
+@media (min-width: 1340px){
+  .pageWrap{
+    padding: 40px 120px 40px 120px!important;
+  }
+  .carImage {
+    margin-left: 50px;
+    margin-right: 10px;
+    border-radius:16px;
+    object-fit:contain;
+    max-width:470px !important;
+    max-height:320px !important;
+    height: 100%;
+  }
+  .mainGrid {
+    display: grid;
+    grid-template-columns: 1fr 360px !important;
+    gap: 28px;
+    align-items: start;
+  }
 }
 
 /* ===== Stepper ===== */
@@ -24,12 +42,12 @@
     display:flex; 
     flex-direction:column; 
     align-items:center; 
-    min-width:120px; 
+    min-width:80px; 
     text-align:center; 
 }
 
 .stepCircle {
-  width:48px; height:48px; border-radius:50%;
+  width:32px; height:32px; border-radius:50%;
   background:#d5ae7e; color:#333; display:flex; align-items:center; justify-content:center; font-weight:700;
   box-shadow: 0 6px 22px rgba(16,32,48,0.06);
 }
@@ -58,14 +76,14 @@
   flex:0 0 160px; 
   height:6px; 
   border-radius:6px; 
-  background:linear-gradient(90deg,#a2784b,#583c1d);
+  background:linear-gradient(90deg,#797775);
   box-shadow: inset 0 -2px 0 rgba(0,0,0,0.02);
 }
 
 /* ===== Main grid ===== */
 .mainGrid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 340px !important;
   gap: 28px;
   align-items: start;
 }
@@ -74,19 +92,18 @@
 .leftCol { 
     display:flex; 
     flex-direction:column; 
-    gap:22px; 
+    gap:16px; 
 }
 
-/* CAR CARD - glass / spotlight */
+
 .carCard {
   display:flex;
   gap:28px;
   align-items:center;
-  padding:26px;
+  padding:18px;
   border-radius:20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.55), rgba(247,243,238,0.55));
+  background: linear-gradient(180deg,#ffffff,#fbf9f6);  
   box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-  border: 1px solid rgba(195,155,75,0.55);
   backdrop-filter: blur(6px);
 
 }
@@ -103,8 +120,9 @@
 .carImage {
   border-radius:16px;
   object-fit:contain;
-  box-shadow: 0 10px 30px rgba(12,18,25,0.12);
-  transform: translateY(-6px);
+  max-width:470px !important;
+  max-height:320px !important;
+  height: 100%;
 }
 
 /* spotlight ground under car */
@@ -128,8 +146,8 @@
 
 .title {
   margin:0;
-  font-family: "Playfair Display", serif;
-  font-size:24px;
+  font-family: poppins;
+  font-size:20px;
   color:#0b1722;
   letter-spacing:-0.2px;
   font-weight:700;
@@ -158,14 +176,22 @@
 }
 
 .discount { 
-    color:#d97706; 
-    font-weight:800; 
-    font-size:14px; 
+    background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+    font-weight:500; 
+    font-size:15px; 
 }
 
 .price { 
     font-weight:900; 
     font-size:28px; 
+    font-family: poppins;
+    color:#081026; 
+}
+.priceper{ 
+    font-weight:500; 
+    font-size:14px; 
     color:#081026; 
 }
 
@@ -192,23 +218,36 @@
 
 .infoList {
      margin:0; 
-     padding-left:18px; 
+     padding:0 8px; 
      color:#374151; 
      font-size:14px; 
      line-height:1.6; 
     }
 
+    .infoListicon{
+      font-size: 16px;
+      font-weight: bolder;
+      color: #cd2a2a;
+      padding-right: 3px;
+    }
+    .infoListicongreen{
+      font-size: 16px;
+      font-weight: bolder;
+      color: #26db69;
+      padding-right: 3px;
+    }
+
 /* cancellation side details */
 .small { 
-    color:#6b7280; 
+    color:#4e525b; 
     margin-top:6px; 
-    font-size:13px; 
+    font-size:14px; 
 }
 
 .smallMuted { 
     color:#9aa0a6; 
     margin-top:6px; 
-    font-size:13px; 
+    font-size:14px; 
 }
 
 .refundLabel { 
@@ -220,17 +259,17 @@
 }
 
 .refundBar { 
-    margin-top:10px; 
-    height:36px; 
-    background:#e9e9ea; 
+    margin-top:08px; 
+    height:16px; 
+    background:#ffffff; 
     border-radius:20px; 
     display:flex; 
     overflow:hidden; 
 }
 
 .refundFill {
-     width:50%; 
-     background: linear-gradient(90deg,#16a34a,#10b981); 
+     width:55%; 
+     background: linear-gradient(90deg,#c3c3c2); 
      color:#fff; 
      display:flex; 
      align-items:center; 
@@ -251,10 +290,24 @@
 }
 
 .refundTime { 
-    margin-top:10px; 
-    font-size:13px; 
+    margin-top:8px; 
+    font-size:14px; 
     color:#535455; 
 }
+.refundTimebelow{
+ color:#4e525b; 
+    margin-top:6px; 
+    font-size:14px; 
+   
+}
+
+.refundTimebelowstar{
+  color: #dd3636;
+  font-size: 14px;
+  margin-bottom: -10px;
+}
+
+
 
 /* ===== RIGHT COLUMN / Summary card ===== */
 .rightCol { 
@@ -265,6 +318,8 @@
     flex-direction:column; 
     gap:12px; 
 }
+
+
 
 /* premium summary card */
 .summaryCard {
@@ -428,10 +483,6 @@
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 1100px) {
-  .mainGrid { grid-template-columns: 1fr 360px; }
-  .carImageStage { width:460px; height:260px; }
-}
 
 @media (max-width: 820px) {
   .mainGrid { grid-template-columns: 1fr; }
@@ -501,7 +552,7 @@
 
   .carImage {
     width: 100%;
-    max-height: 160px;
+    max-height: 120px;
     object-fit: contain;
     transform: translateY(-3px);
   }

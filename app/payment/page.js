@@ -117,10 +117,7 @@ export default function Page() {
           <div className={styles.summaryCard}>
             <h2 className={styles.summaryTitle}>Trip Summary</h2>
 
-            <div className={styles.summaryRow}>
-              <div className={styles.rowLabel}>Insurance Plan:</div>
-              <div className={styles.rowValue}>PLUS</div>
-            </div>
+            
 
             <div className={styles.summaryRow}>
               <div className={styles.rowLabel}>Duration:</div>
@@ -142,11 +139,16 @@ export default function Page() {
               <div className={styles.rowValue}>₹{convenience}</div>
             </div>
 
+            <div className={styles.summaryRow}>
+              <div className={styles.rowLabel}>Discount Price</div>
+              <div className={styles.rowValue}>₹{convenience}</div>
+            </div>
+
             <div className={styles.divider} />
 
             <div className={styles.totalRow}>
-              <div className={styles.totalLabel}>GST (18%):</div>
-              <div className={styles.totalValue}>₹{gst}</div>
+              <div className={styles.totalLabel}>Apply coupons:</div>
+              <div className={styles.totalValue}>enter code</div>
             </div>
 
             <div className={styles.totalBar}>
@@ -173,7 +175,7 @@ export default function Page() {
                 className={styles.checkbox}
               />
               <span>
-                By proceeding to payment, I confirm that I agree to the{" "}
+                By proceeding, I confirm that I agree to the{" "}
                 <a href="#" className={styles.link}>Cancellation Policy</a> and{" "}
                 <a href="#" className={styles.link}>Terms of Service</a>.
               </span>

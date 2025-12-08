@@ -326,8 +326,8 @@ export default function EnhancedCheckoutPage() {
     setBookingCheckStatus({ checking: true, overlaps: false, error: null });
 
     try {
-      const start = parseDateInput(pickup);
-      const end = parseDateInput(returnTime);
+      const start = parseBookingRawDateTime(pickup);
+      const end = parseBookingRawDateTime(returnTime);
       
       console.log('📅 Parsed dates:', { 
         pickupRaw: pickup, 

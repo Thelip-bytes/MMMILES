@@ -374,11 +374,27 @@ export default function EnhancedCheckoutPage() {
           existingEnd: existingEnd.toISOString(),
           requestedStart: start.toISOString(),
           requestedEnd: end.toISOString(),
+          startTime: start.getTime(),
+          endTime: end.getTime(),
+          existingStartTime: existingStart.getTime(),
+          existingEndTime: existingEnd.getTime(),
+          condition1: `start < existingEnd: ${start.toISOString()} < ${existingEnd.toISOString()} = ${start < existingEnd}`,
+          condition2: `existingStart < end: ${existingStart.toISOString()} < ${end.toISOString()} = ${existingStart < end}`,
           overlapCheck: `start < existingEnd: ${start < existingEnd}, existingStart < end: ${existingStart < end}`
         });
         
         // Two time ranges overlap if: start1 < end2 AND start2 < end1
-        if (start < existingEnd && existingStart < end) {
+        const condition1 = start < existingEnd;
+        const condition2 = existingStart < end;
+        
+        console.log('🔍 Detailed overlap analysis:', {
+          bookingId: booking.id,
+          willOverlap: condition1 && condition2,
+          condition1: `${condition1} (${start.toISOString()} < ${existingEnd.toISOString()})`,
+          condition2: `${condition2} (${existingStart.toISOString()} < ${end.toISOString()})`
+        });
+        
+        if (condition1 && condition2) {
           console.log('🚫 OVERLAP DETECTED! Blocking payment');
           
           const formatDate = (date) => {

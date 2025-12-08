@@ -1,7 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { formatDateTimeForDisplay } from "../../lib/dateUtils";
+import { formatDateTimeForDisplay } from "../../lib/dateUtils.js";
 import "./bookingSuccess.css";
 
 export default function BookingSuccess() {

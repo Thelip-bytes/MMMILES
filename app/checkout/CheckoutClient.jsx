@@ -5,44 +5,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { makeAuthenticatedRequest } from "../../lib/customSupabaseClient";
 import { testAuth } from "../../lib/authTest";
+import { parseDate, formatDateTimeForDB } from "../../lib/dateUtils";
 import styles from "./Checkout.module.css";
 
 /* -------------------------------------------------------------------------- */
 /*                          DATE PARSING HELPERS                               */
 /* -------------------------------------------------------------------------- */
+// Using centralized date parsing from dateUtils
 function parseDateInput(raw) {
-  if (!raw) return null;
-  try {
-    let s = decodeURIComponent(String(raw)).trim();
-
-    if (/^\d+$/.test(s)) {
-      const asNum = Number(s);
-      return asNum < 1e12 ? new Date(asNum * 1000) : new Date(asNum);
-    }
-
-    const native = new Date(s);
-    if (!isNaN(native.getTime())) return native;
-
-    const dmy = s.match(
-      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:[T\s]+(\d{1,2}):(\d{2}))?$/
-    );
-    if (dmy) {
-      return new Date(+dmy[3], +dmy[2] - 1, +dmy[1], +(dmy[4] || 0), +(dmy[5] || 0));
-    }
-
-    const ymd = s.match(
-      /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})(?:[T\s]+(\d{1,2}):(\d{2}))?$/
-    );
-    if (ymd) {
-      return new Date(+ymd[1], +ymd[2] - 1, +ymd[3], +(ymd[4] || 0), +(ymd[5] || 0));
-    }
-
-    const alt = new Date(s.replace(/\./g, "-"));
-    if (!isNaN(alt.getTime())) return alt;
-  } catch (err) {
-    console.warn("Date parse error", err);
-  }
-  return null;
+  return parseDate(raw);
 }
 
 function toNumberClean(v) {
@@ -368,8 +339,8 @@ export default function CheckoutPage() {
         return false;
       }
 
-      const startIso = start.toISOString();
-      const endIso = end.toISOString();
+      const startIso = formatDateTimeForDB(start);
+      const endIso = formatDateTimeForDB(end);
 
       // Check for overlapping confirmed bookings using Supabase REST API
       const response = await fetch(
@@ -535,8 +506,8 @@ export default function CheckoutPage() {
         },
         body: JSON.stringify({
           vehicle_id: car.id,
-          start_time: start?.toISOString(),
-          end_time: end?.toISOString()
+          start_time: formatDateTimeForDB(start),
+          end_time: formatDateTimeForDB(end)
         })
       });
 
@@ -603,11 +574,11 @@ export default function CheckoutPage() {
       pickup_datetime_raw: pickup,
       return_datetime_raw: returnTime,
 
-      start_time: start.toISOString(),
-      end_time: end.toISOString(),
+      start_time: formatDateTimeForDB(start),
+      end_time: formatDateTimeForDB(end),
 
       status: "confirmed",
-      created_at: new Date().toISOString(),
+      created_at: formatDateTimeForDB(new Date()),
     };
 
     // Prevent duplicate bookings

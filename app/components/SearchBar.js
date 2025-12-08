@@ -12,6 +12,12 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useCity } from "../context/CityContext";
+import { 
+  parseDateFromSessionStorage, 
+  formatDateTimeForDisplay, 
+  getToday,
+  formatDateForInput 
+} from "../../lib/dateUtils";
 import styles from "./SearchBar.module.css";
 
 const CITIES = ["Chennai", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
@@ -179,13 +185,9 @@ export default function SearchBar() {
       }
 
       if (pickup)
-        setPickupDate(
-          new Date(pickup.split(" ")[0].split("/").reverse().join("-"))
-        );
+        setPickupDate(parseDateFromSessionStorage(pickup));
       if (drop)
-        setReturnDate(
-          new Date(drop.split(" ")[0].split("/").reverse().join("-"))
-        );
+        setReturnDate(parseDateFromSessionStorage(drop));
     }
 
     // 🚫 Prevent any auto-search during restore
@@ -215,14 +217,7 @@ export default function SearchBar() {
   };
 
   const formatDateTime = (date, hour) => {
-    if (!date) return "";
-    const d = new Date(date);
-    d.setHours(hour, 0, 0, 0);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    const hours = String(d.getHours()).padStart(2, "0");
-    return `${day}/${month}/${year} ${hours}:00`;
+    return formatDateTimeForDisplay(date, hour);
   };
 
   // Format Google Maps address for better display - prioritize formatted_address
@@ -852,8 +847,8 @@ export default function SearchBar() {
                 <label className={styles.modalLabel}>Pick-Up Date</label>
                 <input
                   type="date"
-                  value={pickupDate ? pickupDate.toISOString().split("T")[0] : ""}
-                  min={today.toISOString().split("T")[0]}
+                  value={formatDateForInput(pickupDate)}
+                  min={formatDateForInput(today)}
                   onChange={(e) => {
                     const selected = new Date(e.target.value);
                     const now = new Date();
@@ -882,7 +877,7 @@ export default function SearchBar() {
                 <input
                   type="date"
                   value={returnDate ? returnDate.toISOString().split("T")[0] : ""}
-                  min={pickupDate ? pickupDate.toISOString().split("T")[0] : today.toISOString().split("T")[0]}
+                  min={pickupDate ? formatDateForInput(pickupDate) : formatDateForInput(today)}
                   onChange={(e) => {
                     const selected = new Date(e.target.value);
                     const now = new Date();

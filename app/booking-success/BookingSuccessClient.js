@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import { formatDateTimeForDisplay } from "../../lib/dateUtils";
 import "./bookingSuccess.css";
 
 export default function BookingSuccess() {
@@ -106,18 +107,7 @@ export default function BookingSuccess() {
     );
   }
 
-  // Format dates for display
-  const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-IN', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+  // Format dates for display using centralized utility
 
   return (
     <div className="booking-success-page">
@@ -149,10 +139,10 @@ export default function BookingSuccess() {
           <p className="price">₹{bookingData.total_amount} • {bookingData.plan} Plan</p>
           <hr />
           <p>
-            <strong>Pickup:</strong> {formatDateTime(bookingData.start_time)}
+            <strong>Pickup:</strong> {formatDateTimeForDisplay(bookingData.start_time)}
           </p>
           <p>
-            <strong>Return:</strong> {formatDateTime(bookingData.end_time)}
+            <strong>Return:</strong> {formatDateTimeForDisplay(bookingData.end_time)}
           </p>
           <p>
             <strong>Location:</strong> {bookingData.vehicles?.location_name}, {bookingData.vehicles?.city}

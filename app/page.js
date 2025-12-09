@@ -10,6 +10,7 @@ import BookingSteps from "./components/BookingSteps";
 import BecomeHost from "./components/BecomeHost";
 import OffersSection from "./components/OfferSection";
 import HomeContent from "./components/HomeContent";
+import GuidePage from "./components/guide";
 
 
 
@@ -34,9 +35,11 @@ export default function HomePage() {
         < OffersSection />
         <DriveDiscoverSection/>
         <BookingSteps />
+        <GuidePage />
         <ReviewSlider />
         <ReviewSection />
         <BecomeHost />
+        
         <FAQSection />
         
 

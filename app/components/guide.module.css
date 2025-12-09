@@ -1,0 +1,73 @@
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 60px 110px;
+}
+
+/* Header */
+.title {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 60px;
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+/* Card */
+.card {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 18px 0 10px;
+}
+
+.card p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Icon box */
+.imageBox {
+  width: 100%;
+  height: 200px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}

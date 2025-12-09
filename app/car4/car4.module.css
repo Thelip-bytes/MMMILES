@@ -708,19 +708,27 @@
 
 
 
-/* ... (your existing styles for other sections) ... */
 
-/* --- Updated "Explore More Cars" Section Styles for Magnetic Effect --- */
+
+
+
+
+
+
+
+
+
+/* --- Base Section Styles --- */
 .exploreSection {
-  background-color: #FEF9F5;
-  padding: 80px 50px;
+  background-color: #fef9f5; /* Light background for the overall section */
+  padding: 80px 100px;
   text-align: center;
 }
 
 .exploreTitle {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: #000000;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
   margin-bottom: 50px;
 }
 
@@ -728,7 +736,7 @@
   display: flex;
   justify-content: center;
   gap: 30px;
-  max-width: 1200px;
+  max-width: 1150px;
   margin: 0 auto;
 }
 
@@ -736,66 +744,116 @@
     text-decoration: none;
     color: inherit;
     flex: 1;
-    min-width: 300px;
+    min-width: 90px;
     max-width: 380px;
     position: relative;
-    /* We'll set transform and z-index with inline style */
-    transition: transform 0.2s ease-out; 
+    transition: transform 0.2s ease-out; /* Keep magnetic effect transition */
 }
 
+/* --- Card Styles --- */
 .exploreCard {
-  background: #444;
-  border-radius: 15px;
+  /* Card background matches the light beige color in the image */
+  background: #FEF9F5; 
+  border-radius: 12px; /* Larger radius */
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.05); /* Softer shadow */
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 15px; /* Inner padding to offset content */
+  position: relative;
 }
 
+/* --- Rating Badge --- */
+.carRatingBadge {
+    position: absolute;
+    top: 30px; /* Position inside the card */
+    right: 0px;
+    background: linear-gradient(to bottom right, #f0dec3, #dfdfd5);
+    color: #333;
+    padding: 5px 20px 5px 10px ;
+    border-radius: 5px 0 0 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    z-index: 5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Image Styles --- */
 .exploreCardImageWrapper {
   position: relative;
   width: 100%;
-  height: 200px;
-  border-radius: 15px 15px 0 0;
+  height: 140px; /* Adjust height for the car image */
   overflow: hidden;
+  /* Image is contained within the padding, no top border radius needed */
 }
 
 .exploreCardImage {
-  object-fit: cover !important;
-  filter: brightness(0.8) contrast(1.1);
+  object-fit: contain !important; /* Use contain to show the whole car */
+  position: absolute !important;
+  /* No filter needed, images should be bright */
 }
 
+/* --- Content Styles --- */
 .exploreCardContent {
-  padding: 20px;
+  padding: 5px 5px 5px 5px; /* Adjust padding to match visual */
   text-align: left;
   flex-grow: 1;
 }
 
-.exploreCardTag {
-  display: inline-block;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #bbb;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
 .exploreCardTitle {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #fff;
+  color: #000;
   margin-bottom: 10px;
   line-height: 1.4;
 }
 
-.exploreCardDescription {
-  font-size: 0.95rem;
-  color: #aaa;
-  line-height: 1.6;
+/* --- Price and Button Styles --- */
+.carActionRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom right, #f0dec3, #dfdfd5);
+    border-radius: 8px;
 }
+
+.carPrice {
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: baseline;
+}
+
+.carPriceAmount {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.carPriceUnit {
+    font-size: 0.85rem;
+    color: #555;
+    margin-left: 5px;
+    margin-right: 44px;
+}
+
+.bookNowButton {
+    background: linear-gradient(to right, #cfb590 0%, #caa572 100%);
+    color: #0e0e0e;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.bookNowButton:hover {
+    background-color: #9c7b4e;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
@@ -812,10 +870,6 @@
   .exploreSection {
     padding: 50px 20px;
   }
-  .exploreTitle {
-    font-size: 2rem;
-    margin-bottom: 30px;
-  }
   .exploreCardsGrid {
     flex-direction: column;
     align-items: center;
@@ -825,12 +879,6 @@
     max-width: 350px;
   }
   .exploreCardImageWrapper {
-    height: 180px;
-  }
-  .exploreCardTitle {
-    font-size: 1.2rem;
-  }
-  .exploreCardDescription {
-    font-size: 0.9rem;
+    height: 150px;
   }
 }

@@ -15,26 +15,33 @@ import animatedCardStyles from "./animatedCard.module.css";
 const exploreCardsData = [
   {
     id: 1,
-    image: "/explore-cards/card1.png",
-    tag: "Web Development",
-    title: "Animating Data Visualizations: An Expert...",
-    description: "What does it mean to just that—raw...",
+    image: "/explore-cards/explorecar.jpg", // Use paths relevant to the new image assets
+    title: "Toyota Innova Crysta",
+    rating: "4.3/5",
+    price: "₹150",
+    unit: "per Hour",
   },
   {
     id: 2,
-    image: "/explore-cards/card2.png",
-    tag: "UI UX",
-    title: "Your Color Palette Might Be Driving People Off:...",
-    description: "What's the first thing people notice when they land on your...",
+    image: "/explore-cards/explorecar.jpg", 
+    title: "Toyota Innova Iagnen",
+    rating: "4.7/5",
+    price: "₹150",
+    unit: "per Hour",
   },
   {
     id: 3,
-    image: "/explore-cards/card3.png",
-    tag: "UI UX",
-    title: "A comprehensive guide on creating UI designs for iO...",
-    description: "This guide covers everything you need to know to create stunning...",
+    image: "/explore-cards/explorecar.jpg",
+    title: "Toyota Inug700",
+    rating: "4.2/5",
+    price: "₹100",
+    unit: "per Hour",
   },
 ];
+
+
+
+
 
 
 // Data for the FAQ section
@@ -336,38 +343,58 @@ export default function Car2Page() {
           
 
 
-            {/* --- New "Explore More Cars" Section --- */}
-            <div className={styles.exploreSection}>
-              <h2 className={styles.exploreTitle}>Explore more Cars</h2>
-              <div className={styles.exploreCardsGrid}>
-                {exploreCardsData.map((card) => (
-                  <Link 
-                    href="#" 
-                    key={card.id} 
-                    className={styles.exploreCardLink}
-                    onMouseMove={(e) => handleMouseMove(e, card.id)}
-                    onMouseLeave={handleMouseLeave}
-                    style={hoveredCard && hoveredCard.id === card.id ? { transform: hoveredCard.transform, zIndex: 10 } : null}
-                  >
-                    <div className={styles.exploreCard}>
-                      <div className={styles.exploreCardImageWrapper}>
-                        <Image
-                          src={card.image}
-                          alt={card.title}
-                          fill
-                          className={styles.exploreCardImage}
-                        />
-                      </div>
-                      <div className={styles.exploreCardContent}>
-                        <span className={styles.exploreCardTag}>{card.tag}</span>
-                        <h3 className={styles.exploreCardTitle}>{card.title}</h3>
-                        <p className={styles.exploreCardDescription}>{card.description}</p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+           {/* --- Explore More Cars Section --- */}
+<div className={styles.exploreSection}>
+  <h2 className={styles.exploreTitle}>Explore more Cars</h2>
+  <div className={styles.exploreCardsGrid}>
+    {exploreCardsData.map((card) => (
+      <Link 
+        href="#" 
+        key={card.id} 
+        className={styles.exploreCardLink}
+        onMouseMove={(e) => handleMouseMove(e, card.id)} // Keep magnetic effect logic
+        onMouseLeave={handleMouseLeave}
+        style={hoveredCard && hoveredCard.id === card.id ? { transform: hoveredCard.transform, zIndex: 10 } : null}
+      >
+        <div className={styles.exploreCard}>
+          
+          {/* Rating Badge (Star Icon & Text) */}
+          <div className={styles.carRatingBadge}>
+             <span role="img" aria-label="star">★</span> {card.rating}
+          </div>
+
+          <div className={styles.exploreCardImageWrapper}>
+            <Image
+              src={card.image}
+              alt={card.title}
+              fill
+              className={styles.exploreCardImage}
+            />
+          </div>
+
+          <div className={styles.exploreCardContent}>
+            {/* Car Title */}
+            <h3 className={styles.exploreCardTitle}>{card.title}</h3>
+
+            {/* Price and Action Section */}
+            <div className={styles.carActionRow}>
+              <p className={styles.carPrice}>
+                <span className={styles.carPriceAmount}>{card.price}</span>
+                <span className={styles.carPriceUnit}> {card.unit}</span>
+
+                <button className={styles.bookNowButton}>
+                Book Now
+              </button>
+              </p>
+              
+              
             </div>
+          </div>
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
 
            
 

@@ -224,7 +224,7 @@ export default function ProfilePage() {
             <div className={styles.infoGrid}>
 
               <div className={styles.infoCard}>
-                <label className={styles.infoLabel}>Full Name</label>
+                <label className={styles.infoLabel}>Enter Full Name</label>
                 <div className={styles.infoValue}>
                   <User size={18} className={styles.infoIcon} />
                   {profileData.first_name || profileData.last_name 

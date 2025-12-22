@@ -19,6 +19,7 @@
   margin-bottom: 8px;
 }
 
+
 .subheading {
   font-size: 1rem;
   color: #444;
@@ -69,7 +70,7 @@
 
 @media (max-width: 480px) {
   .stepsImage {
-    content: url("/5step-mobile.png"); /* your mobile image */
+    content: url("/5step-mobile.jpg"); /* your mobile image */
   }
 }
 

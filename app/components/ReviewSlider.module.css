@@ -11,10 +11,11 @@
 
 .heading {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 600;
   margin-bottom: 40px;
   color: #111;
+  font-family: Sanchez;
 }
 
 /* Slider wrapper */
@@ -50,12 +51,15 @@
 }
 
 .text {
-  font-size: 0.95rem;
+  font-size: 15px;
+  font-weight: 500;
   margin-bottom: 16px;
   color: #444;
+  font-family: poppins;
 }
 
 .profile {
+  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -67,8 +71,10 @@
 }
 
 .title {
-  font-size: 0.8rem;
+  font-size: 12px;
+  font-weight: 520;
   color: #777;
+  font-family: poppins;
 }
 
 /* Pause scroll when hovered */

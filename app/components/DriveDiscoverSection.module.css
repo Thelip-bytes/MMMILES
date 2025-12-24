@@ -5,14 +5,19 @@
 }
 
 .placebody {
+  font-size: 40px;
+  font-weight: 600;
   padding: 60px 100px;
   background-color: #FEF9F5;
+  font-family: Sanchez;
 }
 
 .subtitle {
   color: #666;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 20px;
+  font-family: poppins;
 }
 
 .slider {

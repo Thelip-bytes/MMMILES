@@ -46,13 +46,13 @@ const reviews = [
     img: "/profile3.jpg",
   },
   {
-    text: "Drove from Bangalore to Goa using MM Miles. The car handled beautifully the entire way, and there were no hidden charges at all.",
+    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a  beautiful manner the entire way, and there were no hidden charges at all.",
     name: "Deepa S.",
     title: "Road Trip Traveler",
     img: "/profile4.jpg",
   },
   {
-    text: "Our company car went for servicing, and MM Miles provided an immediate replacement. Flexible plans and professional support.",
+    text: "Our company car went for servicing, and MM Miles provided an immediate replacement with flexible plans and professional support.",
     name: "Rajesh K.",
     title: "Fleet Manager",
     img: "/profile1.jpg",

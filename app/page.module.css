@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap');
+
+:root {
+  /* Define a variable for easy use later */
+  --font-raleway-bold: 'Raleway', sans-serif;
+}
+
+
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);

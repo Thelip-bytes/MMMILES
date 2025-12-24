@@ -15,7 +15,7 @@ import GuidePage from "./components/guide";
 
 
 export const metadata = {
-  title: "MM Miles | Affordable Car Rentals in Chennai",
+  title: "MM Miles | Car Rentals in Chennai",
   description: "Book top-rated cars for rent in Chennai with Urban Drive. Easy booking, affordable prices, and premium service.",
 };
 

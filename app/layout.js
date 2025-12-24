@@ -3,11 +3,11 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
 export const metadata = {
-  title: "MM Miles | Luxury Car Rentals in Chennai",
+  title: "MM Miles | Car Rentals in Chennai",
   description:
     "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive. Easy booking, great pricing, and top service.",
   openGraph: {
-    title: "MM Miles | Luxury Car Rentals in Chennai",
+    title: "MM Miles | Car Rentals in Chennai",
     description:
       "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive. Easy booking, great pricing, and top service.",
     url: "https://www.urbandrive.in",
@@ -25,7 +25,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MM Miles | Luxury Car Rentals in Chennai",
+    title: "MM Miles | Car Rentals in Chennai",
     description:
       "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive.",
     images: ["/bentley.png"],

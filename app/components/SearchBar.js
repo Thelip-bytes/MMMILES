@@ -12,13 +12,15 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useCity } from "../context/CityContext";
-import { 
-  parseDateFromSessionStorage, 
-  formatDateTimeForDisplay, 
+import {
+  parseDateFromSessionStorage,
+  formatDateTimeForDisplay,
   getToday,
-  formatDateForInput 
+  formatDateForInput
 } from "../../lib/dateUtils";
 import styles from "./SearchBar.module.css";
+import CitySelector from "./CitySelector";
+import CalendarModal from "./CalendarModal";
 
 const CITIES = ["Chennai", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
 const LOCATION_PLACEHOLDER = "Select Your Place";
@@ -83,17 +85,17 @@ const loadGoogleMapsAPI = () => {
       const success = initializeGoogleMapsServices(tempMap);
       resolve(success);
     };
-    
+
     const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&callback=initGoogleMaps&loading=async`;
     script.async = true;
     script.defer = true;
-    
+
     script.onerror = () => {
       window.googleMapsLoading = false;
       resolve(false);
     };
-    
+
     document.head.appendChild(script);
   });
 };
@@ -101,7 +103,7 @@ const loadGoogleMapsAPI = () => {
 export default function SearchBar() {
   const router = useRouter();
   const { setSelectedCity, setPickupDateTime, setReturnDateTime } = useCity();
-  
+
   // Form state
   const [location, setLocation] = useState(LOCATION_PLACEHOLDER);
   const [pickupDate, setPickupDate] = useState(null);
@@ -126,9 +128,9 @@ export default function SearchBar() {
   const isRestoringRef = useRef(true);
 
   // UI state
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCitySelectorOpen, setIsCitySelectorOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  // dropdownRef removed as CitySelector handles its own outside click
   const suggestRef = useRef(null);
 
   // Debounce & abort controller refs
@@ -199,9 +201,6 @@ export default function SearchBar() {
   // Close dropdown and suggestions when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false);
-      }
       if (suggestRef.current && !suggestRef.current.contains(event.target)) {
         setIsSuggestOpen(false);
       }
@@ -213,7 +212,7 @@ export default function SearchBar() {
   const handleCitySelect = (city) => {
     setLocation(city);
     setSelectedCity(city); // Update context for TrendingSection
-    setIsDropdownOpen(false);
+    setIsCitySelectorOpen(false);
   };
 
   const formatDateTime = (date, hour) => {
@@ -236,10 +235,10 @@ export default function SearchBar() {
   // Format Google Maps address for better display - prioritize formatted_address
   const formatGoogleAddress = (result) => {
     if (!result) return "Current Location";
-    
+
     // Use formatted_address as the primary source (this addresses the first issue)
     let formatted = result.formatted_address;
-    
+
     // If formatted_address is not available, try to build it from components
     if (!formatted && result.address_components && result.address_components.length > 0) {
       const components = result.address_components;
@@ -249,38 +248,38 @@ export default function SearchBar() {
       const sublocality = components.find(comp => comp.types.includes('sublocality'))?.long_name || '';
       const sublocalityLevel1 = components.find(comp => comp.types.includes('sublocality_level_1'))?.long_name || '';
       const administrativeArea = components.find(comp => comp.types.includes('administrative_area_level_1'))?.long_name || '';
-      
+
       // Build address from components
       let addressParts = [];
-      
+
       if (streetNumber && route) {
         addressParts.push(`${streetNumber} ${route}`);
       } else if (route) {
         addressParts.push(route);
       }
-      
+
       // Add locality information
       const localityInfo = sublocality || sublocalityLevel1 || locality;
       if (localityInfo && !addressParts.includes(localityInfo)) {
         addressParts.push(localityInfo);
       }
-      
+
       if (administrativeArea && !addressParts.includes(administrativeArea)) {
         addressParts.push(administrativeArea);
       }
-      
+
       formatted = addressParts.join(', ') || "Current Location";
     }
-    
+
     return formatted || "Current Location";
   };
 
   // Helper function to extract city from Google Maps API response and auto-select from dropdown
   const extractAndSelectCity = (result) => {
     if (!result || !result.address_components) return;
-    
+
     const components = result.address_components;
-    
+
     // Try to find city/locality in the following order of preference
     const cityPriorityTypes = [
       'locality',           // Most specific city
@@ -288,10 +287,10 @@ export default function SearchBar() {
       'sublocality_level_1', // Level 1 sub-locality
       'administrative_area_level_2' // District/County level
     ];
-    
+
     // Extract city name from components
     let detectedCity = null;
-    
+
     for (const type of cityPriorityTypes) {
       const component = components.find(comp => comp.types.includes(type));
       if (component && component.long_name) {
@@ -299,23 +298,23 @@ export default function SearchBar() {
         break;
       }
     }
-    
+
     // If no city found in priority types, try administrative_area_level_1
     if (!detectedCity) {
-      const adminComponent = components.find(comp => 
+      const adminComponent = components.find(comp =>
         comp.types.includes('administrative_area_level_1')
       );
       if (adminComponent && adminComponent.long_name) {
         detectedCity = adminComponent.long_name;
       }
     }
-    
+
     // Check if detected city matches any city in our CITIES array
     if (detectedCity) {
-      const matchedCity = CITIES.find(city => 
+      const matchedCity = CITIES.find(city =>
         city.toLowerCase() === detectedCity.toLowerCase()
       );
-      
+
       if (matchedCity && location !== matchedCity) {
         setLocation(matchedCity);
         if (setSelectedCity) setSelectedCity(matchedCity);
@@ -362,7 +361,7 @@ export default function SearchBar() {
         // Use Google Maps Geocoder for reverse geocoding
         if (geocoder) {
           const latlng = { lat: lat, lng: lon };
-          
+
           geocoder.geocode({ location: latlng }, (results, status) => {
             if (status === "OK") {
               if (results[0]) {
@@ -370,10 +369,10 @@ export default function SearchBar() {
                 skipNextSearchRef.current = true;
                 setManualInput(address);
                 setCurrentAddress(address);
-                
+
                 // Auto-select city from dropdown based on the detected location
                 extractAndSelectCity(results[0]);
-                
+
                 toast.success("Location detected!");
               } else {
                 setManualInput("Current Location");
@@ -510,7 +509,7 @@ export default function SearchBar() {
 
           Promise.all(detailedPromises).then((detailedResults) => {
             const validResults = detailedResults.filter(result => result.lat !== 0 && result.lon !== 0);
-            
+
             setIsSuggestLoading(false);
             setIsSearching(false);
             setSuggestions(validResults);
@@ -521,7 +520,7 @@ export default function SearchBar() {
           setIsSearching(false);
           setSuggestions([]);
           setIsSuggestOpen(true);
-          
+
           // Show helpful message if no predictions found
           if (status === "ZERO_RESULTS") {
             // Silent - no toast for zero results
@@ -604,7 +603,7 @@ export default function SearchBar() {
       try {
         // Use the standard Places service to get detailed information
         const placesService = new google.maps.places.PlacesService(document.createElement('div'));
-        
+
         placesService.getDetails(
           {
             placeId: item.place_id,
@@ -614,7 +613,7 @@ export default function SearchBar() {
             if (status === "OK" && place) {
               // Auto-select city from dropdown based on the selected location
               extractAndSelectCity(place);
-              
+
               // Update address with formatted address if available
               const formattedAddress = place.formatted_address;
               if (formattedAddress && formattedAddress !== display) {
@@ -676,39 +675,29 @@ export default function SearchBar() {
     <>
       <div className={styles.container}>
         <div className={styles.box} role="search" aria-label="Car and Location Search Bar">
-          {/* City Dropdown */}
-          <div className={styles.field} ref={dropdownRef}>
+          {/* City Selector */}
+          <div className={styles.field} role="button" onClick={() => setIsCitySelectorOpen(true)} tabIndex={0}>
             <label className={styles.label}>City</label>
             <div
               className={styles.inputWrapper}
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               role="button"
-              aria-expanded={isDropdownOpen}
-              aria-controls="city-dropdown-list"
+              aria-haspopup="dialog"
             >
               <div className={location === LOCATION_PLACEHOLDER ? styles.placeholderText : styles.selectedText}>
                 {location}
               </div>
               <FaMapMarkerAlt className={styles.icon} aria-hidden="true" />
-              <FaChevronDown className={`${styles.dropdownArrow} ${isDropdownOpen ? styles.arrowUp : ""}`} />
+              <FaChevronDown className={styles.dropdownArrow} />
             </div>
-            {isDropdownOpen && (
-              <ul id="city-dropdown-list" className={styles.dropdownList}>
-                {CITIES.map((city) => (
-                  <li
-                    key={city}
-                    className={styles.dropdownItem}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCitySelect(city);
-                    }}
-                  >
-                    {city}
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
+          {isCitySelectorOpen && (
+            <CitySelector
+              isOpen={isCitySelectorOpen}
+              onClose={() => setIsCitySelectorOpen(false)}
+              onSelect={handleCitySelect}
+              selectedCity={location}
+            />
+          )}
 
           <div className={styles.separator}></div>
 
@@ -802,7 +791,7 @@ export default function SearchBar() {
                       <div className={styles.suggestionTitle}>{s.display_name || s.formatted_address}</div>
                       {/* Show type information */}
                       <div className={styles.suggestionMeta}>
-                        {s.types && s.types.length > 0 ? s.types[0].replace(/_/g, ' ') : ''} 
+                        {s.types && s.types.length > 0 ? s.types[0].replace(/_/g, ' ') : ''}
                         {s.secondary_text ? ` • ${s.secondary_text}` : ""}
                       </div>
                     </li>
@@ -849,95 +838,21 @@ export default function SearchBar() {
         </div>
       </div>
 
-      {/* Date Modal */}
-      {isModalOpen && today && (
-        <div className={styles.modalOverlay} role="dialog" aria-modal="true">
-          <div className={styles.modalContent}>
-            <h3>Select Dates & Time</h3>
-
-            <div className={styles.dateTimeSection}>
-              <div className={styles.dateTimeBlock}>
-                <label className={styles.modalLabel}>Pick-Up Date</label>
-                <input
-                  type="date"
-                  value={formatDateForInput(pickupDate)}
-                  min={formatDateForInput(today)}
-                  onChange={(e) => {
-                    const selected = new Date(e.target.value);
-                    const now = new Date();
-                    now.setHours(0, 0, 0, 0);
-                    if (selected < now) {
-                      toast.error("You can't select a past date.");
-                      return;
-                    }
-                    setPickupDate(selected);
-                  }}
-                  className={styles.datePickerInput}
-                />
-                <label className={styles.modalLabel}>Pick-Up Time: {pickupHour}:00</label>
-                <input
-                  type="range"
-                  min="0"
-                  max="23"
-                  value={pickupHour}
-                  onChange={(e) => setPickupHour(Number(e.target.value))}
-                  className={styles.slider}
-                />
-              </div>
-
-              <div className={styles.dateTimeBlock}>
-                <label className={styles.modalLabel}>Return Date</label>
-                <input
-                  type="date"
-                  value={returnDate ? returnDate.toISOString().split("T")[0] : ""}
-                  min={pickupDate ? formatDateForInput(pickupDate) : formatDateForInput(today)}
-                  onChange={(e) => {
-                    const selected = new Date(e.target.value);
-                    const now = new Date();
-                    now.setHours(0, 0, 0, 0);
-                    if (selected < now) {
-                      toast.error("You can't select a past date.");
-                      return;
-                    }
-                    setReturnDate(selected);
-                  }}
-                  className={styles.datePickerInput}
-                />
-                <label className={styles.modalLabel}>Return Time: {returnHour}:00</label>
-                <input
-                  type="range"
-                  min="0"
-                  max="23"
-                  value={returnHour}
-                  onChange={(e) => setReturnHour(Number(e.target.value))}
-                  className={styles.slider}
-                />
-              </div>
-            </div>
-
-            <div className={styles.modalButtons}>
-              <button onClick={() => setIsModalOpen(false)} className={styles.cancelBtn}>
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (!pickupDate || !returnDate) {
-                    toast.error("Select both start and end dates.");
-                    return;
-                  }
-                  if (returnDate < pickupDate) {
-                    toast.error("End date cannot be before start date.");
-                    return;
-                  }
-                  setIsModalOpen(false);
-                }}
-                className={styles.confirmBtn}
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Calendar Modal */}
+      {isModalOpen && (
+        <CalendarModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onApply={(start, end) => {
+            setPickupDate(start);
+            setPickupHour(start.getHours());
+            setReturnDate(end);
+            setReturnHour(end.getHours());
+            setIsModalOpen(false);
+          }}
+          initialPickupDate={pickupDate}
+          initialReturnDate={returnDate}
+        />
       )}
     </>
   );

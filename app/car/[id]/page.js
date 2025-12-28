@@ -138,9 +138,10 @@ export default function CarPage() {
   // Stats Section (derived from car data)
   const statsData = [
     { number: car.model_year || "N/A", label: "Model Year" },
+    { number: car.hourly_rate || "N/A", label: "Base Rate (₹/hr)" },
     { number: car.mileage_kmpl || "N/A", label: "KM/L Mileage" },
     { number: car.seating_capacity || "N/A", label: "Seats" },
-    { number: car.hourly_rate || "N/A", label: "Base Rate (₹/hr)" },
+    
   ];
 
   return (
@@ -219,6 +220,11 @@ export default function CarPage() {
         </div>
       </div>
 
+
+
+
+
+
       {/* --- Stats Section --- */}
       <div className={styles.statsSection}>
         <div className={styles.statsContainer}>
@@ -227,6 +233,10 @@ export default function CarPage() {
           ))}
         </div>
       </div>
+
+
+
+
 
       {/* --- Car Location --- */}
       <div className={styles.locationSection}>
@@ -257,6 +267,8 @@ export default function CarPage() {
           ))}
         </div>
       </div>
+
+
 
       {/* --- FAQs --- */}
       <div className={styles.faqSection}>

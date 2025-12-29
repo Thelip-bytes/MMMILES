@@ -239,19 +239,41 @@ export default function CarPage() {
 
 
       {/* --- Car Location --- */}
-      <div className={styles.locationSection}>
-        <div className={styles.worldMapContainer}>
-          <Image src="/chennai-map.png" alt="Map" fill className={styles.worldMapImage} />
-          <div className={styles.locationTextContent}>
-            <h2>
-              {car.location_name}, {car.city}
-            </h2>
-            <p>
-              Hosted by <strong>{host?.full_name || "TODO: Host Name"}</strong>
-            </p>
-          </div>
-        </div>
-      </div>
+<div className={styles.locationSection}>
+  <div className={styles.worldMapContainer}>
+
+    {/* Desktop Image */}
+    <Image
+      src="/chennai-map.png"
+      alt="Map"
+      fill
+      className={`${styles.worldMapImage} ${styles.desktopMap}`}
+      priority
+    />
+
+    {/* Mobile Image */}
+    <Image
+      src="/chennai-map-mobile.png"
+      alt="Map Mobile"
+      fill
+      className={`${styles.worldMapImage} ${styles.mobileMap}`}
+    />
+
+    <div className={styles.locationTextContent}>
+      <h2>
+        {car.location_name}, {car.city}
+      </h2>
+      <p>
+        Hosted by <strong>{host?.full_name || "TODO: Host Name"}</strong>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+
+
+
 
       {/* --- Features --- */}
       <div className={styles.blurCardsSection}>

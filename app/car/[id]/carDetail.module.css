@@ -187,7 +187,49 @@
   margin-bottom: 20px;
 }
 
+@media (max-width: 480px){
+  .carName {
+    font-size: 25px;
+    font-weight: bolder;
+    color: #1f1f1f;
+    margin-bottom: 3px;
+    margin-top: -10px;
+  }
+  
+  .priceTag {
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 0px !important;
+    margin-top: -3px;
+  }
 
+  .startingAt {
+    font-size: 0.65rem;
+    color: #5c5a5a;
+    font-weight: 600;
+    margin-bottom: -14px !important;
+  }
+
+  .priceValue {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000;
+    margin-top: -20px;
+  }
+
+  .priceUnit {
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .description {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 2px;
+    margin-bottom: 20px;
+  }
+}
 
 
 
@@ -275,7 +317,7 @@
   border: none;
   border-radius: 33px;
   background: #000;
-  color: #bdbdbd;
+  color: #b99564;
   font-weight: 700;
   cursor: pointer;
   font-size: 1.1rem;
@@ -294,6 +336,9 @@
 @media (max-width: 480px) {
     .rightColumn {
         margin-top: -10px !important;
+    }
+    .insuranceSection {
+      margin-top: 6px !important;
     }
     .planBox {
       flex: 1;
@@ -330,12 +375,14 @@
     }
 
     .bookBtn {
-      padding: 12px 130px;
+      padding: 12px 28px;
       border: none;
+      max-width: 350px;
+      width: 100%;
       justify-content: center;
       border-radius: 33px;
       background: #000;
-      color: #bdbdbd;
+      color: #b99564;
       font-weight: 700;
       cursor: pointer;
       font-size: 16px;
@@ -384,7 +431,7 @@
 @media (max-width: 480px){
   .statsSection {
     background: #FEF9F5;
-    padding: 60px 30px 20px !important;
+    padding: 30px 30px 20px !important;
     text-align: center;
   }
    .statsContainer {
@@ -414,7 +461,7 @@
 /* --- Car Location --- */
 .locationSection {
   background: #FEF9F5;
-  padding: 60px 0 50px;
+  padding: 60px 100px 50px;
   text-align: center;
 }
 
@@ -442,7 +489,34 @@
   font-weight: 700;
   margin-bottom: 10px;
 }
+/* --- NEW: IMAGE SWITCHING --- */
+.desktopMap {
+  display: block;
+}
 
+.mobileMap {
+  display: none;
+}
+
+/* Mobile only */
+@media (max-width: 768px) {
+  .desktopMap {
+    display: none;
+  }
+  .locationSection {
+    background: #FEF9F5;
+    padding: 30px 20px 20px;
+    text-align: center;
+  }
+
+  .mobileMap {
+    display: block;
+  }
+
+  .locationTextContent {
+    display: none;
+  }
+}
 
 
 

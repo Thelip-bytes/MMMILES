@@ -117,17 +117,17 @@
   padding: 18px;
   border-radius: 20px;
   background: linear-gradient(180deg, #ffffff, #fbf9f6);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  
   backdrop-filter: blur(6px);
 }
 
 /* image stage with spotlight and subtle reflection */
 .carImageStage {
   position: relative;
-  padding: 25px;
+  padding: 15px;
   border-radius: 20px;
   background: #fff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  
   flex: 0 0 400px;
   height: 200px;
 }

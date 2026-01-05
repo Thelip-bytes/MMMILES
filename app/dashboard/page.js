@@ -884,6 +884,14 @@ export default function Dashboard() {
     );
   }
 
+
+
+
+
+
+
+
+
   /* --------------------------
      Host Page (kept simple here — ready for your design)
      -------------------------- */
@@ -898,92 +906,106 @@ export default function Dashboard() {
 
     return (
       <motion.div
-        className={styles.hostContainer}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+      className={styles.hostContainer}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      {/* HEADER SECTION */}
+      <motion.div
+        className={styles.processHeader}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
       >
-        <motion.div
-          className={styles.processHeader}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <span className={styles.smallTitle}>WORK PROCESS</span>
-          <h2>
-            We Follow the <span className={styles.highlight}>Process</span>
-          </h2>
-        </motion.div>
+        <span className={styles.smallTitle}>Become a Host With <span className={styles.highlighthost}>"Miles"</span> </span>
+        <h2>
+         List your car today <span className={styles.highlight}> Start earning tomorrow.</span>
+        </h2>
+      </motion.div>
 
-        <div className={styles.stepsWrapper}>
-          <div className={styles.stepsRow}>
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                className={styles.stepCard}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                <div className={styles.stepIcon}>
-                  <img src={step.icon} alt="icon" />
-                </div>
-                <h3>{step.title}</h3>
-                <p>Completely responsive forward conveniently target fixed</p>
-              </motion.div>
-            ))}
-          </div>
+      {/* RESPONSIVE PROCESS IMAGE */}
+      <motion.div 
+        className={styles.processImageWrapper}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <picture>
+          {/* Mobile Image (shown below 768px) */}
+          <source media="(max-width: 768px)" srcSet="/images/host-steps-dash.png" />
+          {/* Desktop Image (default) */}
+          <img 
+            src="/images/host-dash.png" 
+            alt="Work Process Flow" 
+            className={styles.processMainImage} 
+          />
+        </picture>
+      </motion.div>
 
-          <img src="/icons/curve-arrows.svg" className={styles.arrowCurve} />
+      {/* ABOUT / INFO SECTION */}
+      <motion.div
+        className={styles.infoSection}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.7 }}
+        viewport={{ once: true }}
+      >
+        <div className={styles.infoLeft}>
+          <motion.img
+            src="/images/hero.png"
+            className={styles.infoImage}
+            initial={{ scale: 0.9 }}
+            whileInView={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
+          />
         </div>
 
-        <motion.div
-          className={styles.infoSection}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <div className={styles.infoLeft}>
-            <motion.img
-              src="/images/hero.png"
-              className={styles.infoImage}
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.5 }}
-            />
-          </div>
+        <div className={styles.infoRight}>
+          <span className={styles.aboutTag}>About The Company</span>
+          <h2>Built for hosts. Powered by trust.</h2>
+          <p>
+            Your safety, control, and earnings come before everything else.
+          </p>
 
-          <div className={styles.infoRight}>
-            <span className={styles.aboutTag}>About The Company</span>
-            <h2>Logistics Solutions That Deliver Excellence</h2>
-            <p>
-              Payment solutions enable businesses to accept secure payments from customers.
-            </p>
+          <motion.div
+            className={styles.trackingBox}
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <h4>Why us</h4>
+            <p>★ Transparent & Timely Earnings.</p>
+            <p>★ Partnership, Not Just a Listing.</p>
+            <p>★ Your Car Is an Asset, Not a Commodity.</p>
+            <p>★ Control Isn’t Optional. It’s Guaranteed.</p>
+          </motion.div>
 
-            <motion.div
-              className={styles.trackingBox}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <h4>📍 Real-Time Tracking</h4>
-              <p>Many variations of lorem ipsum passages available.</p>
-            </motion.div>
-
-            <div className={styles.contactRow}>
-              <button className={styles.detailsBtn}>More Details</button>
-              <div className={styles.phoneBox}>
-                <strong>Emergency</strong>
-                <p>📞 +60 (380) 555-0234</p>
-              </div>
+          <div className={styles.contactRow}>
+            <button className={styles.detailsBtn}>More Details</button>
+            <div className={styles.phoneBox}>
+              <strong>Emergency</strong>
+              <p>
+                <a href="tel:+603805550234">📞 +60 (380) 555-0234</a>
+              </p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
+    </motion.div>
     );
   }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -42,12 +42,12 @@ import {
 export const metadata = {
   title: "MM Miles | Car Rentals in Chennai",
   description:
-    "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive. Easy booking, great pricing, and top service.",
+    "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
   openGraph: {
     title: "MM Miles | Car Rentals in Chennai",
     description:
-      "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive.",
-    url: "https://www.urbandrive.in",
+      "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
+    url: "https://www.mmmiles.com",
     siteName: "MM Miles",
     images: [
       {
@@ -64,7 +64,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "MM Miles | Car Rentals in Chennai",
     description:
-      "Rent premium cars like Bentley, BMW, and Audi in Chennai with Urban Drive.",
+      "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
     images: ["/bentley.png"],
   },
 };

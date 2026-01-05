@@ -879,6 +879,18 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* ===================== HOST YOUR CAR PAGE ===================== */
 
 .hostContainer {
@@ -1092,24 +1104,33 @@
 
 
 .hostContainer {
-  padding: 40px;
+  padding: 10px 20px;
 }
 
 .processHeader {
-  text-align: center;
-  margin-bottom: 40px;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .smallTitle {
   font-size: 14px;
-  color: #ff6600;
   font-weight: bold;
+  
 }
 
 .highlight {
-  color: #ff3300;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
 }
-
+.highlighthost {
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px;
+}
 .stepsRow {
   display: flex;
   justify-content: space-between;
@@ -1207,6 +1228,41 @@
   width: 42px;
   height: 42px;
 }
+
+.processImageWrapper {
+  width: 100%;
+  margin: 30px 0 60px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.processMainImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+  /* Optional: adds a subtle shadow to make the image pop */
+ 
+}
+
+/* Adjust padding for mobile if needed */
+@media (max-width: 768px) {
+  .processImageWrapper {
+    margin: 20px 0 40px 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Additional components */
 .profileActions {

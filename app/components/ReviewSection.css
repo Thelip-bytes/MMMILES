@@ -60,7 +60,7 @@
 
 .userrating-reviewText h3 {
   font-size: 15px;
-  
+  font-weight: 500;
   width: 280px;
   margin-bottom: 1rem;
   line-height: 1.4;
@@ -75,6 +75,8 @@
   border-radius: 20px;
   cursor: pointer;
   font-size: 15px;
+  font-weight: 600;
+  font-family: poppins;
   
 }
 .userrating-reviewBtn:hover {

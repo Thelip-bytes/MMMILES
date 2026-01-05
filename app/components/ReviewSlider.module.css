@@ -12,7 +12,7 @@
 .heading {
   text-align: center;
   font-size: 40px !important;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 40px;
   color: #111;
   font-family: Frank Ruhl Libre;
@@ -52,19 +52,20 @@
 
 .text {
   font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 16px;
+  font-weight: 400;
+  margin-bottom: 1px;
+  line-height: 1.5;
   color: #444;
   font-family: poppins;
 }
 
 .profile {
   font-size: 15px;
-  font-weight: 500;
+ 
+  font-family: poppins;
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: Darker Grotesque;
 }
 
 .avatar {
@@ -75,8 +76,8 @@
 .title {
   font-size: 12px;
   font-weight: 600;
+  font-family: poppins;
   color: #777;
-  font-family: sanchez;
 }
 
 /* Pause scroll when hovered */

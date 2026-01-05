@@ -1,6 +1,5 @@
 .faqSection {
   font-size: 40px;
-  
   background: #FEF9F5;
   padding: 50px 130px;
   text-align: center;
@@ -10,7 +9,7 @@
  
   margin-bottom: 3px;
   font-size: 40px !important;
-  font-weight: 500;
+  font-weight: 700;
   color: #000;
   margin-bottom: 8px;
   font-family: Frank Ruhl Libre;
@@ -19,8 +18,8 @@
 .faqHeader p {
   color: #666;
   font-size: 24px !important;
-  font-weight: 500;
-  font-family: Darker Grotesque;
+  font-weight: 600;
+  font-family: poppins;
   margin-bottom: 20px;
  
 }

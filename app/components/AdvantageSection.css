@@ -16,7 +16,7 @@
 }
 .advantage-container h2 {
   font-size: 40px !important;
-  font-weight: 500;
+  font-weight: 700;
   color: #000;
   margin-bottom: 8px;
   font-family: Frank Ruhl Libre;
@@ -27,7 +27,7 @@
   font-size: 24px !important;
   font-weight: 600;
   margin-bottom: 20px;
-  font-family: Darker Grotesque;
+  font-family: poppins;
 }
 
 .advantage-grid {

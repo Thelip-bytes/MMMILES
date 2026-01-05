@@ -94,7 +94,9 @@
 }
 
 .selectedText {
-    color: #222;
+    color: #333;
+    font-weight: 500;
+    font-family: poppins;
 }
 
 
@@ -109,7 +111,7 @@
     width: 100%;
     color: #666; /* Muted placeholder style */
     cursor: default;
-    font-family: Darker Grotesque;
+    font-family: poppins;
 }
 
 
@@ -121,7 +123,7 @@
     font-size: 15px;
     padding: 0; 
     width: 100%;
-    color: #222;
+    color: #333;
     cursor: pointer;
 }
 
@@ -253,7 +255,7 @@
   border: 1px solid #000000;
   font-size: 0.8rem;
   font-weight: bold;
-  font-family:'poppins', serif;
+  font-family: poppins;
 }
 
 .sliderRow {
@@ -387,6 +389,7 @@
 /* --- Detected/Selected Address (small info below field) --- */
 .detectedAddress {
   font-size: 12px;
+  font-weight: 500;
   color: #777;
   margin-top: 4px;
   padding-left: 4px;
@@ -465,7 +468,7 @@
 
 .modalLabel {
   display: block;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   color: #444;
   margin: 6px 0;

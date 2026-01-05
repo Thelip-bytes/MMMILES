@@ -5,8 +5,8 @@
 }
 
 .placebody {
-  font-size: 25px !important;
-  font-weight: 400;
+  font-size: 27px !important;
+  font-weight: 700;
   padding: 60px 100px;
   background-color: #FEF9F5;
   font-family: Frank Ruhl Libre;
@@ -15,9 +15,9 @@
 .subtitle {
   color: #666;
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 20px;
-  font-family: Darker Grotesque;
+  font-family: poppins;
 }
 
 .slider {

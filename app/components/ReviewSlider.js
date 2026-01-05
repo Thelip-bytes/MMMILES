@@ -34,7 +34,7 @@ const reviews = [
     img: "/profile1.jpg",
   },
    {
-    text: "Got stuck in the rain with no transport, and MM Miles helped me get a car. Smooth pickup and great service even in bad weather.",
+    text: "I got stuck in the rain with no transport, and MM Miles helped me to get a car. Smooth pickup and great service even in a bad weather.",
     name: "Neha V.",
     title: "Daily Commuter",
     img: "/profile2.jpg",
@@ -58,7 +58,7 @@ const reviews = [
     img: "/profile1.jpg",
   },
   {
-    text: "I Booked just an day before my trip and still got a reliable vehicle. I'm super impressed with MM miles a quick turn around and its response.",
+    text: "I Booked just an day before my trip and I still got a reliable vehicle. I'm super impressed with MM miles a quick turn around and its response.",
     name: "Ananya D.",
     title: "Solo Traveler",
     img: "/profile2.jpg",

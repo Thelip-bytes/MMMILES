@@ -78,8 +78,9 @@
   color: #111;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 14px;
   font-weight: 600;
+  font-family: poppins;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: 0.3s ease;
@@ -92,7 +93,7 @@
   .HostFloatingButton {
     padding: 10px 15px;
     font-size: 16px;
-    font-weight: 900;
+    font-weight: 700;
     bottom: 17px;
     right: 50px;
     font-family: poppins;

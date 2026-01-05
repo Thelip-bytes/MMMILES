@@ -58,7 +58,7 @@ export default function GuidePage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.4, duration: 0.6 }}
       >
-        We’ll take care of finding the lowest price for you, but here’s what you can do to make sure you get the best deal:
+        We find the best price. Here’s how to get the best deal:
       </motion.p>
 
       <div className={styles.ggrid}>

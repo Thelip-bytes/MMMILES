@@ -1162,6 +1162,7 @@
 .infoSection {
   display: flex;
   gap: 40px;
+  margin-top: 20px;
   align-items: center;
 }
 
@@ -1198,10 +1199,10 @@
 }
 
 .detailsBtn {
-  background: #ff9900;
+  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
   color: white;
   border: none;
-  padding: 12px 22px;
+  padding: 12px 72px;
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;

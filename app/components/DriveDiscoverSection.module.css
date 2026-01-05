@@ -5,8 +5,8 @@
 }
 
 .placebody {
-  font-size: 30px !important;
-  font-weight: 700;
+  font-size: 25px !important;
+  font-weight: 400;
   padding: 60px 100px;
   background-color: #FEF9F5;
   font-family: Frank Ruhl Libre;
@@ -15,7 +15,7 @@
 .subtitle {
   color: #666;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 20px;
   font-family: Darker Grotesque;
 }
@@ -67,9 +67,7 @@
   background: #dedbd9;
   padding: 6px 14px;
   border-radius: 10px;
-  font-weight: bold;
   font-size: 14px;
-  font-family: sanchez;
 }
 
 @keyframes scroll {

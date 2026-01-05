@@ -50,6 +50,51 @@ export default function PrivacyPage() {
         </li>
         </ul>
       </section>
+      
+      <section className="privacy-section">
+      <h2>5. Data Retention</h2>
+        <ul>
+          <li>Rental records and ID proofs are retained as long as legally required.</li>
+          <li>GPS trip history is stored for a limited time for safety and audit purposes.</li>
+          <li>Customers may request deletion of personal data (except where legally required to retain).</li>
+        </ul>
+      </section>
+
+      <section className="privacy-section">
+      <h2>6. Your Rights</h2>
+        <ul>
+          <p>You have the right to:</p>
+          <li>Access and review the data we hold about you</li>
+          <li>Request corrections to inaccurate data</li>
+          <li>Opt out of promotional communications</li>
+          <li>Request deletion of personal data (subject to legal obligations)</li>
+        </ul>
+      </section>
+
+      <section className="privacy-section">
+      <h2>7. Cookies & Online Tracking (if website/app is used)</h2>
+        <ul>
+          <li>Our website may use cookies to improve user experience.</li>
+          <li>Cookies help us remember preferences and analyze traffic.</li>
+          <li>You can disable cookies in your browser, though some features may not work properly.</li>
+        </ul>
+      </section>
+
+      <section className="privacy-section">
+      <h2>8. Policy Updates</h2>
+        <ul>
+          <p>MM MILES may update this Privacy Policy from time to time. Updated policies will be posted on our website/WhatsApp, and continued use of services will mean acceptance of the updated terms.</p>
+        </ul>
+      </section>
+
+      <section className="privacy-section">
+      <h2>9. Contact Us</h2>
+        <ul>
+          <p>For questions or concerns about privacy, please contact:</p>
+          <li>📧 Email: mmmiles.chennai@gmail.com</li>
+          <li>📞 Phone: +91 97906 09111</li>
+        </ul>
+      </section>
 
       <p className="privacy-footer">
         ⚠️ MM MILES is committed to protecting your privacy while ensuring safe

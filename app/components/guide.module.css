@@ -9,15 +9,15 @@
 .gtitle {
   text-align: center;
   font-size: 40px;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 4px;
   font-family: Frank Ruhl Libre;
 }
 
 .gsubtitle {
-  color: #7d7878;
+  color: #666;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center;
   margin-bottom: 20px;
   font-family: Darker Grotesque;

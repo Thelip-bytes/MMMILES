@@ -9,8 +9,8 @@
 .trendy-heading {
     color: #000;
     margin-bottom: -4px;
-    font-size: 40px;
-    font-weight: 700;
+    font-size: 40px !important;
+    font-weight: 500;
     font-family: Frank Ruhl Libre;
 }
 
@@ -18,7 +18,7 @@
   margin-top: 8px;
   font-size: 24px;
   font-weight: 600;
-  color: #555;
+  color: #666;
   margin-bottom: 0px;
   font-family: Darker Grotesque;
 }

@@ -3,8 +3,7 @@
 
 .container {
   padding: 18px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
+  font-family: Frank Ruhl Libre;
   background: #fef9f5;
   min-height: 100vh;
   color: #111827;
@@ -78,8 +77,9 @@
   width: 100%;
   cursor: pointer;
   font-weight: 600;
-  color: #7c7b77;
+  color: #666;
   font-size: 13px;
+  font-family: Frank Ruhl Libre;;
 }
 
 .tagDate {
@@ -99,9 +99,10 @@
   padding: 9px 19px 9px;
   width: 100%;
   cursor: pointer;
-  font-weight: 500;
-  color: #7c7b77;
-  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  font-size: 15px;
+  font-family: Darker Grotesque;
 }
 
 .taglocation {
@@ -114,9 +115,10 @@
   border-radius: 10px;
   padding: 9px 19px 9px;
   cursor: pointer;
-  font-weight: 500;
-  color: #7c7b77;
-  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  font-size: 15px;
+  font-family: Darker Grotesque;
   white-space: nowrap;
 }
 
@@ -176,7 +178,7 @@
 }
 
 .filterTitle {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -201,6 +203,7 @@
 .label {
   font-size: 14px;
   font-weight: 700;
+  font-family: sanchez;
   margin-bottom: 5px;
 }
 
@@ -493,6 +496,7 @@
   cursor: pointer;
   font-weight: 500;
   font-size: 13px;
+  font-family: poppins;
 }
 
 .selectCardActive {
@@ -501,7 +505,6 @@
   font-weight: 700;
   -webkit-text-fill-color: transparent;
   border: 1.4px solid #000000;
-
   box-shadow: 0 10px 20px rgba(66, 98, 255, 0.06);
 }
 
@@ -512,8 +515,9 @@
 
 /* result count and tags */
 .resultCount {
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 700;
+  font-family: Darker Grotesque;
   margin-bottom: 14px;
   padding-left: 10px;
   /*display: flex;
@@ -558,13 +562,15 @@
 }
 
 .carTitle {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 17px;
+  font-family: poppins;
 }
 
 .carType {
-  font-size: 13px;
-  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
   margin-top: 0px;
 }
 
@@ -609,8 +615,7 @@
 }
   .container {
   padding: 25px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial;
+  font-family: sanchez;
   background: #fef9f5;
   min-height: 100vh;
   color: #111827;
@@ -689,18 +694,6 @@
   
   font-size: 12px;
 }
-
-
-
-
-
-
-
-
-
-
- 
-
 }
 
 
@@ -712,8 +705,6 @@
   font-size: 10px;
   margin-top: -5px;
 }
-
-
 
  .iTag {
   color: #000000;
@@ -766,9 +757,6 @@
   font-size: 12px;
 }
 
-
-
-
 .price {
   font-size: 18px;
   display: flex;
@@ -779,9 +767,6 @@
   padding: 8px 10px 8px 18px;
   border-radius: 12px;
 }
-
-
-
 
 
 /* --- Price Row --- */
@@ -804,7 +789,7 @@
 
 .trendy-per-day {
   font-size: 0.98rem;
-  color: #777;
+  color: #666;
   font-weight: 600;
 }
 
@@ -824,15 +809,9 @@
 
 
 .trendy-reserve-btn:hover {
-
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(228, 192, 44, 0.5);
 }
-
-
-
-
-
 
 /* fade-in animation */
 @keyframes fadeIn {

@@ -8,8 +8,11 @@
 
 .privacy-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 40px !important;
+  font-weight: 800;
+  font-family: Frank Ruhl Libre;
   margin-bottom: 10px;
+  margin-top: 20px;
   background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -17,7 +20,9 @@
 
 .last-updated {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: Darker Grotesque;
   background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -29,19 +34,25 @@
 }
 
 .privacy-section h2 {
-  font-size: 1.3rem;
+  font-size: 16px;
+  
+  font-family: Frank Ruhl Libre;
   margin-bottom: 10px;
   color: #222;
 }
 
 .privacy-section ul {
+  font-size: 14px;
+  font-family: poppins;
   margin-left: 20px;
   list-style: disc;
 }
 
 .privacy-footer {
   margin-top: 30px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: poppins;
   color: #b00;
 }
 

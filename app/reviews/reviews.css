@@ -13,20 +13,22 @@
 }
 
 .testimonialHeading {
-  font-size: 2.8rem;
+  font-size: 40px;
   font-weight: 700;
+  font-family: Frank Ruhl Libre;
   color: #b68b2d;
   margin-bottom: 10px;
   letter-spacing: 0.5px;
 }
 
 .testimonialSub {
-  font-size: 1.2rem;
+  font-size: 24px;
   color: #b9923a;
-  font-weight: 500;
+  font-weight: 600;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
+  font-family: Darker Grotesque;
 }
 
 /* === Grid Layout === */
@@ -62,11 +64,13 @@
 
 /* === Text === */
 .testimonialText {
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 500;
   color: #333;
   line-height: 1.7;
   margin-bottom: 20px;
   min-height: 120px;
+  font-family: poppins;
 }
 
 /* === Profile === */
@@ -90,11 +94,15 @@
 .profileName {
   font-weight: 700;
   color: #111;
-  font-size: 1rem;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: poppins;
 }
 
 .profileRole {
-  font-size: 0.9rem;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: sanchez;
   color: #777;
 }
 

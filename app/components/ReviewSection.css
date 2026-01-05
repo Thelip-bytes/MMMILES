@@ -60,11 +60,11 @@
 
 .userrating-reviewText h3 {
   font-size: 15px;
-  font-weight: 600;
+  
   width: 280px;
   margin-bottom: 1rem;
   line-height: 1.4;
-  font-family: Frank Ruhl Libre;
+  font-family: poppins;
 }
 
 .userrating-reviewBtn {
@@ -75,9 +75,7 @@
   border-radius: 20px;
   cursor: pointer;
   font-size: 15px;
-  font-weight: 600;
-  transition: background 0.3s ease;
-  font-family: Darker Grotesque;
+  
 }
 .userrating-reviewBtn:hover {
   background: linear-gradient(to right, #BF9860 0%, #D8B480 100%);

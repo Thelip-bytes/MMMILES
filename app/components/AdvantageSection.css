@@ -15,8 +15,8 @@
   background-color: #FEF9F5;
 }
 .advantage-container h2 {
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 40px !important;
+  font-weight: 500;
   color: #000;
   margin-bottom: 8px;
   font-family: Frank Ruhl Libre;
@@ -24,7 +24,7 @@
 
 .subtitle {
   color: #666;
-  font-size: 24px;
+  font-size: 24px !important;
   font-weight: 600;
   margin-bottom: 20px;
   font-family: Darker Grotesque;
@@ -73,7 +73,6 @@
 
 .advantage-card p {
   font-size: 14px;
-  font-weight: 500;
   color: #000;
   line-height: 1.4;
   margin-left: 10px;

@@ -12,7 +12,7 @@
 .cleftSection {
   flex: 1; /* Takes up half the width */
   background-color: #F9F4EC;
-   padding: 0px 40px 0px;/* Adjust padding as needed */
+  padding: 0px 40px 0px;/* Adjust padding as needed */
   display: flex;
   border-radius: 12px 0 0 12px;
   margin-bottom: 7px;
@@ -24,25 +24,30 @@
 }
 
 .cmainTitle {
-  font-size: 1.6rem;
+  font-size: 40px;
   font-weight: 700;
   color: #333;
   margin-bottom: 6px;
-  
+  font-family: Frank Ruhl Libre;
 }
 
 .cemail {
-  font-size: 1.1rem;
+  font-size: 24px;
+  font-weight: 500;
   color: #666;
+  font-family: poppins;
 }
 .cphone {
-  font-size: 1.1rem;
+  font-size: 24px;
+  font-weight: 500;
   color: #666;
   margin-bottom: 5px;
+  font-family: poppins;
 }
 .csectionTitle {
-  font-size: 1.6rem;
+  font-size: 40px;
   font-weight: 700;
+  font-family: Darker Grotesque;
   color: #333;
   margin-top: 30px;
   margin-bottom: 6px;
@@ -68,7 +73,9 @@
 }
 
 .caddress {
-  font-size: 1rem;
+  font-size: 24px;
+  font-weight: 500;
+  font-family: poppins;
   color: #666;
   line-height: 1.6;
   margin-bottom: 20px;

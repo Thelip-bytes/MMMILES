@@ -1,17 +1,16 @@
 .faqSection {
   font-size: 40px;
-  font-weight: 600;
+  
   background: #FEF9F5;
   padding: 50px 130px;
   text-align: center;
-  font-family: poppins;
 }
 
 .faqHeader h2 {
-  font-weight: 600;
+ 
   margin-bottom: 3px;
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 40px !important;
+  font-weight: 500;
   color: #000;
   margin-bottom: 8px;
   font-family: Frank Ruhl Libre;
@@ -19,10 +18,11 @@
 
 .faqHeader p {
   color: #666;
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
+  font-size: 24px !important;
+  font-weight: 500;
   font-family: Darker Grotesque;
+  margin-bottom: 20px;
+ 
 }
 
 .faqList {
@@ -67,9 +67,10 @@
 }
 
 .faqQuestion {
-  font-weight: 600;
+  font-weight: 400;
   font-size: 15px;
-  font-family: Sanchez;
+  font-family: poppins;
+  
 }
 
 /* Plus/Minus icon using CSS bars */
@@ -118,10 +119,11 @@
     padding-top 0.3s ease,
     padding-bottom 0.3s ease;
   font-size: 15px;
-  font-weight: 600;
+  font-family: poppins;
+ 
   color: #ffffff;
   line-height: 1.5;
-  font-family: poppins;
+  
 }
 
 .show {

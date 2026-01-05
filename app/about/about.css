@@ -1,11 +1,10 @@
 .about-page {
-  font-family: Arial, sans-serif;
+ 
   color: #111;
   line-height: 1.6;
 }
 
 .about-page {
-  font-family: sans-serif;
   color: #333;
 }
 
@@ -50,13 +49,17 @@
 }
 @media (max-width: 768px){
    .about-section h2 {
-      font-size: 20px;
+      font-size: 24px;
+     
+      font-family: Frank Ruhl Libre;
     }
     .about-section {
       padding: 20px 30px !important;
     }
     .about-section p {
       font-size: 14px !important;
+      font-weight: 500;
+      font-family: poppins;
       text-align: justify;
       line-height: 21px;
     }
@@ -71,18 +74,22 @@
     }
 
     .team-member p{
-      font-size: 12px;
+      font-size: 14px;
     }
     .team-member h4{
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .card p{
-      font-size: 13px !important;
+      font-size: 14px !important;
+      font-weight: 500;
+      font-family: poppins;
     }
 
     .card h3{
-      font-size: 16px !important;
+      font-size: 20px !important;
+      font-weight: 700;
+      font-family: Frank Ruhl Libre;
       background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -95,21 +102,23 @@
 
     .unsdg h1 {
     
-    font-size: 20px !important;
-    font-weight: 600;
-}
-    
+    font-size: 24px !important;
+    font-weight: 700;
+    font-family: Frank Ruhl Libre;
+}   
 }
 
 
 .about-section {
   justify-content: center;
   text-align: justify;
-  font-size: 1.2rem;
+  font-size: 15px;
+  font-weight: 500;
   padding: 2rem 6rem;
   background: #FEF9F5;
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: popppins;
 }
+
 .about-section h2 {
   margin-bottom: 1rem;
   text-align: center;
@@ -198,7 +207,7 @@
 }
 
 .card h3 {
-  font-size: 1.4rem;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 1.2rem;
   color: #000;
@@ -206,11 +215,12 @@
 
 /* Paragraphs remain left-aligned */
 .card p {
-  font-size: 0.95rem;
+  font-size: 14px;
   line-height: 1.3;
   color: #333;
   margin: 0.2rem 14;
   text-align: justify;
+  font-family: poppins;
 }
 
 /* ===== UNSDG Section ===== */
@@ -226,7 +236,9 @@
 }
 
 .unsdg-subtext {
-  font-size: 1rem;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: poppins;
   color: #555;
   line-height: 1.6;
   padding: 0 1rem;
@@ -239,7 +251,9 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 00;
+  font-family: poppins;
   background: #FEF9F5;
   margin: 0;
   padding: 0px;
@@ -313,17 +327,13 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.globe-hand {
-  position: absolute;
-  top: -30px;
-  right: -40px;
-}
-
 .unsdg-description {
   margin: 2rem auto;
   max-width: 900px;
-  font-size: 1rem;
-  color: #444;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: poppins;
+  color: #333;
   line-height: 1.6;
   padding: 0 1rem;
 }
@@ -363,13 +373,15 @@ body {
 }
 
 .stat h4 {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: Darker Grotesque;
   color: #111;
 }
 
 .stat p {
-  font-size: 0.9rem;
+  font-size: 14px;
+  font-weight: 500;
   color: #555;
 }
 

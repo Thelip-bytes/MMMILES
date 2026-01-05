@@ -13,8 +13,8 @@
 }
 
 .heading {
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 40px !important;
+  font-weight: 500;
   color: #111;
   margin-bottom: 8px;
   font-family: Frank Ruhl Libre;
@@ -22,9 +22,9 @@
 
 
 .subheading {
-  font-size: 24px;
-  font-weight: 600;
-  color: #444;
+  font-size: 24px !important;
+  font-weight: 500;
+  color: #666;
   margin-bottom: 24px;
   font-family: Darker Grotesque;
 }

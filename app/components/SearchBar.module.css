@@ -37,7 +37,7 @@
 .label {
     font-weight: 700;
     margin-bottom: 6px;
-    font-size: 15px;
+    font-size: 15px !important;
     color: #333;
     font-family: Frank Ruhl Libre;
 }
@@ -47,7 +47,6 @@
     display: flex;
     align-items: center;
     background: #FEF9F5; 
-     
     border-radius: 12px; 
     padding: 12px 14px; 
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04); 
@@ -82,7 +81,7 @@
     flex-grow: 1;
     font-size: 16px;
     font-weight: 700;
-    color: #333;
+    color: #666;
     padding: 0; 
     width: 100%;
     /* Ensure the text itself is not clickable to allow the wrapper click handler to work */
@@ -91,7 +90,7 @@
 }
 
 .placeholderText {
-    color: #a0a0a0; 
+    color: #666; 
 }
 
 .selectedText {
@@ -108,7 +107,7 @@
     font-weight: 700;
     padding: 0; 
     width: 100%;
-    color: #a0a0a0; /* Muted placeholder style */
+    color: #666; /* Muted placeholder style */
     cursor: default;
     font-family: Darker Grotesque;
 }
@@ -298,6 +297,7 @@
   outline: none;
   background: transparent;
   font-size: 14px;
+  font-weight: 520 !important;
   color: #222;
 }
 

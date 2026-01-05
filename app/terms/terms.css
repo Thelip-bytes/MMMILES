@@ -3,13 +3,18 @@
   margin: auto;
   padding: 20px;
   line-height: 1.6;
-  font-family: Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  font-family: poppins;
+  margin-bottom: 30px;
+  margin-top: 20px;
 }
 
 .terms-title {
   text-align: center;
-  font-size: 2rem;
+  font-size: 40px !important;
   font-weight: 700;
+  font-family: Frank Ruhl Libre;
   margin-bottom: 10px;
     background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
@@ -18,9 +23,10 @@
 
 .last-updated {
   text-align: center;
-  font-size: 3rem;
+  font-size: 24px;
   font-weight: 600;
-    background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  font-family: Darker Grotesque;
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 30px;
@@ -31,19 +37,27 @@
 }
 
 .terms-section h2 {
-  font-size: 1.3rem;
+  font-size: 15px;
+  
   margin-bottom: 10px;
-  color: #222;
+  margin-top: 30px;
+  color: #1f1f1f;
+  font-family: Frank Ruhl Libre;
 }
 
 .terms-section ul {
-  margin-left: 20px;
+  margin-left: 15px;
+  font-size: 14px;
+ 
+  font-family: poppins;
   list-style: disc;
 }
 
 .terms-footer {
   margin-top: 39px;
-  font-weight: 799;
+  font-size: 20px;
+  font-family: Darker Grotesque;
+  font-weight: 600;
   color: #b00;
 }
 

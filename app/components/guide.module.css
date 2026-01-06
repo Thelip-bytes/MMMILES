@@ -71,11 +71,7 @@
 }
 
 @media (max-width: 600px) {
-  .ggrid {
-    grid-template-columns: 1fr;
-  }
-
-  .gtitle {
-    font-size: 32px;
-  }
+ .gcontainer {
+  display: none;
+}
 }

@@ -93,11 +93,7 @@
     color: #666; 
 }
 
-.selectedText {
-    color: #333;
-    font-weight: 500;
-    font-family: poppins;
-}
+
 
 
 /* --- Read-Only Input (Pick Up Field) --- */
@@ -105,11 +101,11 @@
     border: none;
     background: transparent;
     outline: none;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight:800 !important;
     padding: 0; 
     width: 100%;
-    color: #666; /* Muted placeholder style */
+    color: #807979; /* Muted placeholder style */
     cursor: default;
     font-family: Darker Grotesque;
 }

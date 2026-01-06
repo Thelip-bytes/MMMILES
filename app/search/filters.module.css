@@ -3,7 +3,8 @@
 
 .container {
   padding: 18px;
-  font-family: Frank Ruhl Libre;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
   background: #fef9f5;
   min-height: 100vh;
   color: #111827;
@@ -77,9 +78,8 @@
   width: 100%;
   cursor: pointer;
   font-weight: 600;
-  color: #666;
+  color: #7c7b77;
   font-size: 13px;
-  font-family: Frank Ruhl Libre;;
 }
 
 .tagDate {
@@ -99,10 +99,9 @@
   padding: 9px 19px 9px;
   width: 100%;
   cursor: pointer;
-  font-weight: 600;
-  color: #666;
-  font-size: 15px;
-  font-family: Darker Grotesque;
+  font-weight: 500;
+  color: #7c7b77;
+  font-size: 13px;
 }
 
 .taglocation {
@@ -115,10 +114,9 @@
   border-radius: 10px;
   padding: 9px 19px 9px;
   cursor: pointer;
-  font-weight: 600;
-  color: #666;
-  font-size: 15px;
-  font-family: Darker Grotesque;
+  font-weight: 500;
+  color: #7c7b77;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -178,7 +176,7 @@
 }
 
 .filterTitle {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -203,7 +201,6 @@
 .label {
   font-size: 14px;
   font-weight: 700;
-  font-family: sanchez;
   margin-bottom: 5px;
 }
 
@@ -496,7 +493,6 @@
   cursor: pointer;
   font-weight: 500;
   font-size: 13px;
-  font-family: poppins;
 }
 
 .selectCardActive {
@@ -505,6 +501,7 @@
   font-weight: 700;
   -webkit-text-fill-color: transparent;
   border: 1.4px solid #000000;
+
   box-shadow: 0 10px 20px rgba(66, 98, 255, 0.06);
 }
 
@@ -515,11 +512,9 @@
 
 /* result count and tags */
 .resultCount {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
-  font-family: Darker Grotesque;
-  margin-bottom: 14px;
-  padding-left: 10px;
+  margin-bottom: 8px;
   /*display: flex;
   flex-direction: row;*/
 }
@@ -562,15 +557,13 @@
 }
 
 .carTitle {
-  font-weight: 600;
-  font-size: 17px;
-  font-family: poppins;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .carType {
-  font-size: 14px;
-  font-weight: 500;
-  color: #666;
+  font-size: 13px;
+  color: #6b7280;
   margin-top: 0px;
 }
 
@@ -586,115 +579,7 @@
   width: 20px;
   color: #b49b78;
 }
-@media (max-width: 480px) {
-  .grid {
-  display: grid;
-  
-  gap: 22px;
-}
-  .card {
-    background: #fff;
-    border: 1px solid #f1f6fe;
-    border-radius: 12px;
-    padding: 10px 14px !important;
-    width: 100%;
-    max-width: 370px;
-    overflow: hidden;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-    cursor: pointer;
-    animation: fadeIn 0.4s ease;
-  }
-  .trendy-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  margin-bottom: 2px !important;
-  margin-left: 33px;
-  padding: 8px 12px;
-  border-radius: 12px;
-}
-  .container {
-  padding: 25px;
-  font-family: sanchez;
-  background: #fef9f5;
-  min-height: 100vh;
-  color: #111827;
-}
 
-.cardHeader {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-.carImg {
-  width: 100%;
-  max-height: 150px;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 8px;
-  margin: 8px 0;
-}
-
-/* badge tags */
-.iTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  margin-right: 5px;
-  margin-left: 30px;
-  margin-bottom: -5px;
-}
-
-.iiTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 10px;
-  border-radius: 8px;
-  margin-right: 1px;
-  font-size: 12px;
-  margin-bottom: -5px;
-}
-
-.iiiTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 15px;
-  border-radius: 8px;
-  margin-right: 5px;
-  font-size: 12px;
-  margin-bottom: -5px;
-}
-
-.ivTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 10px;
-  margin-left: 30px;
-  margin-right: 7px;
-  border-radius: 8px;
-  font-size: 12px;
-}
-
-.vTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 10px;
-  border-radius: 8px;
-  margin-right: 5px;
-  font-size: 12px;
-}
-
-.viTag {
-  color: #000000;
-  background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
-  padding: 6px 10px;
-  border-radius: 8px;
-  
-  font-size: 12px;
-}
-}
 
 
 .starTag {
@@ -706,7 +591,8 @@
   margin-top: -5px;
 }
 
- .iTag {
+/* badge tags */
+.iTag {
   color: #000000;
   background: linear-gradient(to bottom right, #f5f5f5, #fafaf7);
   padding: 6px 10px;
@@ -757,6 +643,10 @@
   font-size: 12px;
 }
 
+
+
+
+
 .price {
   font-size: 18px;
   display: flex;
@@ -767,6 +657,9 @@
   padding: 8px 10px 8px 18px;
   border-radius: 12px;
 }
+
+
+
 
 
 /* --- Price Row --- */
@@ -789,7 +682,7 @@
 
 .trendy-per-day {
   font-size: 0.98rem;
-  color: #666;
+  color: #777;
   font-weight: 600;
 }
 
@@ -809,9 +702,15 @@
 
 
 .trendy-reserve-btn:hover {
+
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(228, 192, 44, 0.5);
 }
+
+
+
+
+
 
 /* fade-in animation */
 @keyframes fadeIn {
@@ -857,7 +756,7 @@
   }
 
   .grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -865,7 +764,7 @@
   .search input {
     padding: 10px 36px;
   }
-  
+
   .card {
     padding: 12px;
   }

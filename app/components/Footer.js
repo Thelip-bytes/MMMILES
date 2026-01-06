@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaInstagram, FaFacebookF, FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -57,7 +57,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   aria-label="Facebook"
                 >
-                  <FaFacebookF className={`${styles.icon} ${styles.facebook}`} />
+                  <FaLinkedin className={`${styles.icon} ${styles.facebook}`} />
                 </a>
                 <a
                   href="https://wa.me/919096299666"

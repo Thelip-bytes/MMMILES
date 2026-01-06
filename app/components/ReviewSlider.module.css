@@ -51,16 +51,16 @@
 }
 
 .text {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
-  margin-bottom: 1px;
+  margin-bottom: 10px;
   line-height: 1.5;
   color: #444;
   font-family: poppins;
 }
 
 .profile {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   font-family: poppins;
   display: flex;

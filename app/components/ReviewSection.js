@@ -37,8 +37,8 @@ export default function ReviewSection() {
                             />
                             <div className="userrating-reviewText">
                                 <h3>
-                                    Kindly Drop Your Experience <br />
-                                    & Save Big on Your Next Ride
+                                    Kindly drop your experience <br />
+                                    & Save big on your next ride
                                 </h3>
                                 <button 
                                     className="userrating-reviewBtn"
@@ -62,7 +62,7 @@ export default function ReviewSection() {
                             />
                             <div className="userrating-reviewText">
                                 <h3 id="userrating-reviewText2">
-                                    Give Us Your Rating with your <br />
+                                    Give us your rating with your <br />
                                     Experience
                                 </h3>
                                 <button 

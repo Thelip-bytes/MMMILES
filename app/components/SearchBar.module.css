@@ -81,7 +81,7 @@
     flex-grow: 1;
     font-size: 16px;
     font-weight: 700;
-    color: #666;
+    color: #aca4a4;
     padding: 0; 
     width: 100%;
     /* Ensure the text itself is not clickable to allow the wrapper click handler to work */
@@ -111,7 +111,7 @@
     width: 100%;
     color: #666; /* Muted placeholder style */
     cursor: default;
-    font-family: poppins;
+    font-family: Darker Grotesque;
 }
 
 
@@ -298,9 +298,10 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: 14px;
-  font-weight: 520 !important;
-  color: #222;
+  font-size: 16px;
+  font-family: Darker Grotesque;
+  font-weight: 700;
+  color: #928c8c !important;
 }
 
 .smallButton {

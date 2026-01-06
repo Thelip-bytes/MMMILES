@@ -46,7 +46,7 @@ const reviews = [
     img: "/profile3.jpg",
   },
   {
-    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a  beautiful manner the entire way, and there were no hidden charges at all.",
+    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a good manner the entire way, and there were no hidden charges.",
     name: "Deepa S.",
     title: "Road Trip Traveler",
     img: "/profile4.jpg",

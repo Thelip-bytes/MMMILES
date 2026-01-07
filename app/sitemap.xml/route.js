@@ -8,7 +8,7 @@ export async function GET() {
     "/reviews",
     "/faq",
     "/login",
-    "/cars",
+    "/car",
   ];
 
   const urls = pages

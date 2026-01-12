@@ -42,30 +42,32 @@ import {
 export const metadata = {
   title: "MM Miles | Car Rentals in Chennai",
   description:
-    "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
+    "Rent cars in Chennai with MM Miles. Easy booking, affordable pricing, and 24/7 support.",
+
   openGraph: {
     title: "MM Miles | Car Rentals in Chennai",
     description:
-      "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
-    url: "https://www.mmmiles.com",
+      "Flexible car rentals for professionals in Chennai. Drive premium cars without ownership.",
+    url: "https://www.mmmiles.com/",
     siteName: "MM Miles",
     images: [
       {
-        url: "/logo2.png",
+        url: "https://www.mmmiles.com/mmmiles-og.jpg",
         width: 1200,
         height: 630,
-        alt: "Bentley luxury car for rent",
+        alt: "MM Miles – Premium car rentals in Chennai",
       },
     ],
     locale: "en_IN",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     title: "MM Miles | Car Rentals in Chennai",
     description:
-      "Rent cars in Chennai with MMmiles. Easy booking, less pricing, and 24/7 support.",
-    
+      "Flexible car rentals for professionals in Chennai.",
+    images: ["https://www.mmmiles.com/mmmiles-og.jpg"],
   },
 };
 

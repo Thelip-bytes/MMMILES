@@ -217,7 +217,7 @@ export default function SearchPage() {
             }}
           />
         </div>
-        <div>
+        <div className={styles.taguDate}>
           {pickup && returndate && (
             <div className={styles.tags}>
               <span className={styles.tag}>

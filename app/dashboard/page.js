@@ -10,7 +10,8 @@ import {
   UserCircleIcon,
   ShoppingBagIcon,
   HomeModernIcon,
-  LifebuoyIcon,
+  CurrencyRupeeIcon,
+  ChatBubbleLeftIcon,
   ArrowRightOnRectangleIcon,
   EnvelopeIcon,
   PhoneIcon,
@@ -40,8 +41,8 @@ export default function Dashboard() {
     { id: "announcement", label: "Announcements", icon: BellAlertIcon },
     { id: "profile", label: "Profile", icon: UserCircleIcon },
     { id: "orders", label: "Orders", icon: ShoppingBagIcon },
-    { id: "host", label: "Host Your Car", icon: HomeModernIcon },
-    { id: "support", label: "Support", icon: LifebuoyIcon },
+    { id: "host", label: "Host Your Car", icon: CurrencyRupeeIcon },
+    { id: "support", label: "Support", icon: ChatBubbleLeftIcon },
   ];
 
   // handle profile image upload

@@ -44,7 +44,7 @@ export default function Footer() {
               <span className={styles.followText}>Follow us & Stay Notified</span>
               <div className={styles.socialIcons}>
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/mmmiles_chennai/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -52,7 +52,7 @@ export default function Footer() {
                   <FaInstagram className={`${styles.icon} ${styles.instagram}`} />
                 </a>
                 <a
-                  href="https://facebook.com"
+                  href="https://www.linkedin.com/company/mm-miles/?viewAsMember=true"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
@@ -60,7 +60,7 @@ export default function Footer() {
                   <FaLinkedin className={`${styles.icon} ${styles.facebook}`} />
                 </a>
                 <a
-                  href="https://wa.me/919096299666"
+                  href="https://wa.me/9790609111"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"

@@ -4,8 +4,17 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
-import { Frank_Ruhl_Libre } from "next/font/google";
 
+import {
+  Frank_Ruhl_Libre,
+  Darker_Grotesque,
+  Sanchez,
+  Poppins,
+} from "next/font/google";
+
+/* =========================
+   Fonts
+========================= */
 const frankRuhl = Frank_Ruhl_Libre({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700", "900"],
@@ -30,51 +39,57 @@ const poppins = Poppins({
   variable: "--font-poppins",
 });
 
-
-import { 
-  Frank_Ruhl_Libre,
-  Darker_Grotesque,
-  Sanchez,
-  Poppins,
-} from "next/font/google";
-
-
+/* =========================
+   Metadata (LinkedIn Safe)
+========================= */
 export const metadata = {
-  title: "MM Miles | Car Rentals in Chennai",
+  metadataBase: new URL("https://www.mmmiles.com"),
+
+  title: {
+    default: "MM Miles | Car Rentals in Chennai",
+    template: "%s | MM Miles",
+  },
+
   description:
-    "Rent cars in Chennai with MM Miles. Easy booking, affordable pricing, and 24/7 support.",
+    "Rent cars in Chennai with MM Miles. Flexible car rentals for professionals with affordable pricing and 24/7 support.",
+
+  alternates: {
+    canonical: "https://www.mmmiles.com/",
+  },
 
   openGraph: {
     title: "MM Miles | Car Rentals in Chennai",
     description:
       "Flexible car rentals for professionals in Chennai. Drive premium cars without ownership.",
-    url: "https://www.mmmiles.com/",
+    url: "/",
     siteName: "MM Miles",
+    type: "website",
+    locale: "en_IN",
     images: [
       {
-        url: "https://www.mmmiles.com/logo2.jpg",
+        url: "/mmmiles-og.jpg",
         width: 1200,
         height: 630,
         alt: "MM Miles – Premium car rentals in Chennai",
       },
     ],
-    locale: "en_IN",
-    type: "website",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "MM Miles | Car Rentals in Chennai",
-    description:
-      "Flexible car rentals for professionals in Chennai.",
-    images: ["https://www.mmmiles.com/logo2.jpg"],
+    images: ["/mmmiles-og.jpg"],
   },
 };
 
+/* =========================
+   Root Layout
+========================= */
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={frankRuhl.variable}>
+      <body
+        className={`${frankRuhl.variable} ${darkerGrotesque.variable} ${sanchez.variable} ${poppins.variable}`}
+      >
         <Navbar />
 
         {children}
@@ -94,8 +109,6 @@ export default function RootLayout({ children }) {
             },
           }}
         />
-
-       
 
         <Footer />
       </body>

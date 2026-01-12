@@ -52,7 +52,7 @@ export const metadata = {
     siteName: "MM Miles",
     images: [
       {
-        url: "https://www.mmmiles.com/logo2.png",
+        url: "https://www.mmmiles.com/logo2.jpg",
         width: 1200,
         height: 630,
         alt: "MM Miles – Premium car rentals in Chennai",
@@ -67,7 +67,7 @@ export const metadata = {
     title: "MM Miles | Car Rentals in Chennai",
     description:
       "Flexible car rentals for professionals in Chennai.",
-    images: ["https://www.mmmiles.com/logo2.png"],
+    images: ["https://www.mmmiles.com/logo2.jpg"],
   },
 };
 

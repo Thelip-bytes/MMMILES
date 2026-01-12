@@ -51,7 +51,7 @@ export const metadata = {
     siteName: "MM Miles",
     images: [
       {
-        url: "/bentley.png",
+        url: "/logo2.png",
         width: 1200,
         height: 630,
         alt: "Bentley luxury car for rent",

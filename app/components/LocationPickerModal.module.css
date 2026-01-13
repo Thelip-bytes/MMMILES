@@ -1,0 +1,270 @@
+/* Location Picker Modal - Gold Palette */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.closeBtn:hover {
+  background: #f3f4f6;
+  color: #333;
+}
+
+.header {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Search Container */
+.searchContainer {
+  padding: 16px 24px;
+}
+
+.searchLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.searchInputWrapper {
+  display: flex;
+  align-items: center;
+  background: #f9f9f9;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: all 0.2s;
+}
+
+.searchInputWrapper:focus-within {
+  border-color: #BF9860;
+  box-shadow: 0 0 0 3px rgba(191, 152, 96, 0.1);
+}
+
+.searchIcon {
+  color: #BF9860;
+  font-size: 16px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearBtn:hover {
+  color: #666;
+}
+
+/* GPS Button */
+.gpsButton {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 24px 16px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #fef9f3 0%, #fdf5eb 100%);
+  border: 1px solid #BF9860;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.gpsButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fdf5eb 0%, #f9eedf 100%);
+  transform: translateY(-1px);
+}
+
+.gpsButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.gpsIcon {
+  color: #BF9860;
+  font-size: 18px;
+}
+
+.gpsButton span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #BF9860;
+}
+
+/* Suggestions */
+.suggestionsContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 24px;
+  min-height: 150px;
+  max-height: 300px;
+}
+
+.loadingText {
+  text-align: center;
+  padding: 20px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.suggestionsLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #999;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.suggestionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.suggestionItem:hover {
+  background: #f9f9f9;
+}
+
+.suggestionIcon {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.suggestionTexts {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestionTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.suggestionSubtitle {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Continue Button */
+.continueBtn {
+  margin: 16px 24px 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #D8B480 0%, #BF9860 100%);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.continueBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(191, 152, 96, 0.35);
+}
+
+.continueBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .modal {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  .suggestionsContainer {
+    max-height: none;
+    flex: 1;
+  }
+}

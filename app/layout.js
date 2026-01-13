@@ -110,7 +110,11 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <Footer />
+       
+
+        <div id="global-footer">
+          <Footer />
+        </div>
       </body>
     </html>
   );

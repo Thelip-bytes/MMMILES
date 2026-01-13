@@ -7,7 +7,7 @@
   gap: 22px;
 }
   .card {
-    background: #fff;
+    background: #ecddc8;
     border: 1px solid #f1f6fe;
     border-radius: 12px;
     padding: 10px 14px !important;
@@ -28,12 +28,14 @@
   border-radius: 12px;
 }
   .container {
-  padding: 25px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  padding: 0;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
   background: #fef9f5;
   min-height: 100vh;
   color: #111827;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .cardHeader {
@@ -177,8 +179,8 @@
 }
 
 .container {
-  padding: 18px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+  padding: 12px 16px;
+  font-family: Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial;
   background: #fef9f5;
   min-height: 100vh;
@@ -192,6 +194,124 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+/* ===== Zoomcar-Style Search Top Bar ===== */
+.searchTopBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  padding: 6px 14px;
+  margin-bottom: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* Location Section */
+.searchLocation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+
+.searchLocation:hover .locationText {
+  color: #BF9860;
+}
+
+.locationIconCircle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.locationIcon {
+  color: #333;
+  font-size: 14px;
+}
+
+.locationText {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+
+/* Date/Time Section */
+.searchDates {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.dateBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2px 14px;
+  cursor: pointer;
+  border-left: 1px solid #ebebeb;
+  transition: background 0.2s;
+}
+
+.dateBlock:first-child {
+  border-left: none;
+}
+
+.dateBlock:hover {
+  background: #fefbf7;
+}
+
+.dateValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.timeValue {
+  font-size: 12px;
+  font-weight: 400;
+  color: #888;
+}
+
+/* Secondary Bar - Result Count & Recommended */
+.secondaryBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.recommendedBtn {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.recommendedBtn:hover {
+  border-color: #BF9860;
+  color: #BF9860;
+  background: #fefbf7;
 }
 
 .tabs {
@@ -225,74 +345,140 @@
 }
 
 .search input {
-  width: 105%;
-  padding: 12px 44px;
+  width: 100%;
+  padding: 12px 16px 12px 42px; /* space for icon */
   border-radius: 10px;
   border: 1px solid #e6e9ee;
-  background: #fff;
+  background: #ffffff;
+  font-size: 14px;
+  color: #111827;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.search input:focus {
+  outline: none;
+  border-color: #D8B480;
+  box-shadow: 0 0 0 3px rgba(216, 180, 128, 0.1);
 }
 
 .searchIcon {
   width: 20px;
   position: absolute;
-  left: 12px;
-  top: 11px;
-  color: #6b7280;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #BF9860; /* Gold Icon */
 }
 
+/* Location Card - Clickable Address Display */
+.locationCard {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 25px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  min-width: 200px;
+  max-width: 400px;
+}
 
-.tags {
+.locationCard:hover {
+  border-color: #BF9860;
+  background: #fefbf7;
+  box-shadow: 0 2px 8px rgba(191, 152, 96, 0.15);
+}
+
+.locationCardIcon {
+  color: #BF9860;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
+.locationCardText {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.locationCardArrow {
+  color: #9ca3af;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.locationCard:hover .locationCardArrow {
+  color: #BF9860;
+}
+
+/* Enhanced Tag Styles */
 .tag {
   background: #ffffff;
   border: 1px solid #e6e9ee;
-  border-radius: 10px;
-  padding: 11px 19px 11px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: 600;
-  color: #7c7b77;
-  font-size: 13px;
-}
-
-.tagDate {
-  font-weight: bold;
-  font-size: 13px;
-  color: #000;
-}
-
-.tagpromoted {
-  flex-shrink: 0;
-}
-
-.promoted {
-  background: #ffffff;
-  border: 1px solid #e6e9ee;
-  border-radius: 10px;
-  padding: 9px 19px 9px;
+  border-radius: 8px;
+  padding: 10px 16px;
   width: 100%;
   cursor: pointer;
   font-weight: 500;
-  color: #7c7b77;
+  color: #4b5563;
   font-size: 13px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-.taglocation {
-  flex-shrink: 0;
+.tag:hover {
+  border-color: #D8B480;
+  background: #fdfaf5;
+}
+
+.tagDate {
+  font-weight: 700;
+  font-size: 13px;
+  color: #111827;
 }
 
 .location {
   background: #ffffff;
   border: 1px solid #e6e9ee;
-  border-radius: 10px;
-  padding: 9px 19px 9px;
+  border-radius: 8px;
+  padding: 10px 16px;
   cursor: pointer;
   font-weight: 500;
-  color: #7c7b77;
+  color: #4b5563;
   font-size: 13px;
   white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.location:hover {
+  border-color: #D8B480;
+  color: #111827;
+}
+
+.promoted {
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 8px;
+  padding: 10px 16px;
+  width: 100%;
+  cursor: pointer;
+  font-weight: 500;
+  color: #BF9860; /* Gold text for premium feel */
+  font-size: 13px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 
@@ -323,23 +509,47 @@
 
 /* main layout */
 .main {
-  margin-top: 18px;
+  flex: 1;
   display: flex;
-  gap: 30px;
-  align-items: flex-start;
+  overflow: hidden; /* Prevent body scroll */
+  height: calc(100vh - 80px); /* Adjust based on your actual header height */
+  margin-top: 0;
+  gap: 0;
 }
 
-/* Sidebar */
+/* Sidebar - Zoomcar Style */
 .sidebar {
   width: 320px;
-  min-width: 260px;
-  max-height: calc(100vh - 100px);
+  min-width: 320px;
+  max-width: 320px;
+  height: 100%;
   overflow-y: auto;
-  background: #fff;
-  border-radius: 12px;
-  padding: 15px;
-  border: 6px solid #eeede6;
+  
+  background: #ffffff;
+  border-right: 1px solid #ebebeb;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
   flex-shrink: 0;
+  z-index: 10;
+}
+
+/* Subtle scrollbar - only visible on hover */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 /* small header row */
@@ -358,6 +568,7 @@
 .reset {
   background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   border: none;
   cursor: pointer;
@@ -366,10 +577,17 @@
 
 /* generic block used throughout */
 .block {
-  margin-top: 9px;
-  padding: 8px;
-  border-radius: 10px;
-  background: #ffffff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f3f4f6;
+  background: transparent;
+}
+
+.block:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* small label and subtitle */
@@ -500,13 +718,25 @@
 
 .rangeTrack {
   position: absolute;
-  height: 10px;
+  height: 6px; /* Slightly thinner for elegance */
   width: calc(100% - 28px);
   border-radius: 999px;
   background: #eef2ff;
   left: 14px;
   right: 14px;
   overflow: hidden;
+}
+
+/* Visual active track fill */
+.rangeTrack::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--min) * 1%);
+  right: calc(100% - (var(--max) * 1%));
+  height: 100%;
+  background: linear-gradient(to right, #D8B480, #BF9860);
+  border-radius: 999px;
+  transition: left 0.1s ease, right 0.1s ease;
 }
 
 /* the actual range inputs are invisible but thumbs visible */
@@ -594,6 +824,7 @@
 .yearRange input[type="range"] {
   width: 100%;
   -webkit-appearance: none;
+  appearance: none;
   background: transparent;
   margin: 4px 0;
 }
@@ -661,44 +892,92 @@
 }
 
 .selectCard {
-  background: #ffffff;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid #e6e9ee;
+  background: #f9fafb;
+  padding: 8px 18px;
+  border-radius: 30px; /* Pill shape */
+  border: 1px solid #e5e7eb;
   cursor: pointer;
   font-weight: 500;
   font-size: 13px;
+  color: #4b5563;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.selectCard:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
 }
 
 .selectCardActive {
-  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
-  -webkit-background-clip: text;
-  font-weight: 700;
-  -webkit-text-fill-color: transparent;
-  border: 1.4px solid #000000;
-
-  box-shadow: 0 10px 20px rgba(66, 98, 255, 0.06);
+  background: #111827; /* Dark elegant fill */
+  color: #ffffff;
+  font-weight: 600;
+  border: 1px solid #111827;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 /* RIGHT CONTENT */
+/* RIGHT CONTENT */
 .content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 95%; /* Fill parent */
+  overflow: hidden; /* Prevent outer scroll */
+  padding: 1px 16px;
 }
 
-/* result count and tags */
+/* active filters and counts stay fixed at top of content if desired, or scroll with it? 
+   User said "place all search result cars in one separate card tht is scrollable". 
+   So the list should scroll, maybe headers stay put? 
+   I will make a scrollable wrapper for results.
+*/
+
+.resultsScrollableCard {
+  background: #f0e7de;
+  border-radius: 16px;
+  flex: 1;
+  overflow-y: scroll;
+  padding: 16px;
+  box-shadow: none;
+}
+
+/* Subtle scrollbar - only visible on hover */
+.resultsScrollableCard::-webkit-scrollbar {
+  width: 6px;
+}
+
+.resultsScrollableCard::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 6px;
+}
+
+.resultsScrollableCard:hover::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}
+
+.resultsScrollableCard::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* result count - refined */
 .resultCount {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  /*display: flex;
-  flex-direction: row;*/
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 16px;
+  padding: 0;
 }
 
-/* grid */
+/* grid - auto-fill prevents single cards from stretching full width */
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 400px));
+  gap: 20px;
+  row-gap: 32px;
+  justify-content: start;
 }
 
 /* card */
@@ -707,52 +986,321 @@
   color: inherit;
 }
 
+/* Zoomcar-style Card Redesign */
 .card {
-  background: #fff;
-  border: 1px solid #f1f6fe;
-  border-radius: 12px;
-  padding: 13px;
-  width: 100%;
-  max-width: 370px;
+  background: #ecddc8;
+  border-radius: 16px;
   overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Initial subtle shadow */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: pointer;
-  animation: fadeIn 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #f3f4f6;
+  position: relative;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
 }
 
-.cardHeader {
+/* 1. Image Section */
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #f9fafb;
+  overflow: hidden;
+}
+
+.carImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gradient overlay at bottom of image */
+.gradientOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Heart Icon (Top Right) */
+.heartBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ecddc8;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+/* Rating Badge (Bottom Right of Image or overlapping) */
+.ratingBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: #ecddc8;
+  color: #111827;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 5;
+}
+
+/* Dots for Carousel (Green active dot) */
+.dotsOverlay {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  z-index: 5;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 50%;
+}
+
+.dotActive {
+  background: #BF9860; /* Green active dot */
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Slider Arrows */
+.sliderArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.sliderArrow:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.card:hover .sliderArrow {
+  opacity: 1;
+}
+
+.leftArrow {
+  left: 8px;
+}
+
+.rightArrow {
+  right: 8px;
+}
+
+/* 2. Info Section - Overlays bottom of image */
+.cardInfoOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 14px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cardInfoLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.carTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.carSubtitle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.8);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dotSeparator {
+  width: 4px;
+  height: 4px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Rating Badge - Right side of overlay */
+.cardInfoRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.ratingPill {
+  background: #ecddc8;
+  color: #111827;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ratingText {
+  font-size: 10px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Hide old dark section */
+.cardDarkSection {
+  display: none;
+}
+
+.carSubtitle {
+  font-size: 13px;
+  color: #9ca3af; /* Light gray text */
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dotSeparator {
+  width: 3px;
+  height: 3px;
+  background: #6b7280;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 3. Footer Section - Price & Features */
+.cardFooter {
+  padding: 12px 14px;
+  background: #ecddc8;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.carTitle {
-  font-weight: 700;
-  font-size: 16px;
+.footerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.carType {
-  font-size: 13px;
+.featureTag {
+  font-size: 11px;
+  color: #374151;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.featureTag img {
+  width: 14px;
+  height: 14px;
+}
+
+.footerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.priceHour {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.priceUnit {
+  font-size: 12px;
   color: #6b7280;
-  margin-top: 0px;
+  font-weight: 500;
 }
 
-.carImg {
-  width: 100%;
-  height: 160px;
-  object-fit: contain;
-  border-radius: 8px;
-  margin: 8px 0;
+.priceSub {
+  font-size: 10px;
+  color: #9ca3af;
 }
 
-.bookmark {
-  width: 20px;
-  color: #b49b78;
+
+.footerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.priceHour {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.priceSub {
+  font-size: 10px;
+  color: #9ca3af;
+  text-decoration: underline;
+}
+
+/* Hide old elements not used in new design */
+.cardHeader, .features, .trendy-price-row, .starTag {
+  display: none !important;
 }
 
 
@@ -985,34 +1533,439 @@
 
 /* ===== MOBILE HORIZONTAL FILTER BAR ===== */
 
-@media (max-width: 800px) {
+/* ===== MOBILE VERTICAL FILTER LIST (No Scroll) ===== */
+
+.mobileFilterToggle {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .mobileFilterToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    color: #111827;
+    padding: 14px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+  }
+
+  .mobileFilterToggle:active {
+    background: #f9fafb;
+    transform: scale(0.98);
+  }
+  
   .sidebar {
     width: 100%;
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    padding: 12px;
-    gap: 12px;
-    border-radius: 12px;
-    scroll-snap-type: x mandatory;
+    position: relative;
+    top: 0;
+    max-height: none;
+    margin-bottom: 24px;
+    z-index: 10;
+    
+    /* On mobile, standard card look */
+    display: block;
+    overflow-y: auto; /* Enable vertical scrolling */
+    white-space: normal;
+    padding: 20px;
+    padding-bottom: 80px; /* Space for the bottom apply button */
+    height: 100vh;
+    gap: 0;
   }
 
   .block {
-    min-width: 240px;
-    display: inline-block;
-    vertical-align: top;
-    white-space: normal;
-    scroll-snap-align: start;
-    border: 1px solid #e5e7eb;
+    min-width: unset;
+    display: block;
+    padding: 0;
+    margin-bottom: 20px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 20px;
   }
 
   .sidebarHeader {
-    display: none;
-    /* Hide Filter title + Reset on mobile */
+    display: flex; /* Show header on mobile */
+  }
+}
+/* ACTIVE FILTER CHIPS BELOW HEADER */
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.filterChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecddc8;
+  border: 1px solid #BF9860;
+  color: #BF9860;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+.filterChip button {
+  background: none;
+  border: none;
+  color: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.filterChip button:hover {
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+/* Apply button for mobile modal */
+.applyBtn {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 9999;
+    padding: 20px;
+    padding-bottom: 100px; /* Space for fixed button */
+    border-radius: 0;
+    margin: 0;
+    background: #fff;
+    overflow-y: auto;
+  }
+  
+  /* Modal header */
+  .sidebarHeader {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 16px;
   }
 
-  .main {
-    flex-direction: column;
+  /* Fixed Apply Button on Mobile */
+  .applyBtn {
+    display: block;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: #111827;
+    color: white;
+    font-weight: 700;
+    padding: 16px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border: none;
+    z-index: 10000;
+    font-size: 16px;
+  }
+}
+
+/* ACCORDION FILTER UI - Zoomcar Style */
+.filtersContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+.filtersHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 16px;
+  border-bottom: 1px solid #ebebeb;
+  margin-bottom: 0;
+  font-weight: 600;
+  font-size: 15px;
+  color: #222;
+}
+
+.filtersHeader span {
+  color: #222;
+}
+
+.resetBtn {
+  background: none;
+  border: none;
+  color: #BF9860;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.resetBtn:hover {
+  text-decoration: underline;
+}
+
+.filtersTabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: scroll;
+  flex: 1;
+  width: 100%;
+  padding: 0 16px;
+  padding-bottom: 96px;
+  background: #fff;
+}
+
+.filtersTabs::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+.filtersTabs::-webkit-scrollbar-thumb {
+  background-color: #c9c9c9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.filtersTabs::-webkit-scrollbar-track {
+  background: #f6f6f6;
+  border-radius: 8px;
+}
+
+.tab {
+  border-bottom: 1px solid #ebebeb;
+  width: 100%;
+}
+
+.tab:last-child {
+  border-bottom: none;
+}
+
+.tabHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.tabHeader:hover {
+  color: #111;
+}
+
+.tabHeader svg,
+.tabHeader i {
+  transition: transform 0.3s ease;
+  font-size: 14px;
+  color: #666;
+}
+
+.tabHeader.open svg,
+.tabHeader.open i {
+  transform: rotate(180deg);
+}
+
+.tabContent {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.tabContent.open {
+  max-height: 800px;
+  overflow: visible;
+  padding-bottom: 16px;
+}
+
+/* Checkbox Styles */
+.checkboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkboxItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Custom Checkbox Implementation - Gold Palette */
+.checkboxInput {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db !important;
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+  background-color: #fff !important;
+}
+
+.checkboxInput:checked {
+  background-color: #BF9860 !important;
+  border-color: #BF9860 !important;
+}
+
+.checkboxInput:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkboxLabel:hover .checkboxInput {
+  border-color: #BF9860 !important;
+}
+
+.checkboxText {
+  font-size: 14px;
+  color: #333;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Checkbox description (like Zoomcar's info text) */
+.checkboxDescription {
+  font-size: 12px;
+  color: #888;
+  margin-left: 28px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Range Slider wrapper to match reference */
+.rangeWrapper {
+  padding: 10px 0;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.rangeValue {
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #BF9860;
+}
+
+/* Category Sections within a tab (e.g. Car Type, Fuel) */
+.categorySection {
+  margin-bottom: 16px;
+}
+
+.categorySection:last-child {
+  margin-bottom: 0;
+}
+
+.categoryTitle {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Custom Select for Brand Filter */
+.customSelect {
+  position: relative;
+  width: 100%;
+}
+
+.customSelect select {
+  width: 100%;
+  padding: 12px 40px 12px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  background: #f9f9f9;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.customSelect select:hover {
+  border-color: #BF9860;
+}
+
+.customSelect select:focus {
+  outline: none;
+  border-color: #BF9860;
+  box-shadow: 0 0 0 3px rgba(191, 152, 96, 0.1);
+}
+
+.chev {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #666;
+  pointer-events: none;
+}
+
+/* Mobile Adjustments for the specific accordion classes if needed */
+@media (max-width: 900px) {
+  .filtersContainer {
+    border-radius: 0;
   }
 }

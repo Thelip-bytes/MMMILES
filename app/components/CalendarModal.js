@@ -180,7 +180,7 @@ export default function CalendarModal({
         );
     };
 
-    if (!mounted) return null;
+    if (!mounted || !isOpen) return null;
 
     return createPortal(
         <div className={styles.overlay} onClick={onClose}>

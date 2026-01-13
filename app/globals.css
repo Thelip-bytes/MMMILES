@@ -17,3 +17,8 @@ html {
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-out forwards;
 }
+
+/* Hide footer on search page */
+body.hide-footer #global-footer {
+  display: none !important;
+}

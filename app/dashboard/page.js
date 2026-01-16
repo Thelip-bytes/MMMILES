@@ -288,7 +288,28 @@ export default function Dashboard() {
 
     // Fetch profile data from Supabase
     const fetchProfileData = async () => {
-      const userId = getUserId();
+      let userId = null;
+      let tokenPhone = "";
+
+      try {
+        const token = localStorage.getItem("auth_token");
+        if (token) {
+          // Handle padding for base64 decode
+          let base64 = token.split(".")[1];
+          if (base64.length % 4 === 2) base64 += "==";
+          else if (base64.length % 4 === 3) base64 += "=";
+          else if (base64.length % 4 === 1) base64 += "===";
+
+          // Replace URL-safe base64 characters
+          base64 = base64.replace(/-/g, "+").replace(/_/g, "/");
+
+          const payload = JSON.parse(atob(base64));
+          userId = payload.sub;
+          tokenPhone = payload.phone_number;
+        }
+      } catch (err) {
+        console.error("Error parsing token:", err);
+      }
 
       if (!userId) {
         setError("User not authenticated");
@@ -309,7 +330,7 @@ export default function Dashboard() {
           const data = customerData[0];
           const profileInfo = {
             name: `${data.first_name || ''} ${data.last_name || ''}`.trim() || "Guest",
-            phone: data.phone || "",
+            phone: data.phone || tokenPhone || "",
             email: data.email || "",
             gender: data.gender || "",
             address: data.address || "",
@@ -330,7 +351,7 @@ export default function Dashboard() {
           // No profile found - user needs to create profile
           const profileInfo = {
             name: "Guest",
-            phone: "",
+            phone: tokenPhone || "",
             email: "",
             gender: "",
             address: "",

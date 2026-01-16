@@ -223,12 +223,18 @@ export default function EnhancedCheckoutPage() {
       if (res?.length) {
         const c = res[0];
         setCustomer({
-          first_name: c.first_name,
-          last_name: c.last_name,
-          email: c.email,
-          phone: c.phone,
-          address: c.address,
+          first_name: c.first_name || "",
+          last_name: c.last_name || "",
+          email: c.email || "",
+          phone: c.phone || loggedInUser.phone_number || "",
+          address: c.address || "",
         });
+      } else {
+        // If no customer record exists, pre-fill phone from token
+        setCustomer((prev) => ({
+          ...prev,
+          phone: loggedInUser.phone_number || "",
+        }));
       }
     }
 

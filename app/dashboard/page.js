@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import styles from "./dashboard.module.css";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 import {
@@ -728,6 +729,17 @@ export default function Dashboard() {
     );
   }
 
+
+
+
+
+
+
+
+
+
+
+
   /* --------------------------
      Orders Page (tabs + exact card layout + modal)
      -------------------------- */
@@ -810,64 +822,62 @@ export default function Dashboard() {
         </div>
 
         <div className={styles.orderList}>
-          {loading ? (
-            <div className={styles.infoCard}>
-              <div className={styles.infoValue}>Loading orders...</div>
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className={styles.infoCard}>
-              <div className={styles.infoValue}>No orders found</div>
-            </div>
-          ) : (
-            filtered.map((o) => (
-              <article key={o.id} className={`${styles.orderCard} ${styles.card}`}>
-                <div className={styles.orderLeft}>
-                  <div className={styles.ratingBadge}>★ {o.rating}</div>
-                  <div className={styles.carImageWrap}>
-                    {/* Note: place matching images into public/ folder (car-sample.png, car-sample-2.png, ...) */}
-                    <Image src={o.img} alt={o.title} width={420} height={240} className={styles.orderCarImg} />
-                  </div>
-                </div>
+  {filtered.map((o) => (
+    <div key={o.id} className={styles.orderRow}>
 
-                <div className={styles.orderRight}>
-                  <h3 className={styles.orderCarName}>{o.title}</h3>
+      {/* LEFT : IMAGE */}
+      <div className={styles.orderImageWrap}>
+        <Image
+          src={o.img}
+          alt={o.title}
+          width={110}
+          height={110}
+          className={styles.orderImage}
+        />
+      </div>
 
-                  <ul className={styles.featureList}>
-                    {o.features.map((f, i) => (
-                      <li key={i}>✓ {f}</li>
-                    ))}
-                  </ul>
+      {/* CENTER : CONTENT */}
+      <div className={styles.orderContent}>
+        <h3 className={styles.orderTitle}>{o.title}</h3>
 
-                  <ul className={styles.detailList}>
-                    <li>Pickup: <span className={styles.detailInline}>{o.pickup}</span></li>
-                    <li>Dropoff: <span className={styles.detailInline}>{o.dropoff}</span></li>
-                  </ul>
+        <p className={styles.orderDesc}>
+          The Toyota Innova Crysta is a premium MPV known for its powerful performance, spacious interiors, and unmatched reliability. It offers both petrol and diesel engines options.
+        </p>
 
-                  <div className={styles.orderActions}>
-                    <div>
-                      <div className={styles.priceRow}>
-                        <span className={styles.carPrice}>{o.price}</span>
-                      </div>
-                    </div>
-
-                    <div className={styles.actionsRight}>
-                      <span
-                        className={`${styles.statusBadge} ${o.status === "upcoming" ? styles.statusUpcoming : o.status === "completed" ? styles.statusCompleted : styles.statusIncompleted
-                          }`}
-                      >
-                        {o.status === "upcoming" ? "Upcoming" : o.status === "completed" ? "Completed" : "Incompleted"}
-                      </span>
-
-                      <button className={styles.viewBtn} onClick={() => openOrderModal(o)}>
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))
-          )}
+        <div className={styles.orderMeta}>
+          <span className={styles.skipmobile}>number of Seats : 6{o.seats}</span>
+          <span>Model : 2022{o.model}</span>
+          <span>no of hours : {o.hours}</span>
         </div>
+      </div>
+
+      {/* RIGHT : STATUS + ACTIONS */}
+      <div className={styles.orderRight}>
+        <span
+          className={`${styles.orderStatus1} ${
+            o.status === "completed"
+              ? styles.statusCompleted1
+              : styles.statusUpcoming1
+          }`}
+        >
+          {o.status === "completed" ? "Completed" : "Upcoming"}
+        </span>
+
+        <div className={styles.orderActions}>
+          <button className={styles.actionLink}>View Details</button>
+          <span className={styles.divider}>|</span>
+          <button className={styles.actionLink} id={styles.actionLink}>Rent Again</button>
+        </div>
+      </div>
+
+    </div>
+  ))}
+</div>
+
+
+
+
+
 
         {/* Order Details Modal */}
         {orderModalOpen && orderModalData && (
@@ -914,6 +924,11 @@ export default function Dashboard() {
 
 
 
+
+
+
+
+  
   /* --------------------------
      Host Page (kept simple here — ready for your design)
      -------------------------- */
@@ -956,7 +971,7 @@ export default function Dashboard() {
       >
         <picture>
           {/* Mobile Image (shown below 768px) */}
-          <source media="(max-width: 768px)" srcSet="/images/host-dash.png" />
+          <source media="(max-width: 768px)" srcSet="/images/dash-host-mobile-new.png" />
           {/* Desktop Image (default) */}
           <img 
             src="/images/host-dash.png" 
@@ -999,8 +1014,9 @@ export default function Dashboard() {
           
 
           <div className={styles.contactRow}>
+            <Link href="/host-registration">
             <button className={styles.detailsBtn}>More Details</button>
-            
+            </Link>
           </div>
         </div>
       </motion.div>

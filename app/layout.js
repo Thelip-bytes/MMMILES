@@ -53,9 +53,7 @@ export const metadata = {
   description:
     "Rent cars in Chennai with MM Miles. Flexible car rentals for professionals with affordable pricing and 24/7 support.",
 
-  alternates: {
-    canonical: "https://www.mmmiles.com/",
-  },
+  
 
   openGraph: {
     title: "MM Miles | Car Rentals in Chennai",

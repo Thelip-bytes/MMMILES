@@ -747,6 +747,8 @@ export default function Dashboard() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [orderTab, setOrderTab] = useState("all");
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showDetailsModal, setShowDetailsModal] = useState(false);
 
     // Get user ID from JWT token
     const getUserId = () => {
@@ -786,18 +788,40 @@ export default function Dashboard() {
       fetchOrders();
     }, []);
 
+    // Filter orders based on tab (removed incompleted)
     const filtered = orders.filter((o) => {
       if (orderTab === "all") return true;
       return (
         (orderTab === "upcoming" && o.status === "upcoming") ||
-        (orderTab === "completed" && o.status === "completed") ||
-        (orderTab === "incompleted" && o.status === "incompleted")
+        (orderTab === "completed" && o.status === "completed")
       );
     });
 
-    const openOrderModal = (order) => {
-      setOrderModalData(order);
-      setOrderModalOpen(true);
+    // Format date for popup display
+    const formatDateTime = (dateString) => {
+      if (!dateString) return 'N/A';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-IN', {
+        weekday: 'short',
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    };
+
+    // Open order details modal
+    const openDetailsModal = (order) => {
+      setSelectedOrder(order);
+      setShowDetailsModal(true);
+    };
+
+    // Close order details modal
+    const closeDetailsModal = () => {
+      setShowDetailsModal(false);
+      setSelectedOrder(null);
     };
 
     return (
@@ -806,6 +830,7 @@ export default function Dashboard() {
           <h2 className={styles.pageTitle}>Orders</h2>
         </div>
 
+        {/* Order Tabs - Removed Incompleted */}
         <div className={styles.orderTabsRow}>
           <button className={`${styles.orderTab} ${orderTab === "all" ? styles.orderTabActive : ""}`} onClick={() => setOrderTab("all")}>
             All
@@ -816,98 +841,173 @@ export default function Dashboard() {
           <button className={`${styles.orderTab} ${orderTab === "completed" ? styles.orderTabActive : ""}`} onClick={() => setOrderTab("completed")}>
             Completed
           </button>
-          <button className={`${styles.orderTab} ${orderTab === "incompleted" ? styles.orderTabActive : ""}`} onClick={() => setOrderTab("incompleted")}>
-            Incompleted
-          </button>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className={styles.loadingState}>
+            <p>Loading your bookings...</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && filtered.length === 0 && (
+          <div className={styles.emptyState}>
+            <p>No {orderTab === "all" ? "" : orderTab} bookings found.</p>
+          </div>
+        )}
+
+        {/* Orders List */}
         <div className={styles.orderList}>
-  {filtered.map((o) => (
-    <div key={o.id} className={styles.orderRow}>
+          {filtered.map((o) => (
+            <div key={o.id} className={styles.orderRow}>
 
-      {/* LEFT : IMAGE */}
-      <div className={styles.orderImageWrap}>
-        <Image
-          src={o.img}
-          alt={o.title}
-          width={110}
-          height={110}
-          className={styles.orderImage}
-        />
-      </div>
+              {/* LEFT : IMAGE */}
+              <div className={styles.orderImageWrap}>
+                <Image
+                  src={o.img}
+                  alt={o.title}
+                  width={110}
+                  height={110}
+                  className={styles.orderImage}
+                />
+              </div>
 
-      {/* CENTER : CONTENT */}
-      <div className={styles.orderContent}>
-        <h3 className={styles.orderTitle}>{o.title}</h3>
+              {/* CENTER : CONTENT */}
+              <div className={styles.orderContent}>
+                <h3 className={styles.orderTitle}>{o.title}</h3>
 
-        <p className={styles.orderDesc}>
-          The Toyota Innova Crysta is a premium MPV known for its powerful performance, spacious interiors, and unmatched reliability. It offers both petrol and diesel engines options.
-        </p>
+                <p className={styles.orderDesc}>
+                  Booking Code: {o.bookingCode} • {o.hours} Hours • {o.plan} Plan
+                </p>
 
-        <div className={styles.orderMeta}>
-          <span className={styles.skipmobile}>number of Seats : 6{o.seats}</span>
-          <span>Model : 2022{o.model}</span>
-          <span>no of hours : {o.hours}</span>
+                <div className={styles.orderMeta}>
+                  <span className={styles.skipmobile}>Seats: {o.seats}</span>
+                  <span>Model: {o.modelYear}</span>
+                  <span>Duration: {o.hours}h</span>
+                </div>
+              </div>
+
+              {/* RIGHT : STATUS + ACTIONS */}
+              <div className={styles.orderRight}>
+                <span
+                  className={`${styles.orderStatus1} ${
+                    o.status === "completed"
+                      ? styles.statusCompleted1
+                      : styles.statusUpcoming1
+                  }`}
+                >
+                  {o.status === "completed" ? "Completed" : "Upcoming"}
+                </span>
+
+                <div className={styles.orderActions}>
+                  <button 
+                    className={styles.actionLink}
+                    onClick={() => openDetailsModal(o)}
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          ))}
         </div>
-      </div>
 
-      {/* RIGHT : STATUS + ACTIONS */}
-      <div className={styles.orderRight}>
-        <span
-          className={`${styles.orderStatus1} ${
-            o.status === "completed"
-              ? styles.statusCompleted1
-              : styles.statusUpcoming1
-          }`}
-        >
-          {o.status === "completed" ? "Completed" : "Upcoming"}
-        </span>
-
-        <div className={styles.orderActions}>
-          <button className={styles.actionLink}>View Details</button>
-          <span className={styles.divider}>|</span>
-          <button className={styles.actionLink} id={styles.actionLink}>Rent Again</button>
-        </div>
-      </div>
-
-    </div>
-  ))}
-</div>
-
-
-
-
-
-
-        {/* Order Details Modal */}
-        {orderModalOpen && orderModalData && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-              <div className={styles.modalHeader}>
-                <h3>Order Details</h3>
-                <button className={styles.iconBtn} onClick={() => setOrderModalOpen(false)}>
+        {/* Booking Details Popup Modal */}
+        {showDetailsModal && selectedOrder && (
+          <div className={styles.modalOverlay} onClick={closeDetailsModal}>
+            <div className={styles.bookingDetailsModal} onClick={(e) => e.stopPropagation()}>
+              {/* Modal Header */}
+              <div className={styles.bookingModalHeader}>
+                <h3>Booking Details</h3>
+                <button className={styles.iconBtn} onClick={closeDetailsModal}>
                   <XMarkIcon className={styles.smallIcon} />
                 </button>
               </div>
 
-              <div className={styles.modalContent}>
-                <div className={styles.modalImageWrap}>
-                  <Image src={orderModalData.img} alt={orderModalData.title} width={420} height={220} className={styles.modalImg} />
+              {/* Modal Content */}
+              <div className={styles.bookingModalContent}>
+                {/* Car Image & Title */}
+                <div className={styles.bookingCarSection}>
+                  <div className={styles.bookingCarImage}>
+                    <Image 
+                      src={selectedOrder.img} 
+                      alt={selectedOrder.title} 
+                      width={200} 
+                      height={120} 
+                      className={styles.bookingModalImg}
+                    />
+                  </div>
+                  <div className={styles.bookingCarInfo}>
+                    <h4>{selectedOrder.title}</h4>
+                    <span className={`${styles.bookingStatusBadge} ${
+                      selectedOrder.status === "completed" 
+                        ? styles.completedBadge 
+                        : styles.upcomingBadge
+                    }`}>
+                      {selectedOrder.status === "completed" ? "Completed" : "Upcoming"}
+                    </span>
+                  </div>
                 </div>
 
-                <div className={styles.modalInfo}>
-                  <h4 className={styles.modalTitle}>{orderModalData.title}</h4>
-                  <p><b>Pickup:</b> {orderModalData.pickup}</p>
-                  <p><b>Dropoff:</b> {orderModalData.dropoff}</p>
-                  <p><b>Price:</b> {orderModalData.price}</p>
-                  <p><b>Features:</b> {orderModalData.features.join(" • ")}</p>
-                  <p><b>Details:</b> {orderModalData.details.join(" • ")}</p>
+                {/* Booking Details Grid */}
+                <div className={styles.bookingDetailsGrid}>
+                  {/* Booking Time */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>🕒</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Booking Time</span>
+                      <div className={styles.detailValue}>
+                        <div><strong>Pickup:</strong> {formatDateTime(selectedOrder.startTime)}</div>
+                        <div><strong>Return:</strong> {formatDateTime(selectedOrder.endTime)}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Host Name */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>👤</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Host Name</span>
+                      <span className={styles.detailValue}>{selectedOrder.hostName}</span>
+                    </div>
+                  </div>
+
+                  {/* Car Registration Number */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>🚗</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Registration Number</span>
+                      <span className={styles.detailValue}>{selectedOrder.registrationNumber}</span>
+                    </div>
+                  </div>
+
+                  {/* Booking Code */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>📋</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Booking Code</span>
+                      <span className={styles.detailValue}>{selectedOrder.bookingCode}</span>
+                    </div>
+                  </div>
+
+                  {/* Price */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>💰</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Total Amount</span>
+                      <span className={styles.detailValue}>{selectedOrder.price}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div className={styles.modalBtns}>
-                <button className={styles.cancelBtn} onClick={() => setOrderModalOpen(false)}>Close</button>
-                <button className={styles.saveBtn} onClick={() => setOrderModalOpen(false)}>OK</button>
+              {/* Modal Footer */}
+              <div className={styles.bookingModalFooter}>
+                <button className={styles.closeModalBtn} onClick={closeDetailsModal}>
+                  Close
+                </button>
               </div>
             </div>
           </div>

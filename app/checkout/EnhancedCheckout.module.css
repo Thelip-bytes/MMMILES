@@ -127,17 +127,21 @@
   padding: 15px;
   border-radius: 20px;
   background: #fff;
-  
-  flex: 0 0 400px;
-  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 320px;
+  height: 180px;
+  overflow: hidden;
 }
 
 .carImage {
-  border-radius: 16px;
+  border-radius: 12px;
   object-fit: contain;
-  max-width: 470px !important;
-  max-height: 320px !important;
-  height: 100%;
+  width: 100%;
+  max-width: 300px;
+  max-height: 160px;
+  height: auto;
 }
 
 /* spotlight ground under car */
@@ -176,11 +180,16 @@
 
 /* features & price */
 .features {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 10px 18px;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.features span {
+  white-space: nowrap;
 }
 
 .priceRow {
@@ -478,28 +487,36 @@
 }
 
 .checkbox {
-  width: 35px;
-  height: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
   border-radius: 4px;
-  background: #faf0f0;
+  background: #f5f5f5;
+  border: 2px solid #ddd;
   cursor: pointer;
   position: relative;
   margin-top: 2px;
+  transition: all 0.2s ease;
 }
 
 .checkbox:checked {
-  background: linear-gradient(90deg, #bf9860, #a67c40);
-  border-color: rgba(191, 152, 96, 0.9);
+  background: linear-gradient(135deg, #bf9860, #a67c40);
+  border-color: #bf9860;
 }
 
 .checkbox:checked::after {
-  content: "✔";
+  content: "✓";
   color: #fff;
-  font-weight: 800;
+  font-weight: 700;
   position: absolute;
-  left: 3px;
-  top: -1px;
-  font-size: 12px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  line-height: 1;
 }
 
 /* link styling gold */
@@ -522,6 +539,20 @@
   text-align: center;
   font-size: 18px;
   color: #d32f2f;
+}
+
+/* Centered container for single-column forms like Passenger Details */
+.centeredContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.centeredContainer .formSection {
+  width: 100%;
+  max-width: 520px;
 }
 
 .formSection {
@@ -885,17 +916,136 @@
     border-radius: 10px;
     font-size: 13px;
   }
-
-  .checkbox {
-    width: 18px;
-    height: 18px;
-  }
-
-  .checkboxLabel {
-    font-size: 13px;
-  }
-  
 }
+
+/* ========================================
+   🚫 Unavailability Overlay
+   =========================================== */
+.unavailabilityOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.unavailabilityCard {
+  background: #fff;
+  width: 90%;
+  max-width: 480px;
+  border-radius: 20px;
+  padding: 32px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.unavailabilityIcon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  background: #fef2f2;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc2626;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 4px #fee2e2;
+}
+
+.unavailabilityTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.unavailabilityMessage {
+  font-size: 16px;
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.timerRing {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 10px 0;
+}
+
+.timerSvg {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.timerCircleBg {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 4;
+}
+
+.timerCircleFg {
+  fill: none;
+  stroke: #d8b480;
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timerTextCentered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: 700;
+  font-size: 18px;
+  color: #d8b480;
+}
+
+.redirectBtn {
+  background: linear-gradient(135deg, #111827, #374151);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.redirectBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (max-width: 600px) {
     .EnhancedCheckout_stepper__5Gahn {
         gap: 30px !important;

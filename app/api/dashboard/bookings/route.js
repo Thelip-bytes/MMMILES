@@ -24,7 +24,7 @@ export async function GET(request) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    // Fetch bookings with vehicle details
+    // Fetch bookings with vehicle details and host details
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
@@ -35,7 +35,14 @@ export async function GET(request) {
           model,
           model_year,
           registration_number,
+          seating_capacity,
           vehicle_images (image_url, is_primary)
+        ),
+        hosts (
+          id,
+          full_name,
+          phone,
+          email
         )
       `)
       .eq('user_id', userId)
@@ -46,6 +53,8 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Failed to fetch bookings' }, { status: 500 });
     }
 
+    const now = new Date();
+
     // Transform data for frontend
     const transformedBookings = bookings.map(booking => {
       // Get the primary vehicle image using same logic as car/[id] page
@@ -55,6 +64,23 @@ export async function GET(request) {
 
       // Use the same helper function as car/[id] page
       const imageUrl = primaryImage ? getFullImageUrl(primaryImage.image_url) : "/images/black.png";
+
+      // Determine display status based on current time:
+      // - "completed" if end_time has passed (trip is finished)
+      // - "upcoming" if end_time is in the future (trip hasn't ended yet)
+      // - "cancelled" stays as is
+      const endTime = new Date(booking.end_time);
+      let displayStatus;
+      
+      if (booking.status === 'cancelled') {
+        displayStatus = 'cancelled';
+      } else if (endTime < now) {
+        // End time has passed - booking is completed
+        displayStatus = 'completed';
+      } else {
+        // End time is in the future - booking is upcoming
+        displayStatus = 'upcoming';
+      }
 
       return {
         id: booking.id,
@@ -68,7 +94,8 @@ export async function GET(request) {
           'Insurance covered',
           'Luggage space'
         ],
-        status: booking.status,
+        status: displayStatus,
+        originalStatus: booking.status,
         pickup: new Date(booking.start_time).toLocaleDateString('en-IN', {
           day: '2-digit',
           month: 'short',
@@ -84,6 +111,16 @@ export async function GET(request) {
           minute: '2-digit'
         }),
         price: `₹${booking.total_amount || 0}`,
+        // Additional details for the popup
+        hostName: booking.hosts?.full_name || 'MM Miles Host',
+        registrationNumber: booking.vehicles?.registration_number || 'N/A',
+        bookingCode: booking.booking_code || `#${booking.id}`,
+        hours: booking.hours || 0,
+        plan: booking.plan || 'Standard',
+        startTime: booking.start_time,
+        endTime: booking.end_time,
+        seats: booking.vehicles?.seating_capacity || 4,
+        modelYear: booking.vehicles?.model_year || 'N/A',
       };
     });
 

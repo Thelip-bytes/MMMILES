@@ -1764,3 +1764,311 @@
   color: #dc2626;
   border: 1px solid rgba(220, 38, 38, 0.08);
 }
+
+/* =============== BOOKING DETAILS MODAL =============== */
+.bookingDetailsModal {
+  background: linear-gradient(145deg, #ffffff 0%, #fefbf7 100%);
+  border-radius: 20px;
+  width: min(480px, 95%);
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18), 0 10px 25px rgba(0, 0, 0, 0.08);
+  animation: modalSlideIn 0.3s ease-out;
+  margin-top: 60px; /* Position a bit lower from center */
+}
+
+/* Custom Scrollbar - Subtle and elegant */
+.bookingDetailsModal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.bookingDetailsModal::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d8b480, #bf9860);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.bookingDetailsModal::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c9a571, #a88550);
+  background-clip: padding-box;
+}
+
+.bookingDetailsModal::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 10px;
+  margin: 8px 0;
+}
+
+/* Firefox scrollbar */
+.bookingDetailsModal {
+  scrollbar-width: thin;
+  scrollbar-color: #d8b480 rgba(0, 0, 0, 0.04);
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.bookingModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(to right, #fff9f0 0%, #ffffff 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.bookingModalHeader h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #c79f57 0%, #a07b3a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bookingModalContent {
+  padding: 20px 24px;
+}
+
+.bookingCarSection {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: linear-gradient(135deg, #f8f5f0 0%, #fefcfa 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(199, 159, 87, 0.12);
+}
+
+.bookingCarImage {
+  flex-shrink: 0;
+}
+
+.bookingModalImg {
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.bookingCarInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bookingCarInfo h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.bookingStatusBadge {
+  display: inline-flex;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.upcomingBadge {
+  background: linear-gradient(135deg, #fff8e6 0%, #fff2cc 100%);
+  color: #b8860b;
+  border: 1px solid rgba(184, 134, 11, 0.2);
+}
+
+.completedBadge {
+  background: linear-gradient(135deg, #e6fff0 0%, #ccffe0 100%);
+  color: #22a23b;
+  border: 1px solid rgba(34, 162, 59, 0.2);
+}
+
+.bookingDetailsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.bookingDetailItem {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.bookingDetailItem:hover {
+  background: #fefbf7;
+  border-color: rgba(199, 159, 87, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.detailIcon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff8ef 0%, #f5ebe0 100%);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.detailContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.detailLabel {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detailValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.5;
+}
+
+.detailValue strong {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.bookingModalFooter {
+  padding: 16px 24px 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.closeModalBtn {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #c79f57 0%, #a07b3a 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(199, 159, 87, 0.25);
+}
+
+.closeModalBtn:hover {
+  background: linear-gradient(135deg, #b8933f 0%, #8f6b2f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(199, 159, 87, 0.35);
+}
+
+/* Loading State */
+.loadingState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+/* Empty State */
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile Responsiveness for Booking Modal */
+@media (max-width: 480px) {
+  .bookingDetailsModal {
+    width: 100%;
+    max-height: 85vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .bookingModalHeader {
+    padding: 16px 18px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .bookingModalHeader h3 {
+    font-size: 18px;
+  }
+
+  .bookingModalContent {
+    padding: 16px 18px;
+  }
+
+  .bookingCarSection {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .bookingCarInfo h4 {
+    font-size: 16px;
+  }
+
+  .bookingDetailItem {
+    padding: 12px 14px;
+  }
+
+  .detailIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .detailLabel {
+    font-size: 11px;
+  }
+
+  .detailValue {
+    font-size: 14px;
+  }
+
+  .bookingModalFooter {
+    padding: 14px 18px 20px;
+  }
+
+  .closeModalBtn {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  .loadingState,
+  .emptyState {
+    padding: 40px 16px;
+    font-size: 14px;
+  }
+}

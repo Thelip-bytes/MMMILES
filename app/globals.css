@@ -2,6 +2,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Add padding to body to account for fixed navbar */
+body {
+  padding-top: 60px; /* Height of the fixed navbar */
+}
+
 
 @keyframes fadeIn {
   from {

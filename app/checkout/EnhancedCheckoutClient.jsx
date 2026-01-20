@@ -109,8 +109,65 @@ export default function EnhancedCheckoutPage() {
     error: null
   });
 
+  const [unavailableData, setUnavailableData] = useState(null);
+
   /* -------------------------------------------------------------------------- */
-  /*                               LOAD RAZORPAY                                */
+  /*                            REDIRECT LOGIC                                   */
+  /* -------------------------------------------------------------------------- */
+  const handleRedirect = () => {
+    // Try to get previous search parameters to preserve location
+    const saved = sessionStorage.getItem("lastSearchParams");
+    const params = new URLSearchParams(saved || "");
+
+    // Update with current query dates if available
+    if (pickup) params.set("pickupTime", pickup);
+    if (returnTime) params.set("returnTime", returnTime);
+
+    // If no location data, default to Chennai (or handle gracefully)
+    if (!params.get("lat") || !params.get("lon")) {
+      params.set("city", "Chennai"); // Default fallback
+    }
+
+    router.push(`/search?${params.toString()}`);
+  };
+
+  /* -------------------------------------------------------------------------- */
+  /*                       TIMER COMPONENT                                      */
+  /* -------------------------------------------------------------------------- */
+  function UnavailabilityTimer({ duration = 5, onComplete }) {
+    const [timeLeft, setTimeLeft] = useState(duration);
+
+    useEffect(() => {
+      if (timeLeft <= 0) {
+        onComplete();
+        return;
+      }
+      const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
+      return () => clearInterval(timer);
+    }, [timeLeft, onComplete]);
+
+    const radius = 26;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (timeLeft / duration) * circumference;
+
+    return (
+      <div className={styles.timerRing}>
+        <svg className={styles.timerSvg}>
+          <circle cx="30" cy="30" r={radius} className={styles.timerCircleBg} />
+          <circle
+            cx="30" cy="30" r={radius}
+            className={styles.timerCircleFg}
+            strokeDasharray={circumference}
+            strokeDashoffset={offset}
+          />
+        </svg>
+        <span className={styles.timerTextCentered}>{timeLeft}</span>
+      </div>
+    );
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                LOAD RAZORPAY                                */
   /* -------------------------------------------------------------------------- */
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -198,6 +255,7 @@ export default function EnhancedCheckoutPage() {
       });
 
       if (remaining === 0) {
+        // Instead of reload, maybe show unavailable?
         window.location.reload();
       }
     };
@@ -478,13 +536,13 @@ export default function EnhancedCheckoutPage() {
             });
           };
 
-          alert(
-            `This vehicle is already booked during your requested time.\n\n` +
-            `Existing booking:\n` +
-            `From: ${formatDate(existingStart)}\n` +
-            `To: ${formatDate(existingEnd)}\n\n` +
-            `Please choose different dates/times for your booking.`
-          );
+          // Show Unavailability Card instead of Alert
+          setUnavailableData({
+            type: 'booked',
+            title: 'Car Already Booked',
+            message: `This car is booked from ${formatDate(existingStart)} to ${formatDate(existingEnd)}. Creating a new search for you...`
+          });
+
           setBookingCheckStatus({ checking: false, overlaps: true, error: null });
           return false;
         }
@@ -531,6 +589,13 @@ export default function EnhancedCheckoutPage() {
         const otherUserLocks = existingLocks.filter(lock => lock.user_id !== loggedInUser.sub);
 
         if (otherUserLocks.length > 0) {
+          // Show Unavailability Card for Locked Status
+          setUnavailableData({
+            type: 'locked',
+            title: 'Car Unavailable',
+            message: 'Someone else is currently booking this car. We are redirecting you to find other available cars.'
+          });
+
           setLockStatus({
             checking: false,
             error: "Someone else is currently booking this car. Try again later.",
@@ -606,6 +671,13 @@ export default function EnhancedCheckoutPage() {
       if (!lockCreateResponse.ok) {
         const errorData = await lockCreateResponse.json();
         if (errorData.locked_by_other) {
+          // Show Unavailability Card for Locked (Race Condition)
+          setUnavailableData({
+            type: 'locked',
+            title: 'Car Just Booked',
+            message: 'Someone just locked this car for booking. Redirecting you to other options...'
+          });
+
           setLockStatus({
             checking: false,
             error: "Someone else is currently booking this car. Try again later.",
@@ -873,6 +945,26 @@ export default function EnhancedCheckoutPage() {
 
   return (
     <div className={styles.pageWrap}>
+      {/* Unavailability Overlay */}
+      {unavailableData && (
+        <div className={styles.unavailabilityOverlay}>
+          <div className={styles.unavailabilityCard}>
+            <div className={styles.unavailabilityIcon}>
+              {unavailableData.type === 'booked' ? '📅' : '🔒'}
+            </div>
+            <h3 className={styles.unavailabilityTitle}>{unavailableData.title}</h3>
+            <p className={styles.unavailabilityMessage}>{unavailableData.message}</p>
+
+            {/* Timer Ring */}
+            <UnavailabilityTimer duration={5} onComplete={handleRedirect} />
+
+            <button className={styles.redirectBtn} onClick={handleRedirect}>
+              Find Similar Cars 🚗
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* PAYMENT WINDOW COUNTDOWN TIMER */}
       {lockTimer.isActive && (
         <div className={`${styles.lockTimer} ${isTimeRunningLow(lockTimer.remaining) ? styles.lockTimerWarning : ''}`}>
@@ -935,76 +1027,74 @@ export default function EnhancedCheckoutPage() {
         </div>
       </div>
 
-      {/* STEP 1: Passenger Details */}
+      {/* STEP 1: Passenger Details - Centered */}
       {currentStep === 1 && (
-        <div className={styles.mainGrid}>
-          <div className={styles.leftCol}>
-            <div className={styles.formSection}>
-              <h3>Your Details</h3>
+        <div className={styles.centeredContainer}>
+          <div className={styles.formSection}>
+            <h3>Your Details</h3>
 
-              {!isCustomerDataComplete() && (
-                <div style={{
-                  background: '#fff3cd',
-                  color: '#856404',
-                  padding: '10px',
-                  borderRadius: '4px',
-                  marginBottom: '15px',
-                  border: '1px solid #ffeaa7'
-                }}>
-                  <strong>Please complete your profile:</strong> First Name, Last Name, Email, and Address are required to proceed with booking.
-                </div>
-              )}
+            {!isCustomerDataComplete() && (
+              <div style={{
+                background: '#fff3cd',
+                color: '#856404',
+                padding: '10px',
+                borderRadius: '4px',
+                marginBottom: '15px',
+                border: '1px solid #ffeaa7'
+              }}>
+                <strong>Please complete your profile:</strong> First Name, Last Name, Email, and Address are required to proceed with booking.
+              </div>
+            )}
 
-              {["first_name", "last_name", "email"].map((field) => (
-                <div className={styles.formGroup} key={field}>
-                  <label>{field.replace("_", " ").toUpperCase()} *</label>
-                  <input
-                    type="text"
-                    value={customer[field]}
-                    onChange={(e) => {
-                      setCustomer({ ...customer, [field]: e.target.value });
-                      setEditing(true);
-                    }}
-                    placeholder={field === "email" ? "your.email@example.com" : ""}
-                    style={{
-                      borderColor: !customer[field]?.trim() && !isCustomerDataComplete() ? '#dc3545' : '#ddd'
-                    }}
-                  />
-                </div>
-              ))}
-
-              <div className={styles.formGroup}>
-                <label>Home Address *</label>
-                <textarea
-                  rows="3"
-                  value={customer.address}
+            {["first_name", "last_name", "email"].map((field) => (
+              <div className={styles.formGroup} key={field}>
+                <label>{field.replace("_", " ").toUpperCase()} *</label>
+                <input
+                  type="text"
+                  value={customer[field]}
                   onChange={(e) => {
-                    setCustomer({ ...customer, address: e.target.value });
+                    setCustomer({ ...customer, [field]: e.target.value });
                     setEditing(true);
                   }}
-                  placeholder="Enter your complete address including city and state"
+                  placeholder={field === "email" ? "your.email@example.com" : ""}
                   style={{
-                    borderColor: !customer.address?.trim() && !isCustomerDataComplete() ? '#dc3545' : '#ddd'
+                    borderColor: !customer[field]?.trim() && !isCustomerDataComplete() ? '#dc3545' : '#ddd'
                   }}
                 />
               </div>
+            ))}
 
-              <button
-                className={styles.saveBtn}
-                disabled={!editing || !isCustomerDataComplete()}
-                onClick={handleSave}
-              >
-                {editing ? "Save Changes" : "Saved ✓"}
-              </button>
-
-              <button
-                className={styles.stepNextBtn}
-                disabled={!isCustomerDataComplete()}
-                onClick={handleStep1Next}
-              >
-                Next: Review Journey →
-              </button>
+            <div className={styles.formGroup}>
+              <label>Home Address *</label>
+              <textarea
+                rows="3"
+                value={customer.address}
+                onChange={(e) => {
+                  setCustomer({ ...customer, address: e.target.value });
+                  setEditing(true);
+                }}
+                placeholder="Enter your complete address including city and state"
+                style={{
+                  borderColor: !customer.address?.trim() && !isCustomerDataComplete() ? '#dc3545' : '#ddd'
+                }}
+              />
             </div>
+
+            <button
+              className={styles.saveBtn}
+              disabled={!editing || !isCustomerDataComplete()}
+              onClick={handleSave}
+            >
+              {editing ? "Save Changes" : "Saved ✓"}
+            </button>
+
+            <button
+              className={styles.stepNextBtn}
+              disabled={!isCustomerDataComplete()}
+              onClick={handleStep1Next}
+            >
+              Review Journey →
+            </button>
           </div>
         </div>
       )}
@@ -1133,7 +1223,7 @@ export default function EnhancedCheckoutPage() {
                 title={!agree ? "Please accept terms & conditions" : "Proceed to Payment"}
                 onClick={handleStep2Next}
               >
-                Next: Payment →
+                Payment →
               </button>
             </div>
 

@@ -104,6 +104,73 @@ export default function CarsPage() {
         </p>
       </section>
 
+
+
+
+
+
+
+      <script
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is self drive car rental available in Chennai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, MM Miles offers self drive car rentals across Chennai with flexible booking options and transparent pricing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What documents are required to rent a car from MM Miles?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You need a valid driving license and a government-issued ID to book a self drive car with MM Miles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is fuel included in the car rental price?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fuel is not included in the rental price. The car must be returned with the same fuel level as at pickup."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is insurance included?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, insurance is included. Deductibles depend on the protection plan selected."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you provide 24/7 customer support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, MM Miles provides 24/7 customer support to ensure a smooth and hassle-free rental experience."
+          }
+        }
+      ]
+    })
+  }}
+/>
+
+
+
+
+
+
+
+
+
+
       
     </main>
   );

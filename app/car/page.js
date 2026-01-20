@@ -51,6 +51,35 @@ export default function CarsPage() {
         weekend trips and long drives. With transparent pricing, easy online booking and
         24/7 customer support, renting a car has never been easier.
       </p>
+      <section style={{ maxWidth: "900px", marginTop: "24px" }}>
+      <h2>Self Drive Car Rentals in Chennai</h2>
+
+      <p>
+        MM Miles offers reliable and affordable self drive car rentals in Chennai
+        for professionals, families, and travelers. Choose from hatchbacks,
+        sedans, and premium SUVs with transparent pricing and instant online booking.
+      </p>
+
+      <p>
+        Whether you need a car for daily commute, weekend trips, airport travel,
+        or long-term rental, MM Miles gives you complete flexibility without the
+        burden of ownership.
+      </p>
+
+      <h3>Why choose MM Miles?</h3>
+      <ul>
+        <li>Wide range of self drive cars available across Chennai</li>
+        <li>Simple booking through our website</li>
+        <li>No hidden charges or surge pricing</li>
+        <li>Well-maintained vehicles with regular servicing</li>
+        <li>24/7 customer support for complete peace of mind</li>
+      </ul>
+
+      <p>
+        Browse available cars below and book your self drive car in Chennai
+        in just a few clicks.
+      </p>
+    </section>
 
       {/* =========================
           SEO CONTENT BLOCK (RANKING BOOST)

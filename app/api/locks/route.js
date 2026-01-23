@@ -1,6 +1,6 @@
 // app/api/locks/route.js
 import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '@/lib/auth.js';
+import { getUserFromAuthHeader } from '../../../lib/auth';
 
 // GET /api/locks?vehicle_id=123 - Check locks for a vehicle
 export async function GET(request) {

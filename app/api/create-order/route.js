@@ -1,7 +1,7 @@
 // app/api/create-order/route.js
 import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '../../../lib/auth.js';
-import { calculatePricing } from '../../../lib/pricing.js';
+import { getUserFromAuthHeader } from '@/lib/auth';
+import { calculatePricing } from '@/lib/pricing';
 
 // Razorpay SDK imports
 const Razorpay = require('razorpay');

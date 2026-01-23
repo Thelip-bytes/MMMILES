@@ -1,6 +1,6 @@
 // app/api/booking-complete/route.js
 import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '@/lib/auth';
+import { getUserFromAuthHeader } from '../../../lib/auth.js';
 
 // Razorpay SDK for payment verification
 const Razorpay = require('razorpay');

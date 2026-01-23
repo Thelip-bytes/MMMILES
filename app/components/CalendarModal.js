@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { FaTimes, FaCalendarAlt, FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import styles from "./CalendarModal.module.css";
-import { format, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isToday, startOfDay, subMonths } from "date-fns";
+import { format, addMonths, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isToday, startOfDay, subMonths } from "date-fns";
 
 export default function CalendarModal({
     isOpen,
@@ -59,15 +59,22 @@ export default function CalendarModal({
         if (isBefore(date, today)) return;
 
         if (!pickupDate || (pickupDate && returnDate)) {
+            // Selecting pickup date
             setPickupDate(date);
             setReturnDate(null);
         } else {
-            // selecting return date
+            // Selecting return date
             if (isBefore(date, pickupDate)) {
+                // If clicked before pickup, make it the new pickup
                 setPickupDate(date);
-            } else if (isSameDay(date, pickupDate)) {
-                setReturnDate(date);
             } else {
+                // Check 29-day max limit
+                const maxReturnDate = addDays(pickupDate, 29);
+                if (isAfter(date, maxReturnDate)) {
+                    // Date exceeds 29-day limit - show toast/alert
+                    alert("Maximum booking duration is 29 days. Please select an earlier return date.");
+                    return;
+                }
                 setReturnDate(date);
             }
         }

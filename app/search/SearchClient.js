@@ -142,7 +142,7 @@ function CarCard({ car, pickup, returndate, router, city }) {
 
         <div className={styles.footerRight}>
           <div className={styles.priceRow}>
-            <span className={styles.priceHour}>₹{car.hourly_rate}</span>
+            <span className={styles.priceHour}>₹{Math.round((car.base_daily_rate || 0) / 24)}</span>
             <span className={styles.priceUnit}>/hr</span>
           </div>
         </div>
@@ -197,6 +197,47 @@ export default function SearchPage() {
   const [returnDate, setReturnDate] = useState(null);
   const [pickupHour, setPickupHour] = useState(9);
   const [returnHour, setReturnHour] = useState(17);
+
+  // Initialize calendar state from URL params
+  useEffect(() => {
+    if (pickup) {
+      // Parse DD/MM/YYYY HH:MM format
+      const parts = pickup.split(' ');
+      if (parts.length >= 2) {
+        const datePart = parts[0].split('/');
+        const timePart = parts[1].split(':');
+        if (datePart.length === 3) {
+          const date = new Date(
+            parseInt(datePart[2]), // year
+            parseInt(datePart[1]) - 1, // month (0-indexed)
+            parseInt(datePart[0]), // day
+            parseInt(timePart[0]) || 9, // hour
+            0 // minutes always 0
+          );
+          setPickupDate(date);
+          setPickupHour(parseInt(timePart[0]) || 9);
+        }
+      }
+    }
+    if (returndate) {
+      const parts = returndate.split(' ');
+      if (parts.length >= 2) {
+        const datePart = parts[0].split('/');
+        const timePart = parts[1].split(':');
+        if (datePart.length === 3) {
+          const date = new Date(
+            parseInt(datePart[2]),
+            parseInt(datePart[1]) - 1,
+            parseInt(datePart[0]),
+            parseInt(timePart[0]) || 17,
+            0
+          );
+          setReturnDate(date);
+          setReturnHour(parseInt(timePart[0]) || 17);
+        }
+      }
+    }
+  }, [pickup, returndate]);
 
     /* ------------------- UNIFIED FILTER STATE ------------------- */
   // 'filters' is the ONE source of truth.

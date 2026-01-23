@@ -87,7 +87,7 @@ export default function TrendingSection() {
       name: `${vehicle.make} ${vehicle.model}`,
       type: vehicle.vehicle_type || "Car",
       deal: "Trending",
-      price: vehicle.hourly_rate || 0,
+      price: Math.round((vehicle.base_daily_rate || 0) / 24),
       features: [
         vehicle.seats ? `${vehicle.seats} Seater` : "5 Seater",
         "4.5 rating",

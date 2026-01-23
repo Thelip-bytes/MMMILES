@@ -28,7 +28,6 @@ export default function CarPage() {
   const [host, setHost] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activePlan, setActivePlan] = useState("BASIC");
   const [currentMainMedia, setCurrentMainMedia] = useState(null);
   
   // State to hold the transform style for each explore card
@@ -113,32 +112,15 @@ export default function CarPage() {
   if (loading) return <p className={styles.loading}>Loading...</p>;
   if (!car) return <p className={styles.error}>Car not found</p>;
 
-  // Insurance plans from DB
-  const insurancePlans = [
-    {
-      name: "MAX",
-      price: car.price_max || 699,
-      deductible: car.deductible_max || 1000,
-      description: `Only pay ₹${car.deductible_max || 1000} in case of any incidentals`,
-    },
-    {
-      name: "PLUS",
-      price: car.price_plus || 489,
-      deductible: car.deductible_plus || 3000,
-      description: `Only pay ₹${car.deductible_plus || 3000} in case of any incidentals`,
-    },
-    {
-      name: "BASIC",
-      price: car.price_basic || 299,
-      deductible: car.deductible_basic || 5000,
-      description: `Only pay ₹${car.deductible_basic || 5000} in case of any incidentals`,
-    },
-  ];
+  // Insurance is now calculated automatically based on booking duration tier
+  // No user selection needed - insurance is included in the total price
+  const baseDailyRate = car.base_daily_rate || 0;
+  const baseHourlyRate = (baseDailyRate / 24).toFixed(2);
 
   // Stats Section (derived from car data)
   const statsData = [
     { number: car.model_year || "N/A", label: "Model Year" },
-    { number: car.hourly_rate || "N/A", label: "Base Rate (₹/hr)" },
+    { number: baseHourlyRate || "N/A", label: "Base Rate (₹/hr)" },
     { number: car.mileage_kmpl || "N/A", label: "KM/L Mileage" },
     { number: car.seating_capacity || "N/A", label: "Seats" },
     
@@ -184,37 +166,17 @@ export default function CarPage() {
           <p className={styles.priceTag}>
             <span className={styles.startingAt}>STARTING AT</span>
             <br />
-            <span className={styles.priceValue}>₹{car.hourly_rate || car.price_basic}</span>
+            <span className={styles.priceValue}>₹{baseHourlyRate}</span>
             <span className={styles.priceUnit}>/hour</span>
           </p>
 
           <p className={styles.description}>{car.description || "TODO: Add car description."}</p>
-
-          <div className={styles.insuranceSection}>
-            <p className={styles.travelConfident}>Choose Your Insurance Plan</p>
-            <div className={styles.plansContainer}>
-              {insurancePlans.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`${styles.planBox} ${
-                    activePlan === plan.name ? styles.activePlan : ""
-                  }`}
-                  onClick={() => setActivePlan(plan.name)}
-                >
-                  <span className={styles.planName}>{plan.name} PLAN</span>
-                  <p className={styles.planPrice}>₹{plan.price}</p>
-                  <p className={styles.planDesc}>{plan.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
 
           <div className={styles.actionButtons}>
             <BookNowButton
               carId={id}
               pickup={pickup}
               returnTime={returnTime}
-              plan={activePlan}
             />
           </div>
         </div>
@@ -407,7 +369,7 @@ function ExploreMoreCars({ currentCarId, city, pickup, returnTime, onMouseMove, 
               {/* Price and Action Section */}
               <div className={styles.carActionRow}>
                 <p className={styles.carPrice}>
-                  <span className={styles.carPriceAmount}>₹{vehicle.hourly_rate}</span>
+                  <span className={styles.carPriceAmount}>₹{Math.round((vehicle.base_daily_rate || 0) / 24)}</span>
                   <span className={styles.carPriceUnit}> per Hour</span>
 
                   <button className={styles.bookNowButton}>
@@ -425,7 +387,7 @@ function ExploreMoreCars({ currentCarId, city, pickup, returnTime, onMouseMove, 
   );
 }
 
-function BookNowButton({ carId, pickup, returnTime, plan }) {
+function BookNowButton({ carId, pickup, returnTime }) {
   const router = useRouter();
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -456,7 +418,7 @@ function BookNowButton({ carId, pickup, returnTime, plan }) {
       return;
     }
 
-    router.push(`/checkout?car=${carId}&pickup=${pickup}&return=${returnTime}&plan=${plan}`);
+    router.push(`/checkout?car=${carId}&pickup=${pickup}&return=${returnTime}`);
   };
 
   return (

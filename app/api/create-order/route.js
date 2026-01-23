@@ -1,6 +1,7 @@
 // app/api/create-order/route.js
 import { NextRequest } from 'next/server';
 import { getUserFromAuthHeader } from '../../../lib/auth.js';
+import { calculatePricing } from '../../../lib/pricing.js';
 
 // Razorpay SDK imports
 const Razorpay = require('razorpay');
@@ -18,12 +19,12 @@ export async function POST(request) {
             return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
         }
 
-        const { carId, pickupTime, returnTime, plan, discount = 0 } = await request.json();
+        const { carId, pickupTime, returnTime, discount = 0 } = await request.json();
 
         // Validate required parameters
-        if (!carId || !pickupTime || !returnTime || !plan) {
+        if (!carId || !pickupTime || !returnTime) {
             return Response.json({
-                error: 'carId, pickupTime, returnTime, and plan are required'
+                error: 'carId, pickupTime, and returnTime are required'
             }, { status: 400 });
         }
 
@@ -70,80 +71,59 @@ export async function POST(request) {
             return Response.json({ error: 'Return time must be after pickup time' }, { status: 400 });
         }
 
-        // 3. Calculate pricing server-side (same logic as client but on server)
-        const diffMs = endDate - startDate;
-        const hours = Math.ceil(diffMs / 3600000);
+        // 3. Get base daily rate from database
+        const baseDailyRate = parseFloat(vehicle.base_daily_rate) || 0;
 
-        // Get pricing from database (server-side calculation)
-        const hourlyRate = parseFloat(vehicle.hourly_rate) || 0;
-
-        let insuranceCost;
-        switch (plan?.toUpperCase()) {
-            case 'MAX':
-                insuranceCost = parseFloat(vehicle.price_max) || 0;
-                break;
-            case 'PLUS':
-                insuranceCost = parseFloat(vehicle.price_plus) || 0;
-                break;
-            case 'BASIC':
-            default:
-                insuranceCost = parseFloat(vehicle.price_basic) || 60;
-                break;
+        if (baseDailyRate <= 0) {
+            return Response.json({ error: 'Invalid base rate configuration' }, { status: 400 });
         }
 
-        const rentalCost = +(hours * hourlyRate).toFixed(2);
-        const basePrice = +(rentalCost + insuranceCost).toFixed(2);
-        const gst = +(basePrice * 0.18).toFixed(2);
-        const convFee = 100; // Fixed convenience fee
-        const subtotal = +(basePrice + gst + convFee).toFixed(2);
+        // 4. Calculate pricing using the centralized pricing engine
+        const pricing = calculatePricing({
+            baseDailyRate,
+            pickupTime: startDate,
+            returnTime: endDate,
+            discount: discountAmount,
+        });
 
-        // Apply discount
-        const total = Math.max(0, +(subtotal - discountAmount).toFixed(2));
-
-        // 4. Validate calculated prices (sanity checks)
-        if (total <= 0 || total > 100000) { // Max 1 lakh INR
+        // 5. Validate calculated prices (sanity checks)
+        if (pricing.total <= 0 || pricing.total > 100000) { // Max 1 lakh INR
             return Response.json({ error: 'Invalid calculated price' }, { status: 400 });
         }
 
-        // 5. Create Razorpay order with server-calculated amount
+        // 6. Create Razorpay order with server-calculated amount
         const orderOptions = {
-            amount: Math.round(total * 100), // Razorpay expects amount in paise
+            amount: Math.round(pricing.total * 100), // Razorpay expects amount in paise
             currency: 'INR',
             receipt: `booking_${carId}_${Date.now()}`,
             notes: {
                 vehicle_id: carId.toString(),
                 user_id: user.sub,
-                plan: plan,
-                hours: hours.toString(),
+                tier: pricing.tier.name,
+                hours: pricing.hours.toString(),
                 pickup_time: pickupTime,
                 return_time: returnTime,
-                discount: discountAmount.toString(),
-                subtotal: subtotal.toString(),
-                calculated_total: total.toString()
+                discount: pricing.discount.toString(),
+                calculated_total: pricing.total.toString()
             }
         };
 
         const razorpayOrder = await razorpay.orders.create(orderOptions);
 
-        // 6. Return order details to client
+        // 7. Return order details to client
         return Response.json({
             success: true,
             orderId: razorpayOrder.id,
-            amount: total,
+            amount: pricing.total,
             currency: 'INR',
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
             pricing: {
-                hours,
-                hourlyRate,
-                rentalCost,
-                insuranceCost,
-                basePrice,
-                gst,
-                convFee,
-                subtotal,
-                discount: discountAmount,
-                total,
-                plan
+                hours: pricing.hours,
+                tier: pricing.tier,
+                rates: pricing.rates,
+                costs: pricing.costs,
+                discount: pricing.discount,
+                total: pricing.total,
             },
             vehicle: {
                 id: vehicle.id,

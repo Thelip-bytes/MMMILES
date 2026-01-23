@@ -42,7 +42,7 @@ export async function GET(req) {
     // start building query
     let query = supabase
       .from("vehicles")
-      .select("*,vehicle_images(*)")
+      .select("*,vehicle_images(*),buffer_hours")
       .eq("city", city)
       .eq("available_status", true);
 
@@ -53,8 +53,8 @@ export async function GET(req) {
     if (seats) query = query.eq("seating_capacity", parseInt(seats));
     if (year) query = query.eq("model_year", parseInt(year));
     if (brand) query = query.eq("make", brand);
-    if (priceMin) query = query.gte("hourly_rate", parseFloat(priceMin));
-    if (priceMax) query = query.lte("hourly_rate", parseFloat(priceMax));
+    if (priceMin) query = query.gte("base_daily_rate", parseFloat(priceMin) * 24);
+    if (priceMax) query = query.lte("base_daily_rate", parseFloat(priceMax) * 24);
     if (gps === "true") query = query.eq("has_gps", true);
     if (ac === "true") query = query.eq("has_ac", true);
 
@@ -129,12 +129,13 @@ export async function GET(req) {
         for (const statuses of statusOptions) {
           console.log(`🔍 Trying status values: [${statuses.join(", ")}]`);
           
+          // Fetch all confirmed/pending bookings for the time window
+          // We'll add buffer time when checking for conflicts
           const { data, error } = await supabase
             .from("bookings")
             .select("vehicle_id, status, start_time, end_time")
             .in("status", statuses)
-            .lt("start_time", returnTimeISO)  // booking starts before requested return
-            .gt("end_time", pickupTimeISO);   // booking ends after requested pickup
+            .lt("start_time", returnTimeISO);  // booking starts before requested return
 
           if (error) {
             console.log(`❌ Error with status [${statuses.join(", ")}]:`, error.message);
@@ -215,12 +216,40 @@ export async function GET(req) {
 
         console.log("🚫 Booked vehicle IDs:", Array.from(bookedVehicleIds));
 
-        // Filter out vehicles that have overlapping bookings
-        availableVehicles = vehiclesData.filter(
-          (vehicle) => !bookedVehicleIds.has(vehicle.id)
-        );
+        // Filter out vehicles that have overlapping bookings (including buffer time)
+        const requestedPickup = new Date(pickupTimeISO);
+        
+        availableVehicles = vehiclesData.filter((vehicle) => {
+          // Check if vehicle has any overlapping bookings
+          if (bookedVehicleIds.has(vehicle.id)) {
+            // Check if the conflict is real (accounting for buffer time)
+            const vehicleBookings = overlappingBookings.filter(b => b.vehicle_id === vehicle.id);
+            for (const booking of vehicleBookings) {
+              const bookingEnd = new Date(booking.end_time);
+              const bufferHours = vehicle.buffer_hours || 6;
+              const bufferEndTime = new Date(bookingEnd.getTime() + (bufferHours * 60 * 60 * 1000));
+              
+              // If pickup is before buffer end time, vehicle is not available
+              if (requestedPickup < bufferEndTime) {
+                console.log(`🚫 Vehicle ${vehicle.id} blocked: booking ends at ${bookingEnd.toISOString()}, buffer until ${bufferEndTime.toISOString()}, requested pickup ${requestedPickup.toISOString()}`);
+                return false;
+              }
+            }
+          }
+          
+          // Also check next_available field if set
+          if (vehicle.next_available) {
+            const nextAvailable = new Date(vehicle.next_available);
+            if (requestedPickup < nextAvailable) {
+              console.log(`🚫 Vehicle ${vehicle.id} blocked: next_available is ${nextAvailable.toISOString()}, requested pickup ${requestedPickup.toISOString()}`);
+              return false;
+            }
+          }
+          
+          return true;
+        });
 
-        console.log(`✅ Available vehicles after filtering: ${availableVehicles.length}/${vehiclesData.length}`);
+        console.log(`✅ Available vehicles after filtering (with ${vehiclesData[0]?.buffer_hours || 6}hr buffer): ${availableVehicles.length}/${vehiclesData.length}`);
 
       } catch (dateError) {
         console.error("💥 Date parsing error:", dateError);

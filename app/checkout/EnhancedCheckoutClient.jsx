@@ -49,7 +49,7 @@ export default function EnhancedCheckoutPage() {
   const carId = searchParams.get("car");
   const pickup = searchParams.get("pickup");
   const returnTime = searchParams.get("return");
-  const plan = searchParams.get("plan") || "BASIC";
+  // Plan parameter is no longer needed - insurance is calculated automatically
 
   const [car, setCar] = useState(null);
   const [host, setHost] = useState(null);
@@ -349,7 +349,6 @@ export default function EnhancedCheckoutPage() {
             carId: car.id,
             pickupTime: pickupTimeISO,
             returnTime: returnTimeISO,
-            plan: plan,
             discount: discount
           })
         });
@@ -367,11 +366,11 @@ export default function EnhancedCheckoutPage() {
           const totalAfterDiscount = Math.max(0, data.pricing.total - discount);
 
           setPriceSummary({
-            rentalCost: data.pricing.rentalCost,
-            insuranceCost: data.pricing.insuranceCost,
-            basePrice: data.pricing.basePrice,
-            gst: data.pricing.gst,
-            convFee: data.pricing.convFee,
+            rentalCost: data.pricing.costs.rentalCost,
+            insuranceCost: data.pricing.costs.insuranceCost,
+            basePrice: data.pricing.costs.subtotalBeforeGST,
+            gst: data.pricing.costs.gst,
+            convFee: data.pricing.costs.convFee,
             total: totalAfterDiscount,
             hours: data.pricing.hours,
             error: null,
@@ -403,7 +402,7 @@ export default function EnhancedCheckoutPage() {
     }
 
     calculatePrice();
-  }, [car, pickup, returnTime, plan, discount]);
+  }, [car, pickup, returnTime, discount]);
 
   /* -------------------------------------------------------------------------- */
   /*                        SAVE CUSTOMER PROFILE                                */
@@ -731,7 +730,6 @@ export default function EnhancedCheckoutPage() {
       user_id: loggedInUser.sub,
       vehicle_id: car.id,
       host_id: car.host_id,
-      plan,
       hours: priceSummary.hours,
       base_price: priceSummary.basePrice,
       gst: priceSummary.gst,
@@ -1179,12 +1177,12 @@ export default function EnhancedCheckoutPage() {
               </div>
 
               <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Rental ({priceSummary.hours} hrs × ₹{car?.hourly_rate || 0}/hr):</div>
+                <div className={styles.rowLabel}>Rental Cost:</div>
                 <div className={styles.rowValue}>₹{priceSummary.rentalCost}</div>
               </div>
 
               <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Insurance ({plan} Plan):</div>
+                <div className={styles.rowLabel}>Insurance:</div>
                 <div className={styles.rowValue}>₹{priceSummary.insuranceCost}</div>
               </div>
 

@@ -115,7 +115,7 @@ export default function CarPage() {
   // Insurance is now calculated automatically based on booking duration tier
   // No user selection needed - insurance is included in the total price
   const baseDailyRate = car.base_daily_rate || 0;
-  const baseHourlyRate = (baseDailyRate / 24).toFixed(2);
+  const baseHourlyRate = Math.round(baseDailyRate / 24);
 
   // Stats Section (derived from car data)
   const statsData = [

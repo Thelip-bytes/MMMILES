@@ -3,19 +3,19 @@
 export const dynamic = "force-static";
 
 /* =========================
-   SEO METADATA (VERY IMPORTANT)
+   SEO METADATA
 ========================= */
 export const metadata = {
   title: "Self Drive Car Rentals in Chennai | MM Miles",
   description:
-    "Browse and book self drive cars in Chennai with MM Miles. Choose from hatchbacks, sedans and SUVs with transparent pricing, easy online booking and 24/7 customer support.",
+    "Book self drive cars in Chennai with MM Miles. Choose from hatchbacks, sedans and SUVs with transparent pricing, flexible rentals and 24/7 support.",
   alternates: {
     canonical: "https://www.mmmiles.com/car",
   },
   openGraph: {
     title: "Self Drive Car Rentals in Chennai | MM Miles",
     description:
-      "Affordable self drive car rentals in Chennai. Flexible bookings, premium cars and 24/7 support.",
+      "Affordable self drive car rentals in Chennai with flexible booking and premium cars.",
     url: "https://www.mmmiles.com/car",
     siteName: "MM Miles",
     type: "website",
@@ -25,7 +25,7 @@ export const metadata = {
         url: "/mmmiles-og.jpg",
         width: 1200,
         height: 630,
-        alt: "MM Miles Self Drive Cars in Chennai",
+        alt: "MM Miles – Self Drive Cars in Chennai",
       },
     ],
   },
@@ -37,200 +37,141 @@ export const metadata = {
 export default function CarsPage() {
   return (
     <main style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto" }}>
+      
       {/* =========================
-          H1 — DO NOT CHANGE
+          PRIMARY H1
       ========================= */}
       <h1>Available Self Drive Cars in Chennai</h1>
 
       {/* =========================
-          SEO INTRO PARAGRAPH
+          INTRO (CRITICAL)
       ========================= */}
       <p>
-        MM Miles offers reliable and affordable <strong>self drive car rentals in Chennai</strong>.
-        Browse from a wide range of hatchbacks, sedans and SUVs suited for city travel,
-        weekend trips and long drives. With transparent pricing, easy online booking and
-        24/7 customer support, renting a car has never been easier.
+        MM Miles offers trusted and affordable{" "}
+        <strong>self drive car rentals in Chennai</strong>.
+        Rent hatchbacks, sedans, and SUVs for city travel, weekend trips,
+        airport runs, or long-term needs with transparent pricing and easy booking.
       </p>
-      
-      <section>
-
-<section>
-  <h2>Self Drive Cars in Chennai</h2>
-  <p>
-    Looking for self drive cars in Chennai? MM Miles offers affordable and
-    flexible car rentals across Chennai with transparent pricing and instant
-    booking. Choose from hatchbacks, sedans, and SUVs for hourly, daily, or
-    monthly rentals.
-  </p>
-
-  <h2>Car Rental Services in Chennai</h2>
-  <p>
-    Our car rental services in Chennai are designed for professionals, families,
-    and travelers who need reliable vehicles without ownership. MM Miles provides
-    well-maintained cars with 24/7 customer support.
-  </p>
-
-  <h3>Rent a Car in Chennai for Any Need</h3>
-  <ul>
-    <li>Self drive cars for office commute</li>
-    <li>Weekend and holiday car rentals</li>
-    <li>Airport pickup and drop car rentals</li>
-    <li>Long-term monthly car rentals</li>
-  </ul>
-
-  <p>
-    Book a car in Chennai online with MM Miles and enjoy stress-free driving with
-    flexible plans and zero hidden charges.
-  </p>
-</section>
-
-
-
-  <h2>Self Drive Car Rentals in Chennai</h2>
-  <p>
-    MM Miles offers self drive car rentals in Chennai with flexible pricing,
-    easy online booking, and 24/7 customer support. Choose from hatchbacks,
-    sedans, and SUVs for daily, weekly, or monthly rentals.
-  </p>
-
-  <h2>Why Choose MM Miles for Car Rentals in Chennai?</h2>
-  <ul>
-    <li>Wide range of self drive cars</li>
-    <li>No hidden charges</li>
-    <li>Instant booking confirmation</li>
-    <li>24/7 roadside and customer support</li>
-  </ul>
-
-  <h2>Book a Car in Chennai Instantly</h2>
-  <p>
-    Whether you need a car for work, travel, or emergencies, MM Miles makes
-    renting a car in Chennai simple, fast, and reliable.
-  </p>
-</section>
-
-
-
-      <section style={{ maxWidth: "900px", marginTop: "24px" }}>
-      <h2>Self Drive Car Rentals in Chennai</h2>
-
-      <p>
-        MM Miles offers reliable and affordable self drive car rentals in Chennai
-        for professionals, families, and travelers. Choose from hatchbacks,
-        sedans, and premium SUVs with transparent pricing and instant online booking.
-      </p>
-
-      <p>
-        Whether you need a car for daily commute, weekend trips, airport travel,
-        or long-term rental, MM Miles gives you complete flexibility without the
-        burden of ownership.
-      </p>
-
-      <h3>Why choose MM Miles?</h3>
-      <ul>
-        <li>Wide range of self drive cars available across Chennai</li>
-        <li>Simple booking through our website</li>
-        <li>No hidden charges or surge pricing</li>
-        <li>Well-maintained vehicles with regular servicing</li>
-        <li>24/7 customer support for complete peace of mind</li>
-      </ul>
-
-      <p>
-        Browse available cars below and book your self drive car in Chennai
-        in just a few clicks.
-      </p>
-    </section>
 
       {/* =========================
-          SEO CONTENT BLOCK (RANKING BOOST)
+          INTERNAL LINKING (STEP 2)
       ========================= */}
-      <section style={{ marginTop: "30px" }}>
-        <h2>Why Choose MM Miles for Self Drive Car Rental?</h2>
-        <ul>
-          <li>Wide range of well-maintained cars</li>
-          <li>No hidden charges or surprise fees</li>
-          <li>Instant online booking through our website</li>
-          <li>Flexible hourly and daily rental plans</li>
-          <li>24/7 customer support for peace of mind</li>
-        </ul>
-      </section>
-
-      <section style={{ marginTop: "30px" }}>
-        <h2>Self Drive Cars Available Across Chennai</h2>
+      <section style={{ marginTop: "24px" }}>
         <p>
-          Our self drive cars are available across major areas including Anna Nagar,
-          OMR, Velachery, Tambaram and surrounding locations. Whether you need a car
-          for work, travel or leisure, MM Miles ensures a smooth and hassle-free experience.
+          Learn more <a href="/about">about MM Miles</a> and how we make car rentals
+          simple and reliable across Chennai.
+        </p>
+
+        <p>
+          Have questions? Visit our <a href="/faq">car rental FAQs</a> or
+          <a href="/contact"> contact our support team</a> for quick assistance.
         </p>
       </section>
 
+      {/* =========================
+          SERVICES SECTION
+      ========================= */}
+      <section style={{ marginTop: "32px" }}>
+        <h2>Car Rental Services in Chennai</h2>
+        <p>
+          Our self drive car rental services are designed for professionals,
+          families, and travelers who want flexibility without ownership.
+          All vehicles are well-maintained and supported by 24/7 customer care.
+        </p>
 
+        <ul>
+          <li>Self drive cars for daily office commute</li>
+          <li>Weekend and holiday travel rentals</li>
+          <li>Airport pickup and drop car rentals</li>
+          <li>Long-term monthly car rental plans</li>
+        </ul>
+      </section>
 
+      {/* =========================
+          WHY MM MILES
+      ========================= */}
+      <section style={{ marginTop: "32px" }}>
+        <h2>Why Choose MM Miles?</h2>
+        <ul>
+          <li>No hidden charges or surge pricing</li>
+          <li>Flexible hourly, daily, and monthly rentals</li>
+          <li>Wide range of self drive cars</li>
+          <li>Instant online booking</li>
+          <li>24/7 roadside & customer support</li>
+        </ul>
+      </section>
 
+      {/* =========================
+          LOCATION RELEVANCE
+      ========================= */}
+      <section style={{ marginTop: "32px" }}>
+        <h2>Self Drive Cars Available Across Chennai</h2>
+        <p>
+          MM Miles operates across major areas including Anna Nagar, OMR,
+          Velachery, Tambaram, and surrounding locations—ensuring easy access
+          wherever you are in Chennai.
+        </p>
+      </section>
 
-
-
+      {/* =========================
+          FAQ SCHEMA (RICH RESULTS)
+      ========================= */}
       <script
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{
-    __html: JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Is self drive car rental available in Chennai?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, MM Miles offers self drive car rentals across Chennai with flexible booking options and transparent pricing."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "What documents are required to rent a car from MM Miles?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "You need a valid driving license and a government-issued ID to book a self drive car with MM Miles."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is fuel included in the car rental price?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Fuel is not included in the rental price. The car must be returned with the same fuel level as at pickup."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is insurance included?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, insurance is included. Deductibles depend on the protection plan selected."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Do you provide 24/7 customer support?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes, MM Miles provides 24/7 customer support to ensure a smooth and hassle-free rental experience."
-          }
-        }
-      ]
-    })
-  }}
-/>
-
-
-
-
-
-
-
-
-
-
-      
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is self drive car rental available in Chennai?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Yes, MM Miles offers self drive car rentals across Chennai with flexible booking options."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What documents are required to rent a car?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "A valid driving license and government-issued ID are required."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is fuel included in the rental price?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Fuel is not included. Cars must be returned with the same fuel level."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is insurance included?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Yes, insurance is included. Deductibles depend on the selected plan."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do you provide 24/7 support?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text":
+                    "Yes, MM Miles provides 24/7 customer and roadside support."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </main>
   );
 }

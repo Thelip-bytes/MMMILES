@@ -7,6 +7,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../../../lib/supabaseClient";
 import styles from "./carDetail.module.css";
 import Counter from "../../components/Counter";
+import CarCard from "../../components/CarCard";
 
 // Supabase storage base URL for car images
 const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/object/public/car-images/";
@@ -30,9 +31,6 @@ export default function CarPage() {
   const [loading, setLoading] = useState(true);
   const [currentMainMedia, setCurrentMainMedia] = useState(null);
   
-  // State to hold the transform style for each explore card
-  const [hoveredCard, setHoveredCard] = useState(null);
-
   useEffect(() => {
     async function fetchCar() {
       try {
@@ -59,12 +57,12 @@ export default function CarPage() {
         setCar(parsedVehicle);
         setHost(vehicle.hosts || null);
         const rawImages = vehicle.vehicle_images || [];
-        // Sort to put primary image first
-        const sortedImages = [...rawImages].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0));
-        setImages(sortedImages);
+        // Filter out primary images (they are for search results only)
+        const productImages = rawImages.filter(img => !img.is_primary);
+        setImages(productImages);
         setCurrentMainMedia(
-          sortedImages.length
-            ? { src: getFullImageUrl(sortedImages[0].image_url), type: "image" }
+          productImages.length
+            ? { src: getFullImageUrl(productImages[0].image_url), type: "image" }
             : { src: "/cars/default.jpg", type: "image" }
         );
       } catch (e) {
@@ -81,23 +79,7 @@ export default function CarPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  // Mouse move handler for magnetic effect on explore cards
-  const handleMouseMove = (e, cardId) => {
-    const card = e.currentTarget;
-    const { top, left, width, height } = card.getBoundingClientRect();
-    const x = (e.clientX - left - width / 2) / 20; // 20 is a sensitivity factor
-    const y = (e.clientY - top - height / 2) / 20; // 20 is a sensitivity factor
 
-    setHoveredCard({
-      id: cardId,
-      transform: `perspective(1000px) rotateX(${y}deg) rotateY(${-x}deg) scale(1.05)`,
-    });
-  };
-
-  // Mouse leave handler
-  const handleMouseLeave = () => {
-    setHoveredCard(null);
-  };
 
   const handleBookNow = () => {
     const token = localStorage.getItem("auth_token");
@@ -223,7 +205,7 @@ export default function CarPage() {
 
     <div className={styles.locationTextContent}>
       <h2>
-        {car.location_name}, {car.city}
+        {/* Location Hidden */}
       </h2>
       <p>
         Hosted by <strong>{host?.full_name || "TODO: Host Name"}</strong>
@@ -278,9 +260,6 @@ export default function CarPage() {
           city={car.city} 
           pickup={pickup} 
           returnTime={returnTime}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          hoveredCard={hoveredCard}
         />
       </div>
     </div>
@@ -288,7 +267,7 @@ export default function CarPage() {
 }
 
 // Component for exploring more cars from the same city
-function ExploreMoreCars({ currentCarId, city, pickup, returnTime, onMouseMove, onMouseLeave, hoveredCard }) {
+function ExploreMoreCars({ currentCarId, city, pickup, returnTime }) {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -326,62 +305,13 @@ function ExploreMoreCars({ currentCarId, city, pickup, returnTime, onMouseMove, 
   return (
     <div className={styles.exploreCardsGrid}>
       {vehicles.map((vehicle) => (
-        <Link
-          key={vehicle.id}
-          href={`/car/${vehicle.id}?pickup=${pickup}&return=${returnTime}`}
-          className={styles.exploreCardLink}
-          onMouseMove={(e) => onMouseMove(e, vehicle.id)}
-          onMouseLeave={onMouseLeave}
-          style={hoveredCard && hoveredCard.id === vehicle.id ? { transform: hoveredCard.transform, zIndex: 10 } : null}
-        >
-          <div className={styles.exploreCard}>
-
-            
-            {/* Rating Badge */}
-            <div className={styles.carRatingBadge}>
-              <span role="img" aria-label="star">★</span> 4.3/5
-            </div>
-            
-
-            <div className={styles.exploreCardImageWrapper}>
-              <Image
-                src={vehicle.vehicle_images && vehicle.vehicle_images.length > 0 
-                  ? (vehicle.vehicle_images[0].image_url.startsWith("http") 
-                    ? vehicle.vehicle_images[0].image_url 
-                    : `${STORAGE_BASE_URL}${vehicle.vehicle_images[0].image_url}`)
-                  : "/cars/default.jpg"}
-                alt={`${vehicle.make} ${vehicle.model}`}
-                fill
-                className={styles.exploreCardImage}
-              />
-              
-            </div>
-
-            <div className={styles.exploreCardContent}>
-              {/* Car Title */}
-              <h3 className={styles.exploreCardTitle}>{vehicle.make} {vehicle.model}</h3>
-              <div className={styles.carMetaNew}>
-                <span>✓ 2022 model</span>
-                <span>✓ 18 mileage km/l</span>
-                <span>✓ 4 seater</span>
-              </div>
-
-              {/* Price and Action Section */}
-              <div className={styles.carActionRow}>
-                <p className={styles.carPrice}>
-                  <span className={styles.carPriceAmount}>₹{Math.round((vehicle.base_daily_rate || 0) / 24)}</span>
-                  <span className={styles.carPriceUnit}> per Hour</span>
-
-                  <button className={styles.bookNowButton}>
-                    Book Now
-                  </button>
-                </p>
-                
-                
-              </div>
-            </div>
-          </div>
-        </Link>
+        <CarCard 
+          key={vehicle.id} 
+          car={vehicle} 
+          pickup={pickup} 
+          returndate={returnTime} 
+          city={city} 
+        />
       ))}
     </div>
   );

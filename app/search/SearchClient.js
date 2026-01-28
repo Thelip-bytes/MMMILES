@@ -25,11 +25,12 @@ const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/ob
 // Helper to get ALL image URLs
 function getCarImages(car) {
   const images = car.vehicle_images || [];
-  // Sort by is_primary if needed, or just return all
-  // Ensure we have at least one valid image
-  if (images.length === 0) return ["/cars/default.jpg"];
+  // Sort by is_primary to ensure primary image is first for search results
+  const sortedImages = [...images].sort((a, b) => (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0));
   
-  return images.map(img => {
+  if (sortedImages.length === 0) return ["/cars/default.jpg"];
+  
+  return sortedImages.map(img => {
       return img.image_url?.startsWith("http") 
         ? img.image_url 
         : `${STORAGE_BASE_URL}${img.image_url}`;

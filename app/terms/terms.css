@@ -7,7 +7,7 @@
   font-weight: 400;
   font-family: poppins;
   margin-bottom: 30px;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 .terms-title {
@@ -23,10 +23,10 @@
 
 .last-updated {
   text-align: center;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
   font-family: poppins;
-  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  background: #121111;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 30px;

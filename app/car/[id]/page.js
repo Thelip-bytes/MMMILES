@@ -107,6 +107,7 @@ export default function CarPage() {
     { number: car.seating_capacity || "N/A", label: "Seats" },
     
   ];
+  
 
   return (
     <div className={styles.container}>
@@ -153,6 +154,24 @@ export default function CarPage() {
           </p>
 
           <p className={styles.description}>{car.description || "TODO: Add car description."}</p>
+          {/*<div className={styles.insuranceSection}>
+            <p className={styles.travelConfident}>Travel with confidence</p>
+            <div className={styles.plansContainer}>
+              {carDetails.insurancePlans.map(plan => (
+                <div
+                  key={plan.name}
+                  className={`${styles.planBox} ${activePlan === plan.name ? styles.activePlan : ''}`}
+                  onClick={() => setActivePlan(plan.name)}
+                >
+                  <span className={styles.planName}>{plan.name}</span>
+                  <p className={styles.planPrice}>Rs.{plan.price}</p>
+                  <p className={styles.planDesc}>{plan.description}</p>
+                </div>
+              ))}
+            </div>
+            <Link href="#" className={styles.learnMore}>Learn More &gt;</Link>
+          </div>*/}
+
 
           <div className={styles.actionButtons}>
             <BookNowButton

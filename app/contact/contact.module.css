@@ -1,8 +1,16 @@
 /* File: app/contact/contact.module.css */
-
+@media (min-width: 1440px){
+  .ccontainer {
+  display: flex;
+  padding: 20px 130px 0px;
+  min-height: 60vh !important; /* Ensure it takes full viewport height */
+  background-color: #FEF9F5; /* A light background color */
+  font-family: Arial, sans-serif; /* Or your preferred font */
+}
+}
 .ccontainer {
   display: flex;
-  padding: 40px 130px 0px;
+  padding: 20px 130px 0px;
   min-height: 100vh; /* Ensure it takes full viewport height */
   background-color: #FEF9F5; /* A light background color */
   font-family: Arial, sans-serif; /* Or your preferred font */
@@ -12,7 +20,7 @@
 .cleftSection {
   flex: 1; /* Takes up half the width */
   background-color: #F9F4EC;
-  padding: 0px 40px 0px;/* Adjust padding as needed */
+  padding: 0px 20px 0px;/* Adjust padding as needed */
   display: flex;
   border-radius: 12px 0 0 12px;
   margin-bottom: 7px;
@@ -24,7 +32,7 @@
 }
 
 .cmainTitle {
-  font-size: 40px;
+  font-size: 34px;
   font-weight: 700;
   color: #333;
   margin-bottom: 6px;
@@ -32,24 +40,24 @@
 }
 
 .cemail {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   color: #666;
   font-family: poppins;
 }
 .cphone {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   color: #666;
   margin-bottom: 5px;
   font-family: poppins;
 }
 .csectionTitle {
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 700;
-  font-family: Darker Grotesque;
+  font-family: Frank Ruhl Libre;
   color: #333;
-  margin-top: 30px;
+  margin-top: 20px;
   margin-bottom: 6px;
 }
 
@@ -73,8 +81,8 @@
 }
 
 .caddress {
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   font-family: poppins;
   color: #666;
   line-height: 1.6;
@@ -115,9 +123,9 @@
 
 .cmainImageContainer {
   width: 100%; /* Adjust width to fit the image properly */
-  max-width: 520px;
-  height: auto;
-  margin-bottom: -9px;
+  max-width: 590px;
+  height: 100%;
+  margin-bottom: 0px;
   position: relative;
   z-index: 2;
 }

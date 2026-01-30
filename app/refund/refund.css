@@ -1,7 +1,7 @@
 .refund-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: .5rem 1rem;
+  padding: 20px 1rem;
   background: #FEF9F5;
   color: #333;
   line-height: 1.7;
@@ -16,13 +16,13 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.1rem;
-  margin-top: 20px;
+  margin-top: -20px;
 }
 
 .refund-subtitle {
   text-align: center;
-  font-size: 24px;
-  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  font-size: 16px;
+  background: #181818 ;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 600;

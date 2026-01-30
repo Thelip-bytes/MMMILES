@@ -149,7 +149,7 @@
 }
 
 .cityItem.selected .cityIconWrapper {
-    background: linear-gradient(135deg, #d8b480 0%, #bf9860 100%);
+    background: #fff;
     border-color: #bf9860;
     box-shadow: 0 4px 12px rgba(191, 152, 96, 0.3);
 }

@@ -4,16 +4,16 @@ import "./about.css";
 
 export default function Hero() {
   return (
-    <div className="hero">
+    <div className="heroabout">
       {/* ===== Banner ===== */}
-      <section className="hero">
+      <section className="heroabout">
         <div className="hero-fit">
           <Image
             src="/about-hero-final.jpg"
             alt="Top View Car"
             width={1920}
             height={1080}
-            style={{ objectFit: "cover", width: "100%", height: "auto" }}
+            style={{ objectFit: "cover", width: "100%", height: "auto" , marginTop: "60px"}}
         priority
           />
         </div>

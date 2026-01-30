@@ -14,19 +14,19 @@
   background: #fff;
   width: 95%;
   max-width: 760px;
-  height: auto;
-  min-height: 600px;
+  height: 100%;
+  min-height: 550px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   position: relative;
   animation: slideUp 0.3s ease-out;
-  padding: 12px 16px;
+  padding: 5px 16px;
 }
 
 .header {
-  padding: 16px 20px;
+  padding: 5px 20px;
   border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
@@ -59,7 +59,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
+  padding: 8px 20px;
   background: #fafafa;
   border-bottom: 1px solid #eee;
 }
@@ -90,7 +90,7 @@
 .monthsRow {
   display: flex;
   gap: 30px;
-  padding: 20px 40px;
+  padding: 10px 40px;
   /* Space for arrows */
   justify-content: center;
 }
@@ -124,7 +124,7 @@
 /* Navigation Arrows */
 .navButton {
   position: absolute;
-  top: 40px;
+  top: 120px;
   /* Aligned roughly with month title */
   background: white;
   border: 1px solid #eee;
@@ -147,11 +147,11 @@
 }
 
 .navButton.prev {
-  left: 10px;
+  left: 6px;
 }
 
 .navButton.next {
-  right: 10px;
+  right: 6px;
 }
 
 .weekHeader {
@@ -170,7 +170,7 @@
 .daysGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  row-gap: 2px;
+  row-gap: 1px;
 }
 
 .dayCell {
@@ -234,7 +234,7 @@
 
 /* Time Section */
 .timeSection {
-  padding: 24px 20px;
+  padding: 16px 20px;
   background: #fff;
   border-top: 1px solid #eee;
 }
@@ -242,6 +242,7 @@
 .timeTitle {
   font-size: 14px;
   color: #666;
+  font-weight: 600;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -335,6 +336,21 @@
   }
 }
 
+@media (min-width: 1440px){
+  .modal {
+    width: 60% !important;
+    height: 83% !important;
+    max-width: none;
+    min-height: 0;
+    border-radius: 8px !important;
+    padding: 0px 16px !important;
+    justify-content: space-between;
+    /* Distribute space */
+    overflow-y: auto;
+    /* Safety scroll */
+  }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .modal {
@@ -355,7 +371,7 @@
   }
 
   .dateSummary {
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
     align-items: flex-start;
     padding: 12px;

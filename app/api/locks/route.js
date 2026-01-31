@@ -2,6 +2,10 @@
 import { NextRequest } from 'next/server';
 import { getUserFromAuthHeader } from '../../../lib/auth.js';
 
+// Configuration for lock durations (in minutes)
+const LOCK_DURATION_MINUTES = 15;
+const LOCK_EXTENSION_MINUTES = 10;
+
 // GET /api/locks?vehicle_id=123 - Check locks for a vehicle
 export async function GET(request) {
   try {
@@ -113,9 +117,9 @@ export async function POST(request) {
       });
     }
 
-    // Create new lock (30 minutes from now)
+    // Create new lock (15 minutes from now)
     const expiresAt = new Date();
-    expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+    expiresAt.setMinutes(expiresAt.getMinutes() + LOCK_DURATION_MINUTES);
 
     const lockData = {
       vehicle_id,
@@ -202,9 +206,9 @@ export async function PATCH(request) {
 
     const currentLock = currentLocks[0];
     
-    // Calculate new expiry time: current expires_at + 20 minutes
+    // Calculate new expiry time: current expires_at + 10 minutes
     const currentExpiresAt = new Date(currentLock.expires_at);
-    const newExpiresAt = new Date(currentExpiresAt.getTime() + 20 * 60 * 1000); // Add 20 minutes
+    const newExpiresAt = new Date(currentExpiresAt.getTime() + LOCK_EXTENSION_MINUTES * 60 * 1000); // Add extension minutes
 
     // Update the lock with new expiry time
     const updateResponse = await fetch(

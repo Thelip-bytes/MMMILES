@@ -111,6 +111,15 @@ export default function EnhancedCheckoutPage() {
 
   const [unavailableData, setUnavailableData] = useState(null);
 
+  const [bookingResult, setBookingResult] = useState({
+    show: false,
+    type: null, // 'success', 'processing', 'failed'
+    title: '',
+    message: '',
+    bookingId: null,
+    paymentId: null
+  });
+
   /* -------------------------------------------------------------------------- */
   /*                            REDIRECT LOGIC                                   */
   /* -------------------------------------------------------------------------- */
@@ -817,10 +826,18 @@ export default function EnhancedCheckoutPage() {
           const oid = response.razorpay_order_id;
           const signature = response.razorpay_signature;
 
-          alert("Payment Success! Saving booking...");
+          // Show processing card
+          setBookingResult({
+            show: true,
+            type: 'processing',
+            title: 'Processing Payment',
+            message: 'Please wait while we confirm your booking...',
+            bookingId: null,
+            paymentId: pid
+          });
 
           // Mark step 3 as complete when payment is successful
-          setCompletedSteps(prev => new Set([...prev, 3]));
+          setCompletedSteps(prev => new Set([...prev, 2, 3]));
 
           const booking = await createBooking(pid, oid);
 
@@ -850,20 +867,40 @@ export default function EnhancedCheckoutPage() {
             }
 
             console.log('Booking completed successfully with verified payment');
+
+            // Show success card
+            setBookingResult({
+              show: true,
+              type: 'success',
+              title: 'Booking Confirmed! 🎉',
+              message: `Your ${car.make} ${car.model} is booked successfully. Get ready for your trip!`,
+              bookingId: bookingId,
+              paymentId: pid
+            });
+
           } catch (completionError) {
             console.error('Booking completion error:', completionError);
-            alert("Payment verified but booking completion failed. Please contact support.");
+            setBookingResult({
+              show: true,
+              type: 'failed',
+              title: 'Booking Issue',
+              message: 'Payment verified but booking completion failed. Please contact support with Payment ID: ' + pid,
+              bookingId: null,
+              paymentId: pid
+            });
             return;
           }
 
-          router.push(
-            bookingId
-              ? `/booking-success?booking=${bookingId}`
-              : `/booking-success`
-          );
         } catch (err) {
           console.error(err);
-          alert("Payment succeeded but booking failed. Please contact support.");
+          setBookingResult({
+            show: true,
+            type: 'failed',
+            title: 'Booking Failed',
+            message: 'Payment succeeded but booking failed. Please contact support.',
+            bookingId: null,
+            paymentId: null
+          });
         }
       },
 
@@ -876,8 +913,7 @@ export default function EnhancedCheckoutPage() {
       // Add verification for additional security
       notes: {
         vehicle_id: car.id.toString(),
-        user_id: loggedInUser.sub,
-        plan: plan
+        user_id: loggedInUser.sub
       }
     };
 
@@ -931,9 +967,8 @@ export default function EnhancedCheckoutPage() {
       return;
     }
 
-    // Mark step 2 as complete and proceed to payment
-    setCompletedSteps(prev => new Set([...prev, 2]));
-    setCurrentStep(3);
+    // Directly trigger payment from Review Journey step
+    handlePayment();
   };
 
   const handleBackToStep = (step) => {
@@ -959,6 +994,93 @@ export default function EnhancedCheckoutPage() {
             <button className={styles.redirectBtn} onClick={handleRedirect}>
               Find Similar Cars 🚗
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Booking Result Overlay */}
+      {bookingResult.show && (
+        <div className={styles.bookingResultOverlay}>
+          <div className={styles.bookingResultCard}>
+            <div className={`${styles.bookingResultIcon} ${bookingResult.type === 'success' ? styles.successIcon :
+              bookingResult.type === 'processing' ? styles.processingIcon :
+                styles.failedIcon
+              }`}>
+              {bookingResult.type === 'success' ? '✓' :
+                bookingResult.type === 'processing' ? '⏳' : '✕'}
+            </div>
+
+            <h3 className={styles.bookingResultTitle}>{bookingResult.title}</h3>
+            <p className={styles.bookingResultMessage}>{bookingResult.message}</p>
+
+            {bookingResult.type === 'success' && (
+              <>
+                <div className={styles.bookingDetails}>
+                  <div className={styles.bookingDetailRow}>
+                    <span className={styles.detailLabel}>Booking ID</span>
+                    <span className={styles.detailValue}>#{bookingResult.bookingId}</span>
+                  </div>
+                  <div className={styles.bookingDetailRow}>
+                    <span className={styles.detailLabel}>Payment ID</span>
+                    <span className={styles.detailValue}>{bookingResult.paymentId}</span>
+                  </div>
+                  <div className={styles.bookingDetailRow}>
+                    <span className={styles.detailLabel}>Car</span>
+                    <span className={styles.detailValue}>{car?.make} {car?.model}</span>
+                  </div>
+                  <div className={styles.bookingDetailRow}>
+                    <span className={styles.detailLabel}>Amount Paid</span>
+                    <span className={styles.detailValue}>₹{priceSummary.total}</span>
+                  </div>
+                </div>
+
+                <button
+                  className={styles.successBtn}
+                  onClick={() => router.push('/dashboard?tab=orders')}
+                >
+                  View My Bookings 📋
+                </button>
+                <button
+                  className={styles.homeBtn}
+                  onClick={() => router.push('/')}
+                >
+                  Back to Home
+                </button>
+              </>
+            )}
+
+            {bookingResult.type === 'processing' && (
+              <div className={styles.processingSpinner}>
+                <div className={styles.spinner}></div>
+              </div>
+            )}
+
+            {bookingResult.type === 'failed' && (
+              <>
+                {bookingResult.paymentId && (
+                  <div className={styles.bookingDetails}>
+                    <div className={styles.bookingDetailRow}>
+                      <span className={styles.detailLabel}>Payment ID</span>
+                      <span className={styles.detailValue}>{bookingResult.paymentId}</span>
+                    </div>
+                  </div>
+                )}
+                <button
+                  className={styles.retryBtn}
+                  onClick={() => {
+                    setBookingResult({ show: false, type: null, title: '', message: '', bookingId: null, paymentId: null });
+                  }}
+                >
+                  Try Again 🔄
+                </button>
+                <button
+                  className={styles.supportBtn}
+                  onClick={() => window.open('mailto:support@mmmiles.com', '_blank')}
+                >
+                  Contact Support
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -999,11 +1121,11 @@ export default function EnhancedCheckoutPage() {
           onClick={() => currentStep <= 2 || !completedSteps.has(1) ? null : handleBackToStep(2)}
           style={{ cursor: currentStep <= 2 || !completedSteps.has(1) ? 'default' : 'pointer' }}
         >
-          <div className={`${styles.stepCircle} ${completedSteps.has(2) ? styles.stepDone :
+          <div className={`${styles.stepCircle} ${(completedSteps.has(2) || (currentStep === 2 && agree)) ? styles.stepDone :
             currentStep === 2 ? styles.stepActive :
               styles.stepInactive
             }`}>
-            {completedSteps.has(2) ? '✔' : '2'}
+            {(completedSteps.has(2) || (currentStep === 2 && agree)) ? '✔' : '2'}
           </div>
           <div className={styles.stepLabel}>Review Journey</div>
         </div>
@@ -1217,11 +1339,36 @@ export default function EnhancedCheckoutPage() {
 
               <button
                 className={styles.payBtn}
-                disabled={!agree}
+                disabled={
+                  !agree ||
+                  !priceSummary.total ||
+                  !priceSummary.serverCalculated ||
+                  !orderDetails.orderId ||
+                  bookingCheckStatus.checking ||
+                  bookingCheckStatus.overlaps ||
+                  lockStatus.checking ||
+                  lockStatus.blocked
+                }
                 title={!agree ? "Please accept terms & conditions" : "Proceed to Payment"}
                 onClick={handleStep2Next}
               >
-                Payment →
+                {priceSummary.error ? (
+                  "Price Calculation Failed"
+                ) : !priceSummary.serverCalculated ? (
+                  "Calculating Price..."
+                ) : bookingCheckStatus.checking ? (
+                  "Checking Availability..."
+                ) : bookingCheckStatus.overlaps ? (
+                  "Time Conflict"
+                ) : lockStatus.checking ? (
+                  "Checking Lock Status..."
+                ) : lockStatus.blocked ? (
+                  "Currently Unavailable"
+                ) : lockStatus.canProceed ? (
+                  `Pay ₹${priceSummary.total} ✓`
+                ) : (
+                  `Pay ₹${priceSummary.total}`
+                )}
               </button>
             </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./dashboard.module.css";
 import Image from "next/image";
@@ -29,7 +29,7 @@ import {
  * - Keeps all existing styles and classes unchanged
  */
 
-export default function Dashboard() {
+function DashboardContent() {
   const searchParams = useSearchParams();
   const [active, setActive] = useState("announcement");
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -1250,5 +1250,13 @@ export default function Dashboard() {
 
       <main className={styles.main}>{renderContent()}</main>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }

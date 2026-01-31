@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import styles from "./dashboard.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,10 +30,19 @@ import {
  */
 
 export default function Dashboard() {
+  const searchParams = useSearchParams();
   const [active, setActive] = useState("announcement");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileImage, setProfileImage] = useState("/user.jpg");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // Handle tab query parameter on mount
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['announcement', 'profile', 'orders', 'host', 'support'].includes(tabParam)) {
+      setActive(tabParam);
+    }
+  }, [searchParams]);
 
   // Orders: modal
   const [orderModalOpen, setOrderModalOpen] = useState(false);

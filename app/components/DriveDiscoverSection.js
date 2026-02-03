@@ -11,7 +11,7 @@ const DriveDiscoverSection = () => {
     { src: "/mahabalipuram1.jpg", label: "MAHABALIPURAM" },
     { src: "/kodai1.jpg", label: "KODAIKANAL" },
     { src: "/kothagiri1.jpg", label: "KOTHAGIRI" },
-    { src: "/Ooty11.jpg", label: "OOTY" },
+    { src: "/ooty11.jpg", label: "OOTY" },
     { src: "/yercaud1.jpg", label: "YERCAUD" },
     { src: "/pondi.jpg", label: "PONDICHERY" },
   ];

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getUserFromAuthHeader } from '../../../../lib/auth.js';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -14,6 +15,15 @@ const supabase = createClient(
 
 export async function POST(request) {
   try {
+    // SECURITY: Verify authentication
+    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    if (!user) {
+      return NextResponse.json({ 
+        valid: false, 
+        message: 'Unauthorized' 
+      }, { status: 401 });
+    }
+
     const body = await request.json();
     const { vehicle_id } = body;
 

@@ -38,7 +38,7 @@
 # Installer logs
 **/pip-log.txt
 **/pip-delete-this-directory.txt
-.user_input_files
+.user-input-details
 # Unit test / coverage reports
 **/htmlcov/
 **/.tox/

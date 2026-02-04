@@ -9,6 +9,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY!
 );
 
+// Rate limiting configuration
+const MAX_OTP_REQUESTS_PER_HOUR = 5;
+
 function hashOTP(otp: string) {
   return crypto.createHash("sha256").update(otp).digest("hex");
 }
@@ -16,14 +19,36 @@ function hashOTP(otp: string) {
 function generateOTP() {
   const length = Number(process.env.OTP_LENGTH || 4);
   const min = Math.pow(10, length - 1);
-  const max = Math.pow(10, length) - 1;
-  return Math.floor(min + Math.random() * (max - min)).toString();
+  const max = Math.pow(10, length);
+  // SECURITY: Use cryptographically secure random number
+  return crypto.randomInt(min, max).toString();
 }
 
 export async function POST(req: Request) {
   try {
     const { phone } = await req.json();
     if (!phone) return NextResponse.json({ error: "Phone required" }, { status: 400 });
+
+    // Validate phone format (basic)
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+      return NextResponse.json({ error: "Invalid phone format" }, { status: 400 });
+    }
+
+    // SECURITY: Rate limiting - check recent OTP requests
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const { count, error: countError } = await supabase
+      .from("otp_events")
+      .select("*", { count: "exact", head: true })
+      .eq("phone", phone)
+      .gte("created_at", oneHourAgo);
+
+    if (!countError && count !== null && count >= MAX_OTP_REQUESTS_PER_HOUR) {
+      console.warn(`Rate limit exceeded for phone: ${phone.slice(-4)}`);
+      return NextResponse.json({
+        error: "Too many OTP requests. Please try again in an hour."
+      }, { status: 429 });
+    }
 
     const otp = generateOTP();
     const otpHash = hashOTP(otp);

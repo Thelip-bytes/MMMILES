@@ -51,32 +51,60 @@ export async function POST(request) {
 
     const booking = bookings[0];
 
-    // 2. Verify payment amount matches expected amount (Security check)
-    if (expected_amount) {
-      try {
-        const payment = await razorpay.payments.fetch(payment_id);
+    // 2. VERIFY PAYMENT INTEGRITY (Security Gold Standard)
+    // We fetch the payment AND the associated order from Razorpay to verify against
+    // the metadata (notes) we stored securely during the 'create-order' step.
+    try {
+      // Fetch payment details
+      const payment = await razorpay.payments.fetch(payment_id);
 
-        if (payment.status !== 'captured') {
-          return Response.json({ error: 'Payment not completed' }, { status: 400 });
-        }
-
-        const paidAmount = payment.amount / 100; // Convert from paise to rupees
-        const expectedAmount = parseFloat(expected_amount);
-
-        if (Math.abs(paidAmount - expectedAmount) > 0.01) { // Allow 1 paisa difference for rounding
-          console.error(`Payment verification failed: Paid ${paidAmount}, Expected ${expectedAmount}`);
-          return Response.json({
-            error: 'Payment amount mismatch',
-            paid_amount: paidAmount,
-            expected_amount: expectedAmount
-          }, { status: 400 });
-        }
-
-        console.log(`Payment verified successfully: ${paidAmount} INR`);
-      } catch (paymentError) {
-        console.error('Payment verification error:', paymentError);
-        return Response.json({ error: 'Failed to verify payment' }, { status: 400 });
+      if (payment.status !== 'captured' && payment.status !== 'authorized') {
+        return Response.json({ error: 'Payment not successful' }, { status: 400 });
       }
+
+      // Fetch the original order to get the tamper-proof metadata (notes)
+      const rzpOrder = await razorpay.orders.fetch(payment.order_id);
+      const notes = rzpOrder.notes || {};
+
+      const paidAmount = payment.amount / 100;
+      const serverCalculatedAmount = parseFloat(notes.calculated_total || 0);
+      const serverVehicleId = notes.vehicle_id;
+      const serverUserId = notes.user_id;
+
+      console.log(`Verifying Payment ${payment_id}:`, {
+        paidAmount,
+        expectedAmount: serverCalculatedAmount,
+        vehicleId: vehicle_id,
+        serverVehicleId,
+        userId: user.sub,
+        serverUserId
+      });
+
+      // 1. Verify Amount
+      if (Math.abs(paidAmount - serverCalculatedAmount) > 0.01) {
+        console.error(`❌ Security Violation: Amount Mismatch. Paid: ${paidAmount}, Expected: ${serverCalculatedAmount}`);
+        return Response.json({ error: 'Security violation: Payment amount mismatch' }, { status: 400 });
+      }
+
+      // 2. Verify Vehicle ID
+      if (serverVehicleId && serverVehicleId.toString() !== vehicle_id.toString()) {
+        console.error(`❌ Security Violation: Vehicle Mismatch. Provided: ${vehicle_id}, Expected: ${serverVehicleId}`);
+        return Response.json({ error: 'Security violation: Vehicle ID mismatch' }, { status: 400 });
+      }
+
+      // 3. Verify User ID
+      if (serverUserId && serverUserId.toString() !== user.sub.toString()) {
+        console.error(`❌ Security Violation: User Mismatch. Provided: ${user.sub}, Expected: ${serverUserId}`);
+        return Response.json({ error: 'Security violation: User mismatch' }, { status: 400 });
+      }
+
+      console.log(`✅ Payment verified successfully against server-side order metadata.`);
+    } catch (paymentError) {
+      console.error('Razorpay verification error:', paymentError);
+      return Response.json({ 
+        error: 'Failed to verify payment with Razorpay',
+        details: paymentError.message 
+      }, { status: 400 });
     }
 
     // 3. Get vehicle details to get buffer_hours

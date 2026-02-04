@@ -24,136 +24,102 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Check if coupons table exists, if not return mock data
-    try {
-      const { data: coupon, error } = await supabase
-        .from('coupons')
-        .select('*')
-        .eq('code', code.toUpperCase())
-        .eq('is_active', true)
-        .single();
+    // Query active_coupons table
+    const { data: coupon, error } = await supabase
+      .from('active_coupons')
+      .select('*')
+      .eq('code', code.toUpperCase())
+      .single();
 
-      if (error || !coupon) {
-        // Return mock coupon data for demo
-        const mockCoupons = {
-          'WELCOME10': { discount_type: 'fixed', discount_value: 100 },
-          'SAVE20': { discount_type: 'fixed', discount_value: 200 },
-          'FIRST15': { discount_type: 'percentage', discount_value: 15, max_discount: 300 }
-        };
-
-        const mockCoupon = mockCoupons[code.toUpperCase()];
-        if (mockCoupon) {
-          let discount = mockCoupon.discount_value;
-          
-          if (mockCoupon.discount_type === 'percentage') {
-            discount = Math.min(
-              (subtotal * mockCoupon.discount_value / 100),
-              mockCoupon.max_discount || Infinity
-            );
-          }
-          
-          return NextResponse.json({ 
-            valid: true, 
-            message: 'Coupon applied successfully',
-            discount: discount,
-            coupon: {
-              code: code.toUpperCase(),
-              discount_type: mockCoupon.discount_type,
-              discount_value: mockCoupon.discount_value
-            }
-          });
-        }
-        
-        return NextResponse.json({ 
-          valid: false, 
-          message: 'Invalid coupon code' 
-        }, { status: 400 });
-      }
-
-      // Validate coupon conditions
-      const now = new Date();
-      const validFrom = new Date(coupon.valid_from);
-      const validUntil = new Date(coupon.valid_until);
-
-      if (now < validFrom || now > validUntil) {
-        return NextResponse.json({ 
-          valid: false, 
-          message: 'Coupon has expired or not yet valid' 
-        }, { status: 400 });
-      }
-
-      if (subtotal < coupon.min_amount) {
-        return NextResponse.json({ 
-          valid: false, 
-          message: `Minimum order amount is ₹${coupon.min_amount}` 
-        }, { status: 400 });
-      }
-
-      if (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) {
-        return NextResponse.json({ 
-          valid: false, 
-          message: 'Coupon usage limit exceeded' 
-        }, { status: 400 });
-      }
-
-      // Calculate discount
-      let discount = coupon.discount_value;
-      if (coupon.discount_type === 'percentage') {
-        discount = Math.min(
-          (subtotal * coupon.discount_value / 100),
-          coupon.max_discount || Infinity
-        );
-      }
-
-      return NextResponse.json({ 
-        valid: true, 
-        message: 'Coupon applied successfully',
-        discount: discount,
-        coupon: coupon
-      });
-
-    } catch (dbError) {
-      // Fallback to mock data if coupons table doesn't exist
-      const mockCoupons = {
-        'WELCOME10': { discount_type: 'fixed', discount_value: 100 },
-        'SAVE20': { discount_type: 'fixed', discount_value: 200 },
-        'FIRST15': { discount_type: 'percentage', discount_value: 15, max_discount: 300 }
-      };
-
-      const mockCoupon = mockCoupons[code.toUpperCase()];
-      if (mockCoupon) {
-        let discount = mockCoupon.discount_value;
-        
-        if (mockCoupon.discount_type === 'percentage') {
-          discount = Math.min(
-            (subtotal * mockCoupon.discount_value / 100),
-            mockCoupon.max_discount || Infinity
-          );
-        }
-        
-        return NextResponse.json({ 
-          valid: true, 
-          message: 'Coupon applied successfully',
-          discount: discount,
-          coupon: {
-            code: code.toUpperCase(),
-            discount_type: mockCoupon.discount_type,
-            discount_value: mockCoupon.discount_value
-          }
-        });
-      }
-      
+    if (error || !coupon) {
       return NextResponse.json({ 
         valid: false, 
         message: 'Invalid coupon code' 
       }, { status: 400 });
     }
 
+    // 1. Check if status is Active (or not Expired) based on user data
+    // The user data shows "status": "Expired" for invalid ones. We assume "Active" for valid ones.
+    if (coupon.status === 'Expired') {
+      return NextResponse.json({ 
+        valid: false, 
+        message: 'This coupon has expired' 
+      }, { status: 400 });
+    }
+
+    // 2. Date validation
+    const now = new Date();
+    const validFrom = coupon.valid_from ? new Date(coupon.valid_from) : null;
+    const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
+
+    if (validFrom && now < validFrom) {
+       return NextResponse.json({ 
+        valid: false, 
+        message: 'Coupon is not yet active' 
+      }, { status: 400 });
+    }
+
+    if (validUntil && now > validUntil) {
+      return NextResponse.json({ 
+        valid: false, 
+        message: 'Coupon has expired' 
+      }, { status: 400 });
+    }
+
+    // 3. Minimum amount validation
+    const minAmount = parseFloat(coupon.min_amount || 0);
+    if (subtotal < minAmount) {
+      return NextResponse.json({ 
+        valid: false, 
+        message: `Minimum order amount of ₹${minAmount} required to use this coupon` 
+      }, { status: 400 });
+    }
+
+    // 4. Usage limit validation
+    if (coupon.usage_limit !== null && coupon.used_count >= coupon.usage_limit) {
+      return NextResponse.json({ 
+        valid: false, 
+        message: 'Coupon usage limit exceeded' 
+      }, { status: 400 });
+    }
+
+    // 5. Calculate discount
+    let discount = 0;
+    const discountValue = parseFloat(coupon.discount_value || 0);
+
+    if (coupon.discount_type === 'percentage') {
+      discount = (subtotal * discountValue) / 100;
+      // Apply max discount cap if it exists
+      if (coupon.max_discount !== null) {
+        discount = Math.min(discount, parseFloat(coupon.max_discount));
+      }
+    } else {
+      // Fixed discount
+      discount = discountValue;
+    }
+
+    // Ensure discount doesn't exceed subtotal
+    discount = Math.min(discount, subtotal);
+    // Round to 2 decimal places
+    discount = Math.round(discount * 100) / 100;
+
+    return NextResponse.json({ 
+      valid: true, 
+      message: 'Coupon applied successfully',
+      discount: discount,
+      coupon: {
+        code: coupon.code,
+        discount_type: coupon.discount_type,
+        discount_value: discountValue,
+        description: coupon.description
+      }
+    });
+
   } catch (error) {
     console.error('Coupon validation error:', error);
     return NextResponse.json({ 
       valid: false, 
-      message: 'Internal server error' 
+      message: 'Internal server error during validation' 
     }, { status: 500 });
   }
 }

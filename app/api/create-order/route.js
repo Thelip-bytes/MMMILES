@@ -19,19 +19,13 @@ export async function POST(request) {
             return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
         }
 
-        const { carId, pickupTime, returnTime, discount = 0 } = await request.json();
+        const { carId, pickupTime, returnTime, couponCode } = await request.json();
 
         // Validate required parameters
         if (!carId || !pickupTime || !returnTime) {
             return Response.json({
                 error: 'carId, pickupTime, and returnTime are required'
             }, { status: 400 });
-        }
-
-        // Validate discount parameter
-        const discountAmount = parseFloat(discount) || 0;
-        if (discountAmount < 0 || discountAmount > 50000) { // Max 50k discount
-            return Response.json({ error: 'Invalid discount amount' }, { status: 400 });
         }
 
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -78,20 +72,89 @@ export async function POST(request) {
             return Response.json({ error: 'Invalid base rate configuration' }, { status: 400 });
         }
 
-        // 4. Calculate pricing using the centralized pricing engine
+        // --- Server-Side Pricing Calculation for Pre-Discount Total needed for validation ---
+        // We calculate an initial price with 0 discount to check constraints
+        const initialPricing = calculatePricing({
+            baseDailyRate,
+            pickupTime: startDate,
+            returnTime: endDate,
+            discount: 0,
+        });
+        const subtotal = initialPricing.costs.subtotalBeforeGST; // Used for coupon min_amount validation
+
+        // 4. Validate Coupon and Calculate Discount (Server-Side)
+        let validDiscount = 0;
+        let appliedCouponCode = null;
+
+        if (couponCode) {
+            try {
+                const couponResponse = await fetch(
+                    `${supabaseUrl}/rest/v1/active_coupons?code=eq.${couponCode.toUpperCase()}&select=*`,
+                    {
+                        headers: {
+                            'apikey': supabaseKey,
+                            'Authorization': request.headers.get('authorization'),
+                        },
+                    }
+                );
+
+                if (couponResponse.ok) {
+                    const coupons = await couponResponse.json();
+                    if (coupons.length > 0) {
+                        const coupon = coupons[0];
+                        
+                        // Validate Coupon Conditions
+                        const now = new Date();
+                        const validFrom = coupon.valid_from ? new Date(coupon.valid_from) : null;
+                        const validUntil = coupon.valid_until ? new Date(coupon.valid_until) : null;
+                        const minAmount = parseFloat(coupon.min_amount || 0);
+
+                        let isValid = true;
+                        if (coupon.status === 'Expired') isValid = false;
+                        if (validFrom && now < validFrom) isValid = false;
+                        if (validUntil && now > validUntil) isValid = false;
+                        if (subtotal < minAmount) isValid = false;
+                        if (coupon.usage_limit !== null && coupon.used_count >= coupon.usage_limit) isValid = false;
+
+                        if (isValid) {
+                            appliedCouponCode = coupon.code;
+                            const discountValue = parseFloat(coupon.discount_value || 0);
+                            
+                            if (coupon.discount_type === 'percentage') {
+                                validDiscount = (subtotal * discountValue) / 100;
+                                if (coupon.max_discount !== null) {
+                                    validDiscount = Math.min(validDiscount, parseFloat(coupon.max_discount));
+                                }
+                            } else {
+                                validDiscount = discountValue;
+                            }
+                            
+                            // Cap discount at subtotal
+                            validDiscount = Math.min(validDiscount, subtotal);
+                            validDiscount = Math.round(validDiscount * 100) / 100;
+                        }
+                    }
+                }
+            } catch (couponError) {
+                console.error("Coupon validation error during order creation:", couponError);
+                // Fail safe: validDiscount remains 0
+            }
+        }
+
+        // 5. Final Calculation with Validated Discount
         const pricing = calculatePricing({
             baseDailyRate,
             pickupTime: startDate,
             returnTime: endDate,
-            discount: discountAmount,
+            discount: validDiscount,
         });
 
-        // 5. Validate calculated prices (sanity checks)
+        // 6. Validate calculated prices (sanity checks)
         if (pricing.total <= 0 || pricing.total > 100000) { // Max 1 lakh INR
             return Response.json({ error: 'Invalid calculated price' }, { status: 400 });
         }
 
-        // 6. Create Razorpay order with server-calculated amount
+        // 7. Create Razorpay order with server-calculated amount
         const orderOptions = {
             amount: Math.round(pricing.total * 100), // Razorpay expects amount in paise
             currency: 'INR',
@@ -103,14 +166,15 @@ export async function POST(request) {
                 hours: pricing.hours.toString(),
                 pickup_time: pickupTime,
                 return_time: returnTime,
-                discount: pricing.discount.toString(),
+                discount: validDiscount.toString(),
+                coupon_code: appliedCouponCode || "",
                 calculated_total: pricing.total.toString()
             }
         };
 
         const razorpayOrder = await razorpay.orders.create(orderOptions);
 
-        // 7. Return order details to client
+        // 8. Return order details to client
         return Response.json({
             success: true,
             orderId: razorpayOrder.id,
@@ -122,7 +186,7 @@ export async function POST(request) {
                 tier: pricing.tier,
                 rates: pricing.rates,
                 costs: pricing.costs,
-                discount: pricing.discount,
+                discount: validDiscount,
                 total: pricing.total,
             },
             vehicle: {

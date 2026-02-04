@@ -358,37 +358,46 @@ export default function EnhancedCheckoutPage() {
             carId: car.id,
             pickupTime: pickupTimeISO,
             returnTime: returnTimeISO,
-            discount: discount
+            couponCode: couponInfo?.code
           })
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          console.error('❌ Server price calculation failed:', errorData);
-          throw new Error(errorData.error || 'Failed to calculate price. Please check your booking dates.');
+          const rawText = await response.text();
+          let errorData = {};
+          try {
+            errorData = JSON.parse(rawText);
+          } catch (parseError) {
+            console.error('Failed to parse error response as JSON:', rawText);
+            errorData = { error: `Server error (${response.status}): ${rawText || 'Unknown error'}` };
+          }
+          console.error('❌ Server price calculation failed:', { status: response.status, errorData });
+          throw new Error(errorData.error || `Failed to calculate price (${response.status}).`);
         }
 
         const data = await response.json();
 
         if (data.success) {
-          // Apply discount if any
-          const totalAfterDiscount = Math.max(0, data.pricing.total - discount);
-
           setPriceSummary({
             rentalCost: data.pricing.costs.rentalCost,
             insuranceCost: data.pricing.costs.insuranceCost,
             basePrice: data.pricing.costs.subtotalBeforeGST,
             gst: data.pricing.costs.gst,
             convFee: data.pricing.costs.convFee,
-            total: totalAfterDiscount,
+            total: data.pricing.total,
             hours: data.pricing.hours,
             error: null,
             serverCalculated: true,
           });
 
+          // Update local discount state to match server for display consistency
+          if (data.pricing.discount !== undefined) {
+            setDiscount(data.pricing.discount);
+          }
+
           setOrderDetails({
             orderId: data.orderId,
-            amount: totalAfterDiscount, // Use discounted amount
+            amount: data.pricing.total,
             key: data.key,
           });
         } else {
@@ -411,7 +420,7 @@ export default function EnhancedCheckoutPage() {
     }
 
     calculatePrice();
-  }, [car, pickup, returnTime, discount]);
+  }, [car, pickup, returnTime, couponInfo]);
 
   /* -------------------------------------------------------------------------- */
   /*                        SAVE CUSTOMER PROFILE                                */
@@ -447,6 +456,56 @@ export default function EnhancedCheckoutPage() {
     }
 
     setEditing(false);
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                            COUPON HANDLING                                  */
+  /* -------------------------------------------------------------------------- */
+  async function handleApplyCoupon() {
+    if (!couponCode.trim()) {
+      alert("Please enter a coupon code");
+      return;
+    }
+
+    setApplyingCoupon(true);
+    try {
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          code: couponCode,
+          subtotal: priceSummary.basePrice // Use basePrice usually, or total depending on logic
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        setDiscount(data.discount);
+        setCouponInfo(data.coupon);
+        alert(`Coupon applied! You saved ₹${data.discount}`);
+      } else {
+        setDiscount(0);
+        setCouponInfo(null);
+        alert(data.message || "Invalid coupon code");
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      alert("Failed to apply coupon");
+    } finally {
+      setApplyingCoupon(false);
+    }
+  }
+
+  function handleRemoveCoupon() {
+    setDiscount(0);
+    setCouponInfo(null);
+    setCouponCode("");
+    alert("Coupon removed");
   }
 
   /* -------------------------------------------------------------------------- */
@@ -1318,19 +1377,46 @@ export default function EnhancedCheckoutPage() {
                 <div className={styles.rowValue}>₹{priceSummary.gst}</div>
               </div>
 
-              {discount > 0 && (
+              {/* {discount > 0 && (
                 <div className={styles.summaryRow}>
                   <div className={styles.rowLabel}>Discount Applied:</div>
                   <div className={styles.rowValue}>-₹{discount}</div>
                 </div>
-              )}
+              )} */}
 
               <div className={styles.divider} />
 
-              <div className={styles.totalRow}>
+              {/* <div className={styles.couponSection}>
                 <div className={styles.totalLabel}>Apply coupons:</div>
-                <div className={styles.totalValue}>enter code</div>
-              </div>
+                {couponInfo ? (
+                  <div className={styles.appliedCoupon}>
+                    <span className={styles.couponCode}>{couponInfo.code}</span>
+                    <button
+                      className={styles.removeCouponBtn}
+                      onClick={handleRemoveCoupon}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div className={styles.couponInputGroup}>
+                    <input
+                      type="text"
+                      className={styles.couponInput}
+                      placeholder="Enter code"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    />
+                    <button
+                      className={styles.applyCouponBtn}
+                      onClick={handleApplyCoupon}
+                      disabled={applyingCoupon || !couponCode}
+                    >
+                      {applyingCoupon ? '...' : 'Apply'}
+                    </button>
+                  </div>
+                )}
+              </div> */}
 
               <div className={styles.totalBar}>
                 <div className={styles.totalText}>Total:</div>

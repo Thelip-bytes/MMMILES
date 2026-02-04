@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getUserFromAuthHeader } from '../../../../lib/auth.js';
 
 // Supabase storage base URL for car images
 const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/object/public/car-images/";
@@ -12,19 +13,33 @@ const getFullImageUrl = (imageUrl) => {
 
 export async function GET(request) {
   try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-
-    if (!userId) {
-      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    // SECURITY: Verify authentication
+    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Use authenticated user's ID, NOT from query params (prevents IDOR)
+    const userId = user.sub;
+
+    // Get the user's token for RLS-compatible queries
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.split(' ')[1];
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      }
+    );
+
     // Fetch bookings with vehicle details and host details
+    // Double security: RLS + explicit user_id filter
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`

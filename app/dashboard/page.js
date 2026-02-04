@@ -783,10 +783,17 @@ function DashboardContent() {
         if (!userId) return;
 
         try {
-          const response = await fetch(`/api/dashboard/bookings?userId=${userId}`);
+          const token = localStorage.getItem('auth_token');
+          const response = await fetch(`/api/dashboard/bookings`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
           if (response.ok) {
             const data = await response.json();
             setOrders(data);
+          } else {
+            console.error('Failed to fetch orders:', response.status);
           }
         } catch (error) {
           console.error('Error fetching orders:', error);

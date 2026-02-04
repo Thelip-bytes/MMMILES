@@ -79,7 +79,12 @@ export default function CarPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-
+  const carDetails = {
+    insurancePlans: [
+      { name: "MAX", price: 629, description: "Only pay Rs.2000 in case of any accidental damage." },
+      
+    ]
+  }
 
   const handleBookNow = () => {
     const token = localStorage.getItem("auth_token");
@@ -154,23 +159,39 @@ export default function CarPage() {
           </p>
 
           <p className={styles.description}>{car.description || "TODO: Add car description."}</p>
-          {/*<div className={styles.insuranceSection}>
-            <p className={styles.travelConfident}>Travel with confidence</p>
-            <div className={styles.plansContainer}>
-              {carDetails.insurancePlans.map(plan => (
-                <div
-                  key={plan.name}
-                  className={`${styles.planBox} ${activePlan === plan.name ? styles.activePlan : ''}`}
-                  onClick={() => setActivePlan(plan.name)}
-                >
-                  <span className={styles.planName}>{plan.name}</span>
-                  <p className={styles.planPrice}>Rs.{plan.price}</p>
-                  <p className={styles.planDesc}>{plan.description}</p>
-                </div>
-              ))}
-            </div>
-            <Link href="#" className={styles.learnMore}>Learn More &gt;</Link>
-          </div>*/}
+          
+          
+          {/* --- Single Insurance Banner --- */}
+<div className={styles.singleinsurance}>
+  <div className={styles.singleinsuranceLeft}>
+    <p className={styles.singleinsuranceTitle}>
+      100% Coverage from MMmiles
+    </p>
+
+    <p className={styles.singleinsurancePrice}>
+      At just ₹599
+    </p>
+
+    <div className={styles.singleinsuranceDivider}></div>
+
+    <p className={styles.singleinsuranceDesc}>
+      Enjoy the ride. We’ll handle the safety. Drive with complete peace of mind
+      on every ride with us.
+    </p>
+  </div>
+
+  <div className={styles.singleinsuranceRight}>
+    <img
+      src="/shield-check.png"
+      alt="Insurance Shield"
+      className={styles.singleinsuranceShield}
+    />
+  </div>
+
+  <span className={styles.singleinsuranceTc}>T&C*</span>
+</div>
+
+
 
 
           <div className={styles.actionButtons}>

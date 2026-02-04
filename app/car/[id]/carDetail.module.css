@@ -35,7 +35,7 @@
 .mainImage {
   position: relative;
   width: 100%;
-  height: 330px;
+  height: 350px;
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #ddd;
@@ -51,7 +51,7 @@
   position: relative;
   max-width: 126px;
   width: 100%;
-  height: 90px;
+  height: 100px;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #ccc;
@@ -155,13 +155,14 @@
   font-size: 2.3rem;
   font-weight: 700;
   color: #333;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .priceTag {
   color: #555;
   font-weight: 600;
-  margin-bottom: 10px;
+  line-height: 1.35;
+  margin-bottom: 5px;
 }
 
 .startingAt {
@@ -183,8 +184,8 @@
 .description {
   color: #666;
   line-height: 1.5;
-  margin-top: 12px;
-  margin-bottom: 20px;
+  margin-top: 3px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 480px){
@@ -234,16 +235,24 @@
 
 
 
+
+
+
+
+
+
+
+
 /* --- Insurance Plans --- */
 .insuranceSection {
-  margin-top: 16px;
+  margin-top: 6px;
 }
 
 .travelConfident {
   font-size: 1.1rem;
   font-weight: 700;
   color: #333;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .plansContainer {
@@ -256,7 +265,7 @@
 .planBox {
   flex: 1;
   min-width: 150px;
-  border: 2px solid #ddd;
+  border: 2px solid #b9b6b6;
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
@@ -265,13 +274,11 @@
 }
 
 .planBox:hover {
-  border-color: #bf9860;
-  box-shadow: 0 0 12px rgba(191, 152, 96, 0.5);
+  
 }
 
 .activePlan {
-  border-color: #bf9860;
-  box-shadow: 0 0 14px rgba(191, 152, 96, 0.7);
+  display: none;
 }
 
 .planName {
@@ -300,6 +307,184 @@
   text-decoration: none;
   font-size: 0.95rem;
 }
+
+@media (max-width: 480px) {
+    
+    .insuranceSection {
+      margin-top: 6px !important;
+    }
+    .planBox {
+      flex: 1;
+      min-width: 150px;
+      border: 2px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      background: #fff;
+    }
+    .planName {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .planPrice {
+      font-size: 16px;
+      font-weight: 600;
+      color: #000;
+      margin: 4px 0;
+    }
+
+    .planDesc {
+      font-size: 12px;
+      color: #777;
+      line-height: 1.4;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Single Insurance Banner --- */
+.singleinsurance {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e6e3dc;
+  border-radius: 24px;
+  padding: 18px 26px;
+  margin-top: 14px;
+}
+
+/* Left content */
+.singleinsuranceLeft {
+  max-width: 60%;
+}
+
+.singleinsuranceTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #6f6f6f;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.singleinsurancePrice {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: poppins;
+  -webkit-text-fill-color: #0000;
+    background: linear-gradient(90deg, #D8B480 0, #BF9860);
+    -webkit-background-clip: text;
+  margin-bottom: 8px;
+}
+
+/* Divider */
+.singleinsuranceDivider {
+  width: 100%;
+  height: 1.3px;
+  background: #9c7a1f;
+  margin-bottom: 10px;
+}
+
+/* Description */
+.singleinsuranceDesc {
+  font-size: 16px;
+  line-height: 1.3;
+  color: #7b7b7b;
+  font-family: poppins;
+  font-weight: 500;
+  max-width: 520px;
+}
+
+/* Right icon */
+.singleinsuranceRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.singleinsuranceShield {
+  width: 140px;
+  height: 146px;
+}
+
+/* T&C */
+.singleinsuranceTc {
+  position: absolute;
+  bottom: 18px;
+  right: 24px;
+  font-size: 8px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+  .singleinsurance {
+    flex-direction: column;
+    padding: 28px 24px;
+  }
+
+  .singleinsuranceLeft {
+    max-width: 100%;
+  }
+
+  .singleinsuranceTitle {
+    font-size: 24px;
+  }
+
+  .singleinsurancePrice {
+    font-size: 30px;
+  }
+
+  .singleinsuranceDesc {
+    font-size: 16px;
+  }
+
+  .singleinsuranceShield {
+    width: 130px;
+    margin-top: 20px;
+  }
+
+  .singleinsuranceTc {
+    bottom: 10px;
+    right: 16px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

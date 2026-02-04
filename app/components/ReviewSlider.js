@@ -5,63 +5,63 @@ import styles from "./ReviewSlider.module.css";
 const reviews = [
   {
     text: "The booking was super easy, got a clean, comfortable car for our girls’ weekend. Having GPS and Bluetooth made the trip stress-free and fun.",
-    name: "Priya S.",
+    name: "Fazil",
     title: "Friends Trip (4 members)",
-    img: "/profile1.jpg",
+    img: "/Fazil.jpeg",
   },
   {
     text: "MM Miles made our family road trip smooth from start to finish. The spacious SUV fit all our luggage, and the customer support was 24/7.",
-    name: "Rohan K.",
+    name: "Vengat",
     title: "Family (5 members)",
-    img: "/profile2.jpg",
+    img: "/vengat.jpeg",
   },
   {
     text: "Our car broke down suddenly, but I got a replacement vehicle within an hour. Fast response and professional team — truly a lifesaver.",
-    name: "Sneha L.",
+    name: "Vishal",
     title: "Emergency Booking",
-    img: "/profile3.jpg",
+    img: "/vishal.jpeg",
   },
   {
     text: "Even during the holiday rush, MM Miles had cars ready on short notice. We appreciated how easy it was to pick up and drop off without delays.",
-    name: "Arjun P.",
+    name: "Dayan Khan",
     title: "Frequent Traveler",
-    img: "/profile4.jpg",
+    img: "/dayan khan.jpeg",
   },
    {
     text: "I often rent for work trips, and MM Miles is the most reliable. The process is seamless and the cars are always in excellent condition.",
-    name: "Kavita D.",
+    name: "Ganesh",
     title: "Corporate Client",
-    img: "/profile1.jpg",
+    img: "/ganesh.jpeg",
   },
    {
     text: "I got stuck in the rain with no transport, and MM Miles helped me to get a car. Smooth pickup and great service even in a bad weather.",
-    name: "Neha V.",
+    name: "Dinesh",
     title: "Daily Commuter",
-    img: "/profile2.jpg",
+    img: "/dinesh.jpeg",
   },
   {
     text: "Needed a car to pick up family from the airport. Booking took just 2 minutes, and the car was ready right on time. Excellent coordination!",
-    name: "Harish T.",
+    name: "Harisha",
     title: "Local Resident",
-    img: "/profile3.jpg",
-  },
-  {
-    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a good manner the entire way, and there were no hidden charges.",
-    name: "Deepa S.",
-    title: "Road Trip Traveler",
-    img: "/profile4.jpg",
-  },
-  {
-    text: "Our company car went for servicing, and MM Miles provided an immediate replacement with flexible plans and professional support.",
-    name: "Rajesh K.",
-    title: "Fleet Manager",
     img: "/profile1.jpg",
   },
   {
-    text: "I Booked just an day before my trip and I still got a reliable vehicle. I'm super impressed with MM miles a quick turn around and its response.",
-    name: "Ananya D.",
-    title: "Solo Traveler",
+    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a good manner the entire way, and there were no hidden charges.",
+    name: "Tushara",
+    title: "Road Trip Traveler",
     img: "/profile2.jpg",
+  },
+  {
+    text: "Our company car went for servicing, and MM Miles provided an immediate replacement with flexible plans and professional support.",
+    name: "Roshan",
+    title: "Fleet Manager",
+    img: "/profile3.jpg",
+  },
+  {
+    text: "I Booked just an day before my trip and I still got a reliable vehicle. I'm super impressed with MM miles a quick turn around and its response.",
+    name: "Vinod",
+    title: "Solo Traveler",
+    img: "/profile4.jpg",
   },
 ];
 
@@ -99,4 +99,3 @@ export default function ReviewSlider() {
     </div>
   );
 }
-

@@ -1,0 +1,193 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap");
+
+/* ===== HERO WRAPPER ===== */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  padding-top: 70px;
+  background: #000;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+/* ===== TOP TEXT ===== */
+.coming {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+
+.city {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 76px;
+  font-weight: 600;
+  color: linear-gradient(200 deg, #b9934b, #ead19a);
+}
+
+/* ===== CAR (PIXEL-LOCKED) ===== */
+.car-lock {
+  position: relative;          /* 🔓 unlocked */
+  width: 1100px;                /* controlled size */
+  height: 600px;
+  top: -10%;
+  margin-left: -70px;           /* visual offset instead of absolute */
+}
+
+.car-img {
+  object-fit: contain;
+}
+
+/* Headlight glow */
+.headlight {
+  position: absolute;
+  right: 120px;
+  top: 100px;
+
+  width: 50px;
+  height: 2px;
+
+  background: radial-gradient(
+    ellipse at left,
+    rgba(0, 255, 255, 0.7),
+    transparent 70%
+  );
+
+  transform: translateY(-50%);
+  filter: blur(10px);
+}
+
+/* ===== RIGHT CONTENT ===== */
+.right {
+  position: absolute;
+
+  /* Exact placement from screenshot */
+  right: 40px;
+  top: 399px;
+  max-width: 600px;
+}
+
+.right h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 124.8%;
+  margin-bottom: 15px;
+}
+
+.sub {
+  font-size: 19px;
+  font-weight: 400;
+  max-width: 900px;
+  opacity: 0.85;
+  margin-bottom: 10px;
+}
+
+/* ===== CTA BUTTON ===== */
+.cta {
+  background: linear-gradient(135deg, #b9934b, #ead19a);
+  color: #000;
+
+  border: none;
+  padding: 16px 42px;
+  border-radius: 16px;
+
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* 🚫 No media queries — desktop locked */
+
+
+
+/* ================= MOBILE POSTER LAYOUT ================= */
+@media (max-width: 768px) {
+
+  .hero {
+    padding-top: 48px;
+    height: auto;
+    min-height: 100vh;
+    text-align: center;
+  }
+
+  /* Top text */
+  .coming {
+    font-size: 24px;
+    margin-bottom: 8px;
+    font-family: poppins;
+  }
+
+  .city {
+    font-size: 47px;
+    margin-bottom: 32px;
+  }
+
+  /* Car centered like poster */
+  .car-lock {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 260px;
+
+    margin: 0 auto 36px;
+    top: 0;
+    left: 0;
+  }
+
+  .headlight {
+    right: -10px;
+    top: 50%;
+    width: 90px;
+    height: 28px;
+  }
+
+  /* Text block moves below car */
+  .right {
+    position: relative;
+    top: 0;
+    right: 0;
+
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .right h2 {
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    text-align: left;
+  }
+
+  .sub {
+    font-size: 15px;
+    margin-bottom: 28px;
+    text-align: left;
+  }
+
+/* CTA button – LEFT aligned on mobile */
+.cta {
+  padding: 16px 46px;
+  font-size: 13px;
+  border-radius: 22px;
+  display: inline-block;   /* important */
+  margin-left: 0;          /* force left */
+  margin-right: auto;      /* prevents centering */
+}
+
+.right {
+  text-align: left;
+}
+
+.cta {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+
+
+}

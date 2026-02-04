@@ -874,61 +874,87 @@ function DashboardContent() {
           </div>
         )}
 
-        {/* Orders List */}
+        {/* Orders List - Premium Cards */}
         <div className={styles.orderList}>
-          {filtered.map((o) => (
-            <div key={o.id} className={styles.orderRow}>
+          {filtered.map((o) => {
+            // Format dates for display
+            const formatDateShort = (dateStr) => {
+              if (!dateStr) return 'N/A';
+              const d = new Date(dateStr);
+              return d.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            };
 
-              {/* LEFT : IMAGE */}
-              <div className={styles.orderImageWrap}>
-                <Image
-                  src={o.img}
-                  alt={o.title}
-                  width={110}
-                  height={110}
-                  className={styles.orderImage}
-                />
-              </div>
+            const startDate = formatDateShort(o.startTime);
+            const endDate = formatDateShort(o.endTime);
 
-              {/* CENTER : CONTENT */}
-              <div className={styles.orderContent}>
-                <h3 className={styles.orderTitle}>{o.title}</h3>
-
-                <p className={styles.orderDesc}>
-                  Booking Code: {o.bookingCode} • {o.hours} Hours • {o.plan} Plan
-                </p>
-
-                <div className={styles.orderMeta}>
-                  <span className={styles.skipmobile}>Seats: {o.seats}</span>
-                  <span>Model: {o.modelYear}</span>
-                  <span>Duration: {o.hours}h</span>
-                </div>
-              </div>
-
-              {/* RIGHT : STATUS + ACTIONS */}
-              <div className={styles.orderRight}>
-                <span
-                  className={`${styles.orderStatus1} ${
-                    o.status === "completed"
-                      ? styles.statusCompleted1
-                      : styles.statusUpcoming1
-                  }`}
-                >
+            return (
+              <div key={o.id} className={styles.orderCard}>
+                {/* Status Badge - Top Right */}
+                <span className={`${styles.orderStatusBadge} ${
+                  o.status === "completed" ? styles.statusCompleted : styles.statusUpcoming
+                }`}>
                   {o.status === "completed" ? "Completed" : "Upcoming"}
                 </span>
 
-                <div className={styles.orderActions}>
-                  <button 
-                    className={styles.actionLink}
-                    onClick={() => openDetailsModal(o)}
-                  >
-                    View Details
-                  </button>
+                {/* Top Section */}
+                <div className={styles.orderCardTop}>
+                  {/* Car Image */}
+                  <div className={styles.orderImageWrap}>
+                    <Image
+                      src={o.img}
+                      alt={o.title}
+                      width={180}
+                      height={101}
+                      className={styles.orderImage}
+                    />
+                  </div>
+
+                  {/* Car Info */}
+                  <div className={styles.orderCarInfo}>
+                    <h3 className={styles.orderTitle}>{o.title}</h3>
+                    <p className={styles.orderDesc}>
+                      Booking Code: {o.bookingCode} • {o.seats} Seats • {o.modelYear} Model
+                    </p>
+                    
+                    {/* Price Badge */}
+                    <div className={styles.orderPriceBadge}>
+                      <span className={styles.orderPriceText}>TOTAL : {o.price}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Divider Line */}
+                <hr className={styles.orderDivider} />
+
+                {/* Bottom Section */}
+                <div className={styles.orderCardBottom}>
+                  {/* Left: User Info */}
+                  <div className={styles.orderMetaLeft}>
+                    <span className={styles.orderMetaLabel}>Host name : {o.userName || 'Guest'}</span>
+                    <span className={styles.orderMetaDuration}>During : {startDate} to {endDate}</span>
+                    <span className={styles.orderMetaLabel}>No. of Hours : {o.hours}</span>
+                  </div>
+
+                  {/* Right: Host Info */}
+                  <div className={styles.orderMetaRight}>
+                    <p className={styles.orderHostInfo}>
+                      Car address: {o.hostAddress || 'Contact host for pickup location'}
+                    </p>
+                    
+                    {/* View Details Button */}
+                    <div className={styles.orderActions}>
+                      <button 
+                        className={styles.actionLink}
+                        onClick={() => openDetailsModal(o)}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Booking Details Popup Modal */}
@@ -997,6 +1023,15 @@ function DashboardContent() {
                     <div className={styles.detailContent}>
                       <span className={styles.detailLabel}>Registration Number</span>
                       <span className={styles.detailValue}>{selectedOrder.registrationNumber}</span>
+                    </div>
+                  </div>
+
+                  {/* Car Address */}
+                  <div className={styles.bookingDetailItem}>
+                    <div className={styles.detailIcon}>📍</div>
+                    <div className={styles.detailContent}>
+                      <span className={styles.detailLabel}>Car Address</span>
+                      <span className={styles.detailValue}>{selectedOrder.hostAddress}</span>
                     </div>
                   </div>
 

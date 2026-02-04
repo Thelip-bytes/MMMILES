@@ -565,7 +565,7 @@ export default function SearchPage() {
                     <div className={styles.categorySection}>
                       <div className={styles.categoryTitle}>Filter By Car Type</div>
                       <div className={styles.checkboxGroup}>
-                        {["SUV", "Sedan", "Hatchback"].map((type) => (
+                        {["SUV", "Compact SUV", "Luxury SUV", "Hatchback", "MUV", "Sedan"].map((type) => (
                           <label key={type} className={styles.checkboxLabel}>
                             <input type="checkbox" className={styles.checkboxInput} checked={uiFilters.type === type} onChange={() => updateFilter("type", uiFilters.type === type ? "" : type)} />
                             <span className={styles.checkboxText}>{type}</span>
@@ -606,7 +606,7 @@ export default function SearchPage() {
                   </div>
                   <div className={`${styles.tabContent} ${expandedTabs.seats ? styles.open : ''}`}>
                     <div className={styles.checkboxGroup}>
-                       {["5 seater", "7 seater"].map((seat) => (
+                       {["5 seater", "7 seater", "8 seater"].map((seat) => (
                           <label key={seat} className={styles.checkboxLabel}>
                             <input type="checkbox" className={styles.checkboxInput} checked={uiFilters.seats === seat} onChange={() => updateFilter("seats", uiFilters.seats === seat ? "" : seat)} />
                             <span className={styles.checkboxText}>{seat}</span>

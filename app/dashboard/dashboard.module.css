@@ -737,233 +737,270 @@
 
 
 
-/* ===== ORDER LIST ===== */
+/* ===== NEW PREMIUM ORDER CARD ===== */
 
 .orderList {
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border-radius: 12px;
-}
-
-
-/* ROW */
-.orderRow {
-  display: flex;
-  align-items: center;
   gap: 20px;
-  padding: 18px 22px;
-  border-radius: 12px;
-  border-bottom: 1px solid #979aa1;
+  margin-top: 10px;
 }
 
-/* IMAGE */
+/* Premium Order Card */
+.orderCard {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  min-height: 212px;
+  background: linear-gradient(93.7deg, #FFFFFF -30.89%, #E8DFB5 209.07%);
+  border-radius: 19px;
+  padding: 15px 22px 15px 22px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.orderCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Section - Above Divider */
+.orderCardTop {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 15px;
+}
+
+/* Car Image */
 .orderImageWrap {
   flex-shrink: 0;
+  width: 180px;
+  height: 101px;
 }
 
 .orderImage {
-  border-radius: 10px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: 8px;
 }
 
-/* CENTER CONTENT */
-.orderContent {
+/* Car Info Section */
+.orderCarInfo {
   flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .orderTitle {
   margin: 0;
-  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  color: #111827;
+  font-size: 20px;
+  line-height: 30px;
+  color: #5A5956;
 }
 
 .orderDesc {
-  margin: 6px 0;
-  font-size: 12px;
-  color: #6b7280;
-  line-height: 1.5;
-  max-width: 900px;
-  width: 100%;
-  white-space: wrap;
+  font-family: 'Aleo', serif;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
+  color: #000000;
+  max-width: 341px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* META INFO */
-.orderMeta {
-  display: flex;
-  gap: 24px;
-  font-size: 13px;
-  color: #96979b;
-  font-weight: 500;
+/* Total Price Badge */
+.orderPriceBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(95.42deg, #FFFAE6 1.57%, #DDD3AD 88.05%);
+  border-radius: 6px;
+  padding: 4px 12px;
   margin-top: 6px;
+  width: fit-content;
 }
 
-/* RIGHT SIDE */
-.orderRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: space-between;
-  min-width: 180px;
-  height: 100%;
+.orderPriceText {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  color: #000000;
 }
 
-/* STATUS */
-.orderStatus1 {
-  font-size: 13px;
+/* Status Badge - Top Right */
+.orderStatusBadge {
+  position: absolute;
+  top: 16px;
+  right: 22px;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
 }
 
-.statusCompleted1 {
-  color: #22c55e;
+.statusCompleted {
+  color: #5FAC39;
 }
 
-.statusUpcoming1 {
+.statusUpcoming {
   color: #d1a319;
 }
 
-/* ACTION LINKS */
+.statusPending {
+  color: #3b82f6;
+}
+
+/* Divider Line */
+.orderDivider {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 0.5px solid #4A4646;
+  margin: 0;
+}
+
+/* Bottom Section - Below Divider */
+.orderCardBottom {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  gap: 20px;
+}
+
+/* Left Info: User, Duration, Hours */
+.orderMetaLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orderMetaLabel {
+  font-family: 'Aleo', serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  color: #000000;
+}
+
+.orderMetaDuration {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  color: #000000;
+}
+
+/* Right Info: Host Address */
+.orderMetaRight {
+  flex: 1;
+  max-width: 300px;
+}
+
+.orderHostInfo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 15px;
+  color: #4E4A4A;
+}
+
+/* View Details Button */
 .orderActions {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 3px 15px;
-  background: linear-gradient(to right bottom, #f0dec3, rgb(223, 223, 213));
-  margin-top: 38px;
-  border-radius: 12px;
-}
-
-.actionLink {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 10px;
-  font-weight: 600;
-  color: #000000;
-  cursor: pointer;
-}
-
-.divider {
-  color: #7b7f86;
-  margin-bottom: 4px;
-}
-@media (max-width:480px){
-
-  .orderList {
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  border-radius: 12px;
   margin-top: 10px;
 }
-  /* ROW */
-.orderRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 18px 18px 18px 12px !important;
-  border-radius: 12px;
-  border-bottom: 1px solid #979aa1;
-}
-  .orderContent {
-  flex: 1;
-  min-width: 120px;
-}
 
-/* IMAGE */
-.orderImageWrap {
-  flex-shrink: 0;
-}
-
-.orderImage {
-  border-radius: 10px;
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-}
-
-
-.skipmobile{
-  display: none;
-}
-
-  .orderTitle {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-}
-.orderMeta {
-  display: flex;
-  gap: 8px;
-  font-size: 8px;
-  color: #96979b;
-  font-weight: 500;
-  margin-top: 6px;
-}
-  .orderDesc {
-    margin: 6px 0;
-    font-size: 10px;
-    color: #6b7280;
-    line-height: 1.5;
-    max-width: 900px;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .orderRight {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between;
-    min-width: 100px;
-    height: 100%;
-  }
-  .orderActions {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  padding: 7px 10px;
-  background: linear-gradient(to right bottom, #f0dec3, rgb(223, 223, 213));
-  margin-top: 18px;
-  margin-left: -20px !important;
-  border-radius: 12px;
-}
 .actionLink {
-  background: none;
+  background: linear-gradient(95.42deg, #FFFAE6 1.57%, #DDD3AD 88.05%);
   border: none;
-  padding: 0;
-  font-size: 10px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
   font-weight: 600;
   color: #000000;
   cursor: pointer;
-}
-#actionLink{
-  display: none;
-}
-.divider {
-  display: none;
-}
-/* STATUS */
-.orderStatus1 {
-  font-size: 13px;
-  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.statusCompleted1 {
-  color: #22c55e;
+.actionLink:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.statusUpcoming1 {
-  color: #d1a319;
+/* Loading & Empty States */
+.loadingState,
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  font-size: 14px;
 }
 
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 700px) {
+  .orderCard {
+    max-width: 100%;
+    min-height: auto;
+    padding: 12px 15px;
+    border-radius: 14px;
+  }
+
+  .orderCardTop {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .orderImageWrap {
+    width: 100%;
+    height: 140px;
+  }
+
+  .orderTitle {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .orderDesc {
+    font-size: 11px;
+    line-height: 14px;
+    max-width: 100%;
+  }
+
+  .orderStatusBadge {
+    top: 12px;
+    right: 15px;
+    font-size: 9px;
+  }
+
+  .orderCardBottom {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .orderMetaRight {
+    max-width: 100%;
+  }
+
+  .orderHostInfo {
+    font-size: 9px;
+    line-height: 13px;
+  }
+
+  .orderMetaLabel,
+  .orderMetaDuration {
+    font-size: 11px;
+  }
 }
 
 

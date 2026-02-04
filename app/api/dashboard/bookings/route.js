@@ -39,7 +39,6 @@ export async function GET(request) {
     );
 
     // Fetch bookings with vehicle details and host details
-    // Double security: RLS + explicit user_id filter
     const { data: bookings, error } = await supabase
       .from('bookings')
       .select(`
@@ -51,6 +50,7 @@ export async function GET(request) {
           model_year,
           registration_number,
           seating_capacity,
+          location_name,
           vehicle_images (image_url, is_primary)
         ),
         hosts (
@@ -126,8 +126,9 @@ export async function GET(request) {
           minute: '2-digit'
         }),
         price: `₹${booking.total_amount || 0}`,
-        // Additional details for the popup
+        // Additional details for the card
         hostName: booking.hosts?.full_name || 'MM Miles Host',
+        hostAddress: booking.vehicles?.location_name || 'Contact host for pickup location',
         registrationNumber: booking.vehicles?.registration_number || 'N/A',
         bookingCode: booking.booking_code || `#${booking.id}`,
         hours: booking.hours || 0,
@@ -136,6 +137,7 @@ export async function GET(request) {
         endTime: booking.end_time,
         seats: booking.vehicles?.seating_capacity || 4,
         modelYear: booking.vehicles?.model_year || 'N/A',
+        userName: booking.hosts?.full_name || 'Host Not Found',
       };
     });
 

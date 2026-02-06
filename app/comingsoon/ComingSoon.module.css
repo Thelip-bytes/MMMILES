@@ -1,85 +1,75 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@600&display=swap");
 
 /* ===== HERO WRAPPER ===== */
-.hero {
+.ComingSoonhero {
   position: relative;
   width: 100%;
-  height: 100vh;
-  padding-top: 70px;
+  height: 100%;
+  padding-top: 20px;
+  padding: 50px 120px;
   background: #000;
-  color: #fff;
+  color: rgb(195, 199, 202);
   font-family: "Poppins", sans-serif;
   overflow: hidden;
 }
 
 /* ===== TOP TEXT ===== */
-.coming {
+.ComingSooncoming {
   text-align: center;
-  font-size: 40px;
+  font-size: 24px;
   font-weight: 400;
-  margin-bottom: 6px;
+  margin-bottom: -10px;
 }
 
-.city {
+.ComingSooncity {
   text-align: center;
   font-family: "Playfair Display", serif;
-  font-size: 76px;
+  font-size: 46px;
+  margin-bottom: -20px;
   font-weight: 600;
-  color: linear-gradient(200 deg, #b9934b, #ead19a);
+  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* ===== CAR (PIXEL-LOCKED) ===== */
-.car-lock {
-  position: relative;          /* 🔓 unlocked */
-  width: 1100px;                /* controlled size */
-  height: 600px;
-  top: -10%;
-  margin-left: -70px;           /* visual offset instead of absolute */
+/* ===== CAR ===== */
+.ComingSooncar-lock {
+  position: relative;
+  max-width: 480px;
+  height: 500px;
 }
 
-.car-img {
+.ComingSooncar-img {
   object-fit: contain;
 }
 
-/* Headlight glow */
-.headlight {
+.ComingSoonheadlight {
   position: absolute;
-  right: 120px;
-  top: 100px;
-
   width: 50px;
   height: 2px;
-
-  background: radial-gradient(
-    ellipse at left,
-    rgba(0, 255, 255, 0.7),
-    transparent 70%
-  );
-
   transform: translateY(-50%);
   filter: blur(10px);
 }
 
 /* ===== RIGHT CONTENT ===== */
-.right {
+.ComingSoonright {
   position: absolute;
-
-  /* Exact placement from screenshot */
-  right: 40px;
-  top: 399px;
-  max-width: 600px;
+  right: 4%;
+  top: 40%;
+  max-width: 570px;
 }
 
-.right h2 {
-  font-family: "Playfair Display", serif;
-  font-size: 32px;
-  font-weight: 900;
-  line-height: 124.8%;
-  margin-bottom: 15px;
+.ComingSoonright h2 {
+  font-family: poppins;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 144.8%;
+  margin-bottom: -15px;
+  color: rgb(195, 199, 202);
 }
 
-.sub {
-  font-size: 19px;
+.ComingSoonsub {
+  font-size: 16px;
   font-weight: 400;
   max-width: 900px;
   opacity: 0.85;
@@ -87,107 +77,280 @@
 }
 
 /* ===== CTA BUTTON ===== */
-.cta {
-  background: linear-gradient(135deg, #b9934b, #ead19a);
+.ComingSooncta {
+  background: linear-gradient(to right, #ead19a, #b9934b);
   color: #000;
-
   border: none;
-  padding: 16px 42px;
-  border-radius: 16px;
-
-  font-size: 15px;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-top: 3px;
   font-weight: 600;
   cursor: pointer;
 }
 
-/* 🚫 No media queries — desktop locked */
-
-
-
-/* ================= MOBILE POSTER LAYOUT ================= */
+/* ================= TABLET ================= */
 @media (max-width: 768px) {
-
-  .hero {
+  .ComingSoonhero {
     padding-top: 48px;
-    height: auto;
     min-height: 100vh;
     text-align: center;
   }
 
-  /* Top text */
-  .coming {
-    font-size: 24px;
-    margin-bottom: 8px;
-    font-family: poppins;
-  }
-
-  .city {
+  .ComingSooncity {
     font-size: 47px;
     margin-bottom: 32px;
   }
 
-  /* Car centered like poster */
-  .car-lock {
-    position: relative;
-    width: 100%;
+  .ComingSooncar-lock {
     max-width: 520px;
     height: 260px;
-
     margin: 0 auto 36px;
-    top: 0;
-    left: 0;
   }
 
-  .headlight {
-    right: -10px;
-    top: 50%;
-    width: 90px;
-    height: 28px;
-  }
-
-  /* Text block moves below car */
-  .right {
+  .ComingSoonright {
     position: relative;
-    top: 0;
     right: 0;
-
+    top: 0;
     max-width: 90%;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
   }
 
-  .right h2 {
+  .ComingSoonright h2 {
     font-size: 18px;
     line-height: 1.4;
     margin-bottom: 14px;
-    text-align: left;
   }
 
-  .sub {
+  .ComingSoonsub {
     font-size: 15px;
     margin-bottom: 28px;
-    text-align: left;
   }
 
-/* CTA button – LEFT aligned on mobile */
-.cta {
-  padding: 16px 46px;
-  font-size: 13px;
-  border-radius: 22px;
-  display: inline-block;   /* important */
-  margin-left: 0;          /* force left */
-  margin-right: auto;      /* prevents centering */
+  .ComingSooncta {
+    padding: 16px 46px;
+    font-size: 13px;
+    border-radius: 22px;
+  }
 }
 
-.right {
-  text-align: left;
+/* ================= MOBILE ================= */
+@media (max-width: 480px) {
+  .ComingSoonhero {
+    padding: 30px 20px 50px !important;
+  }
+
+  .ComingSooncar-lock {
+    max-width: 380px !important;
+    height: 200px;
+  }
+
+  .ComingSooncoming {
+    font-size: 16px;
+    margin-bottom: 0;
+  }
+
+  .ComingSooncity {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .ComingSoonright h2 {
+    font-size: 16px !important;
+    line-height: 1.6;
+  }
+
+  .ComingSoonsub {
+    font-size: 12px;
+    margin-bottom: 0;
+  }
+
+  .ComingSooncta {
+    padding: 9px 19px;
+    font-size: 10px;
+    border-radius: 16px;
+    font-weight: 700 !important;
+  }
 }
 
-.cta {
-  margin-right: auto;
-  margin-left: 0;
+/* ================= LARGE SCREENS ================= */
+@media (min-width: 1440px) {
+  .ComingSoonhero {
+    padding: 90px 169px;
+  }
+
+  .ComingSooncar-lock {
+    max-width: 580px;
+    height: 500px;
+  }
+
+  .ComingSoonright {
+    right: 14%;
+    top: 45%;
+  }
+}
+
+/* ================================================= */
+/* ================= POPUP STYLES ================== */
+/* ================================================= */
+
+.comingsoonOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.comingsoonModal {
+  position: relative;
+  width: 360px;
+  padding: 32px;
+  background: #0b0b0b;
+  border-radius: 18px;
+  border: 1px solid #b9934b;
+  color: #ffffff;
+  animation: comingsoonPop 0.35s ease;
+}
+
+@keyframes comingsoonPop {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.comingsoonTitle {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #ead19a, #b9934b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.comingsoonInput {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  background: #121212;
+  border: 1px solid #333;
+  color: #ffffff;
+  outline: none;
+}
+
+.comingsoonSubmit {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #ead19a, #b9934b);
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.comingsoonClose {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.comingsoonError {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.comingsoonSuccess {
+  text-align: center;
+  animation: comingsoonFadeIn 0.4s ease;
+}
+
+.comingsoonCheck {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ead19a, #b9934b);
+  color: #000;
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+}
+
+@keyframes comingsoonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
 
+
+
+
+
+/* ===== CTA MICRO INTERACTION ===== */
+.ComingSooncta {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ComingSooncta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(185, 147, 75, 0.35);
+}
+
+/* ===== LOADING SPINNER ===== */
+.comingsoonSpinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== SUCCESS SCALE EFFECT ===== */
+.comingsoonSuccess {
+  text-align: center;
+  animation: successPop 0.5s ease;
+}
+
+@keyframes successPop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

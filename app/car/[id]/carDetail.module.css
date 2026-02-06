@@ -855,8 +855,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #fff;
-    transition: transform 0.3s, filter 0.3s;
+    
+    
   }
   .blurCardsContainer {
     display: flex;
@@ -875,6 +875,18 @@
     opacity: 0.9;
     text-align: center;
   }
+
+  .blurCardsContainer:hover .blurCard:not(:hover) {
+    filter:none;
+    transform: scale(0.95);
+    opacity: none;
+  }
+
+  .blurCard:hover {
+    transform: none;
+    box-shadow: 0 8px 25px rgba(191, 152, 96, 0.4);
+  }
+  
 }
 
 

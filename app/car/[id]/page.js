@@ -152,7 +152,7 @@ export default function CarPage() {
             {car.make} {car.model} ({car.model_year})
           </h1>
           <p className={styles.priceTag}>
-            <span className={styles.startingAt}>STARTING AT</span>
+            <span className={styles.startingAt}>Starting At</span>
             <br />
             <span className={styles.priceValue}>₹{baseHourlyRate}</span>
             <span className={styles.priceUnit}>/hour</span>

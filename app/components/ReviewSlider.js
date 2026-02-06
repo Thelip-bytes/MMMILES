@@ -4,7 +4,7 @@ import styles from "./ReviewSlider.module.css";
 
 const reviews = [
   {
-    text: "The booking was super easy, got a clean, comfortable car for our girls’ weekend. Having GPS and Bluetooth made the trip stress-free and fun.",
+    text: "The booking was super easy, got a clean, comfortable car for our Boy’s weekend. Having 24/7 support made the trip stress-free and fun.",
     name: "Fazil",
     title: "Friends Trip (4 members)",
     img: "/Fazil.jpeg",
@@ -12,13 +12,13 @@ const reviews = [
   {
     text: "MM Miles made our family road trip smooth from start to finish. The spacious SUV fit all our luggage, and the customer support was 24/7.",
     name: "Vengat",
-    title: "Family (5 members)",
+    title: "Weekend Gateway",
     img: "/vengat.jpeg",
   },
   {
     text: "Our car broke down suddenly, but I got a replacement vehicle within an hour. Fast response and professional team — truly a lifesaver.",
     name: "Vishal",
-    title: "Emergency Booking",
+    title: "Immediete Support",
     img: "/vishal.jpeg",
   },
   {
@@ -46,7 +46,7 @@ const reviews = [
     img: "/profile1.jpg",
   },
   {
-    text: "I had drove from Bangalore to Goa using MM Miles. The car was handled in a good manner the entire way, and there were no hidden charges.",
+    text: "I had drove from Chennai to Bangalore using MM Miles. The car was handled in a good manner, and there were no hidden charges.",
     name: "Tushara",
     title: "Road Trip Traveler",
     img: "/profile2.jpg",

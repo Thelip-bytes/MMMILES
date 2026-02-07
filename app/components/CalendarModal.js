@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { FaTimes, FaCalendarAlt, FaArrowRight, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 import styles from "./CalendarModal.module.css";
 import { format, addMonths, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, isToday, startOfDay, subMonths } from "date-fns";
 
@@ -72,7 +73,7 @@ export default function CalendarModal({
                 const maxReturnDate = addDays(pickupDate, 29);
                 if (isAfter(date, maxReturnDate)) {
                     // Date exceeds 29-day limit - show toast/alert
-                    alert("Maximum booking duration is 29 days. Please select an earlier return date.");
+                    toast.error("Maximum booking duration is 29 days. Please select an earlier return date.");
                     return;
                 }
                 setReturnDate(date);
@@ -94,6 +95,24 @@ export default function CalendarModal({
             const end = new Date(returnDate);
             end.setHours(returnHour, 0, 0, 0);
 
+            const now = new Date();
+
+            // 1. Validation: Pickup start time must be greater than current time
+            if (isBefore(start, now)) {
+                toast.error("Pickup time cannot be in the past. Please select a future time.");
+                return;
+            }
+
+            // 2. Validation: Total booking is min. 6hrs
+            const durationMs = end - start;
+            const minDurationMs = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+
+            if (durationMs < minDurationMs) {
+                toast.error("Minimum booking duration is 6 hours.");
+                return;
+            }
+
+            toast.success("Dates selected successfully!");
             onApply(start, end);
             onClose();
         }

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { estimatePrice } from "../../../lib/pricing";
 import { supabase } from "../../../lib/supabaseClient";
 import styles from "./carDetail.module.css";
 import Counter from "../../components/Counter";
@@ -24,6 +26,45 @@ export default function CarPage() {
   const searchParams = useSearchParams();
   const pickup = searchParams.get("pickup") || searchParams.get("pickupTime");
   const returnTime = searchParams.get("return") || searchParams.get("returnTime");
+
+  useEffect(() => {
+    if (pickup && returnTime) {
+        // Helper to parse "DD/MM/YYYY HH:MM"
+        const parseDateTime = (str) => {
+            if (!str) return null;
+            const parts = str.split(' ');
+            if (parts.length < 2) return null;
+            const [dateStr, timeStr] = parts;
+            const [day, month, year] = dateStr.split('/');
+            const [hour, _] = timeStr.split(':');
+            return new Date(year, month - 1, day, hour, 0);
+        };
+
+        const startDate = parseDateTime(pickup);
+        const endDate = parseDateTime(returnTime);
+
+        if (startDate && endDate) {
+            const now = new Date();
+             // Allow a small buffer (e.g., 5 mins) for "past" checks
+            const pastBuffer = 5 * 60 * 1000; 
+
+            if (startDate < new Date(now.getTime() - pastBuffer)) {
+                toast.error("Pickup time cannot be in the past.");
+                setTimeout(() => router.push('/'), 2000);
+                return;
+            }
+
+            const durationMs = endDate - startDate;
+            const minDurationMs = 6 * 60 * 60 * 1000; // 6 hours
+
+            if (durationMs < minDurationMs) {
+                toast.error("Minimum booking duration is 6 hours.");
+                setTimeout(() => router.push('/'), 2000);
+                return;
+            }
+        }
+    }
+  }, [pickup, returnTime, router]);
 
   const [car, setCar] = useState(null);
   const [host, setHost] = useState(null);
@@ -102,7 +143,39 @@ export default function CarPage() {
   // Insurance is now calculated automatically based on booking duration tier
   // No user selection needed - insurance is included in the total price
   const baseDailyRate = car.base_daily_rate || 0;
-  const baseHourlyRate = Math.round(baseDailyRate / 24);
+  let displayHourlyRate = Math.round(baseDailyRate / 24);
+  // Default insurance for 1 day (Tier 1 divisor is ~9.4, but let's use a safe estimate or base it on 24h)
+  // Check pricing.js: TIER_1 (6-12h) divisor 9.4. TIER_2 (12-24h) same. 
+  // Let's use standard assumption for "Starting At" logic or just base rate / 9.4 rounded.
+  let displayInsurance = Math.round(baseDailyRate / 9.4);
+
+  if (pickup && returnTime) {
+      // Parse dates for pricing estimate
+       const parseDateTime = (str) => {
+            if (!str) return null;
+            const parts = str.split(' ');
+            if (parts.length < 2) return null;
+            const [dateStr, timeStr] = parts;
+            const [day, month, year] = dateStr.split('/');
+            const [hour, _] = timeStr.split(':');
+            return new Date(year, month - 1, day, hour, 0);
+        };
+      
+      const start = parseDateTime(pickup);
+      const end = parseDateTime(returnTime);
+      
+      if (start && end && end > start) {
+           const diffMs = end - start;
+           const hours = Math.ceil(diffMs / 3600000);
+           if (hours > 0) {
+               const estimated = estimatePrice(baseDailyRate, hours);
+               displayHourlyRate = estimated.hourlyRate;
+               displayInsurance = estimated.insuranceCost;
+           }
+      }
+  }
+
+  const baseHourlyRate = Math.round(baseDailyRate / 24); // Keep for stats if needed, or use displayHourlyRate
 
   // Stats Section (derived from car data)
   const statsData = [
@@ -154,7 +227,7 @@ export default function CarPage() {
           <p className={styles.priceTag}>
             <span className={styles.startingAt}>Starting At</span>
             <br />
-            <span className={styles.priceValue}>₹{baseHourlyRate}</span>
+            <span className={styles.priceValue}>₹{displayHourlyRate}</span>
             <span className={styles.priceUnit}>/hour</span>
           </p>
 
@@ -169,7 +242,7 @@ export default function CarPage() {
     </p>
 
     <p className={styles.singleinsurancePrice}>
-      At just ₹599
+      At just ₹{displayInsurance}
     </p>
 
     <div className={styles.singleinsuranceDivider}></div>
@@ -190,6 +263,41 @@ export default function CarPage() {
 
   <span className={styles.singleinsuranceTc}>T&C*</span>
 </div>
+
+{/* --- Range Limit Banner (Conditional) --- */}
+{car.range_km_limit && car.range_km_limit.range_km_limit && (
+    <div className={styles.singleinsurance}>
+      <div className={styles.singleinsuranceLeft}>
+        <p className={styles.singleinsuranceTitle}>
+          Kilometer Limit
+        </p>
+
+        <p className={styles.singleinsurancePrice}>
+         {car.range_km_limit.range_km_limit} km included
+        </p>
+
+        <div className={styles.singleinsuranceDivider}></div>
+
+        <p className={styles.singleinsuranceDesc}>
+          Extra km charge: ₹{car.range_km_limit.price_per_extra_km || 0}/km
+        </p>
+      </div>
+
+      <div className={styles.singleinsuranceRight}>
+        <div style={{
+            fontSize: '3rem', 
+            color: '#bf9860',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100px',
+            height: '100px'
+        }}>
+             🛣️
+        </div>
+      </div>
+    </div>
+)}
 
 
 

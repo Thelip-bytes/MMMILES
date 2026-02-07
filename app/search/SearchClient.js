@@ -3,6 +3,8 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
+import { estimatePrice } from "../../lib/pricing";
 import { FaFilter, FaSearch, FaMapMarkerAlt, FaClock, FaCar, FaGasPump, FaCog, FaUsers, FaCalendarAlt, FaChevronDown, FaStar, FaMedal, FaAirFreshener, FaAirbnb, FaSafari, FaFirstAid, FaUserFriends, FaChair, FaRegSave, FaSatellite, FaPhone, FaHeart, FaRegHeart, FaCrown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import styles from "./filters.module.css";
 import LocationPickerModal from "../components/LocationPickerModal";
@@ -57,6 +59,35 @@ function CarCard({ car, pickup, returndate, router, city }) {
     setIsWishlisted(!isWishlisted);
     // TODO: Call API to toggle wishlist
   };
+
+  // Calculate dynamic price based on duration
+  const baseDailyRate = car.base_daily_rate || 0;
+  let displayHourlyRate = Math.round(baseDailyRate / 24);
+
+  if (pickup && returndate) {
+    // Helper to parse "DD/MM/YYYY HH:MM"
+    const parseDateTime = (str) => {
+        if (!str) return null;
+        const parts = str.split(' ');
+        if (parts.length < 2) return null;
+        const [dateStr, timeStr] = parts;
+        const [day, month, year] = dateStr.split('/');
+        const [hour, _] = timeStr.split(':');
+        return new Date(year, month - 1, day, hour, 0);
+    };
+
+    const start = parseDateTime(pickup);
+    const end = parseDateTime(returndate);
+
+    if (start && end && end > start) {
+        const diffMs = end - start;
+        const hours = Math.ceil(diffMs / 3600000);
+        if (hours > 0) {
+            const estimated = estimatePrice(baseDailyRate, hours);
+            displayHourlyRate = estimated.hourlyRate;
+        }
+    }
+  }
 
   return (
     <div
@@ -138,7 +169,7 @@ function CarCard({ car, pickup, returndate, router, city }) {
 
         <div className={styles.footerRight}>
           <div className={styles.priceRow}>
-            <span className={styles.priceHour}>₹{Math.round((car.base_daily_rate || 0) / 24)}</span>
+            <span className={styles.priceHour}>₹{displayHourlyRate}</span>
             <span className={styles.priceUnit}>/hr</span>
           </div>
         </div>
@@ -192,6 +223,46 @@ export default function SearchPage() {
   const [returnDate, setReturnDate] = useState(null);
   const [pickupHour, setPickupHour] = useState(9);
   const [returnHour, setReturnHour] = useState(17);
+
+  // Validate URL parameters on mount
+  useEffect(() => {
+    if (pickup && returndate) {
+        const parts = pickup.split(' ');
+        const returnParts = returndate.split(' ');
+        
+        // Helper to parse "DD/MM/YYYY HH:MM"
+        const parseDateTime = (str) => {
+            const [dateStr, timeStr] = str.split(' ');
+            const [day, month, year] = dateStr.split('/');
+            const [hour, _] = timeStr.split(':');
+            return new Date(year, month - 1, day, hour, 0);
+        };
+
+        const startDate = parseDateTime(pickup);
+        const endDate = parseDateTime(returndate);
+        const now = new Date();
+        
+        // Allow a small buffer (e.g., 5 mins) for "past" checks to avoid edge cases with clock diffs
+        const pastBuffer = 5 * 60 * 1000; 
+
+        if (startDate < new Date(now.getTime() - pastBuffer)) {
+             toast.error("Pickup time cannot be in the past.");
+             // Optional: Redirect or just clear params. 
+             // Redirecting to home is safer to force re-selection.
+             setTimeout(() => router.push('/'), 2000);
+             return;
+        }
+
+        const durationMs = endDate - startDate;
+        const minDurationMs = 6 * 60 * 60 * 1000; // 6 hours
+
+        if (durationMs < minDurationMs) {
+             toast.error("Minimum booking duration is 6 hours.");
+             setTimeout(() => router.push('/'), 2000);
+             return;
+        }
+    }
+  }, [pickup, returndate, router]);
 
   // Initialize calendar state from URL params
   useEffect(() => {

@@ -138,6 +138,7 @@ export async function GET(request) {
         seats: booking.vehicles?.seating_capacity || 4,
         modelYear: booking.vehicles?.model_year || 'N/A',
         userName: booking.hosts?.full_name || 'Host Not Found',
+        hostPhone: booking.hosts?.phone || '',
       };
     });
 

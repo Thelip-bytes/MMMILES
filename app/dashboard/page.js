@@ -759,6 +759,7 @@ function DashboardContent() {
     const [orderTab, setOrderTab] = useState("all");
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const [visiblePhoneId, setVisiblePhoneId] = useState(null); // Track which phone number is visible
 
     // Get user ID from JWT token
     const getUserId = () => {
@@ -813,33 +814,6 @@ function DashboardContent() {
         (orderTab === "completed" && o.status === "completed")
       );
     });
-
-    // Format date for popup display
-    const formatDateTime = (dateString) => {
-      if (!dateString) return 'N/A';
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-IN', {
-        weekday: 'short',
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-      });
-    };
-
-    // Open order details modal
-    const openDetailsModal = (order) => {
-      setSelectedOrder(order);
-      setShowDetailsModal(true);
-    };
-
-    // Close order details modal
-    const closeDetailsModal = () => {
-      setShowDetailsModal(false);
-      setSelectedOrder(null);
-    };
 
     return (
       <div className={`${styles.pageWrap} ${styles.pageTransition}`}>
@@ -916,6 +890,38 @@ function DashboardContent() {
                       Booking Code: {o.bookingCode} • {o.seats} Seats • {o.modelYear} Model
                     </p>
                     
+                    {/* Phone Button / Display */}
+                    <div className={styles.phoneWrapper}>
+                      {visiblePhoneId === o.id ? (
+                        <span 
+                          className={styles.pnoneNumDisplay}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setVisiblePhoneId(null); // Click to hide
+                          }}
+                          title="Click to hide"
+                        >
+                          {o.hostPhone || 'No Info'}
+                        </span>
+                      ) : (
+                        <button 
+                          className={styles.phoneBtn}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                               window.location.href = `tel:${o.hostPhone}`;
+                            } else {
+                               // Toggle visibility on desktop
+                               setVisiblePhoneId(o.id);
+                            }
+                          }}
+                          title={o.status === 'upcoming' ? "Call Host" : "Call Support"}
+                        >
+                          <PhoneIcon className={styles.phoneIconSmall} />
+                        </button>
+                      )}
+                    </div>
+
                     {/* Price Badge */}
                     <div className={styles.orderPriceBadge}>
                       <span className={styles.orderPriceText}>TOTAL : {o.price}</span>
@@ -935,135 +941,27 @@ function DashboardContent() {
                     <span className={styles.orderMetaLabel}>No. of Hours : {o.hours}</span>
                   </div>
 
-                  {/* Right: Host Info */}
+                  {/* Right: Host Info & Actions */}
                   <div className={styles.orderMetaRight}>
                     <p className={styles.orderHostInfo}>
                       Car address: {o.hostAddress || 'Contact host for pickup location'}
                     </p>
                     
-                    {/* View Details Button */}
-                    <div className={styles.orderActions}>
-                      <button 
-                        className={styles.actionLink}
-                        onClick={() => openDetailsModal(o)}
-                      >
-                        View Details
-                      </button>
-                    </div>
+                    {/* Car Registration Number (Only for Upcoming Orders) */}
+                    {o.status === "upcoming" && (
+                       <div className={styles.orderRegNumber}>
+                         <div className={styles.plateContainer}>
+                            <span className={styles.plateLabel}>IND</span>
+                            <span className={styles.plateValue}>{o.registrationNumber}</span>
+                         </div>
+                       </div>
+                    )}
                   </div>
                 </div>
               </div>
             );
           })}
         </div>
-
-        {/* Booking Details Popup Modal */}
-        {showDetailsModal && selectedOrder && (
-          <div className={styles.modalOverlay} onClick={closeDetailsModal}>
-            <div className={styles.bookingDetailsModal} onClick={(e) => e.stopPropagation()}>
-              {/* Modal Header */}
-              <div className={styles.bookingModalHeader}>
-                <h3>Booking Details</h3>
-                <button className={styles.iconBtn} onClick={closeDetailsModal}>
-                  <XMarkIcon className={styles.smallIcon} />
-                </button>
-              </div>
-
-              {/* Modal Content */}
-              <div className={styles.bookingModalContent}>
-                {/* Car Image & Title */}
-                <div className={styles.bookingCarSection}>
-                  <div className={styles.bookingCarImage}>
-                    <Image 
-                      src={selectedOrder.img} 
-                      alt={selectedOrder.title} 
-                      width={200} 
-                      height={120} 
-                      className={styles.bookingModalImg}
-                    />
-                  </div>
-                  <div className={styles.bookingCarInfo}>
-                    <h4>{selectedOrder.title}</h4>
-                    <span className={`${styles.bookingStatusBadge} ${
-                      selectedOrder.status === "completed" 
-                        ? styles.completedBadge 
-                        : styles.upcomingBadge
-                    }`}>
-                      {selectedOrder.status === "completed" ? "Completed" : "Upcoming"}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Booking Details Grid */}
-                <div className={styles.bookingDetailsGrid}>
-                  {/* Booking Time */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>🕒</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Booking Time</span>
-                      <div className={styles.detailValue}>
-                        <div><strong>Pickup:</strong> {formatDateTime(selectedOrder.startTime)}</div>
-                        <div><strong>Return:</strong> {formatDateTime(selectedOrder.endTime)}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Host Name */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>👤</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Host Name</span>
-                      <span className={styles.detailValue}>{selectedOrder.hostName}</span>
-                    </div>
-                  </div>
-
-                  {/* Car Registration Number */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>🚗</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Registration Number</span>
-                      <span className={styles.detailValue}>{selectedOrder.registrationNumber}</span>
-                    </div>
-                  </div>
-
-                  {/* Car Address */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>📍</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Car Address</span>
-                      <span className={styles.detailValue}>{selectedOrder.hostAddress}</span>
-                    </div>
-                  </div>
-
-                  {/* Booking Code */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>📋</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Booking Code</span>
-                      <span className={styles.detailValue}>{selectedOrder.bookingCode}</span>
-                    </div>
-                  </div>
-
-                  {/* Price */}
-                  <div className={styles.bookingDetailItem}>
-                    <div className={styles.detailIcon}>💰</div>
-                    <div className={styles.detailContent}>
-                      <span className={styles.detailLabel}>Total Amount</span>
-                      <span className={styles.detailValue}>{selectedOrder.price}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Modal Footer */}
-              <div className={styles.bookingModalFooter}>
-                <button className={styles.closeModalBtn} onClick={closeDetailsModal}>
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

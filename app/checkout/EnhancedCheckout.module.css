@@ -435,6 +435,26 @@
   color: #0b1722;
 }
 
+/* KM Limit Note */
+.kmLimitNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #fbf6ef;
+  border: 1px solid rgba(210, 160, 91, 0.15);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #5a4a35;
+  line-height: 1.5;
+}
+
+.kmIcon {
+  font-size: 18px;
+  margin-top: -2px;
+}
+
 /* PAY button - gold metallic with subtle shine animation */
 .payBtn {
   width: 100%;

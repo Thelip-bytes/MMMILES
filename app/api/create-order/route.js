@@ -65,6 +65,20 @@ export async function POST(request) {
             return Response.json({ error: 'Return time must be after pickup time' }, { status: 400 });
         }
 
+        const now = new Date();
+        // Allow 5 min buffer
+        const pastBuffer = 5 * 60 * 1000;
+        if (startDate < new Date(now.getTime() - pastBuffer)) {
+             return Response.json({ error: 'Pickup time cannot be in the past' }, { status: 400 });
+        }
+
+        const durationMs = endDate - startDate;
+        const minDurationMs = 6 * 60 * 60 * 1000; // 6 hours
+
+        if (durationMs < minDurationMs) {
+             return Response.json({ error: 'Minimum booking duration is 6 hours' }, { status: 400 });
+        }
+
         // 3. Get base daily rate from database
         const baseDailyRate = parseFloat(vehicle.base_daily_rate) || 0;
 
@@ -150,8 +164,8 @@ export async function POST(request) {
         });
 
         // 6. Validate calculated prices (sanity checks)
-        if (pricing.total <= 0 || pricing.total > 100000) { // Max 1 lakh INR
-            return Response.json({ error: 'Invalid calculated price' }, { status: 400 });
+        if (pricing.total <= 0 || pricing.total > 500000) { // Max 5 lakh INR
+            return Response.json({ error: 'Invalid calculated price', total: pricing.total }, { status: 400 });
         }
 
         // 7. Create Razorpay order with server-calculated amount

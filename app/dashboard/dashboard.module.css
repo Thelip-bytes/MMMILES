@@ -835,6 +835,50 @@
   color: #000000;
 }
 
+
+
+.phoneWrapper {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.pnoneNumDisplay {
+  background: white;
+  border: 1px solid #bf9860;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b1720;
+  cursor: pointer;
+  animation: fadeIn 0.2s ease;
+  white-space: nowrap;
+}
+
+.phoneBtn {
+  background: linear-gradient(95.42deg, #FFFAE6 1.57%, #DDD3AD 88.05%);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.phoneBtn:hover {
+  transform: scale(1.1);
+}
+
+.phoneIconSmall {
+  width: 14px;
+  height: 14px;
+  color: #000;
+}
+
 /* Status Badge - Top Right */
 .orderStatusBadge {
   position: absolute;
@@ -912,12 +956,51 @@
   color: #4E4A4A;
 }
 
-/* View Details Button */
-.orderActions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* View Details Button REMOVED - Replaced by Reg Number */
+.orderRegNumber {
   margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Indian License Plate Style */
+.plateContainer {
+  display: inline-flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #000;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.plateLabel {
+  background: #102d68; /* EU/IND blue strip */
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  padding: 4px 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 24px;
+  line-height: 1;
+}
+
+.plateValue {
+  padding: 2px 8px;
+  font-family: 'Schibsted Grotesk', sans-serif; /* Or any blocky font */
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.orderActions {
+  display: none; /* Hidden */
 }
 
 .actionLink {

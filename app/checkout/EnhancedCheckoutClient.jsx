@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 import { makeAuthenticatedRequest } from "../../lib/customSupabaseClient";
 import { testAuth } from "../../lib/authTest";
 import { parseDate, formatDateTimeForDB, parseBookingRawDateTime } from "../../lib/dateUtils";
@@ -331,6 +332,48 @@ export default function EnhancedCheckoutPage() {
         error: "Invalid booking dates. Please select valid pickup and return times.",
         serverCalculated: false,
       });
+      return;
+    }
+
+    // --- Validation Logic ---
+    const now = new Date();
+    // Allow a small buffer (e.g., 5 mins) for "past" checks
+    const pastBuffer = 5 * 60 * 1000;
+
+    if (pickupDate < new Date(now.getTime() - pastBuffer)) {
+      setPriceSummary({
+        rentalCost: 0,
+        insuranceCost: 0,
+        basePrice: 0,
+        gst: 0,
+        convFee: 100,
+        total: 0,
+        hours: 0,
+        error: "Pickup time cannot be in the past.",
+        serverCalculated: false,
+      });
+      toast.error("Pickup time cannot be in the past.");
+      setTimeout(() => router.push('/'), 2500);
+      return;
+    }
+
+    const durationMs = returnDate - pickupDate;
+    const minDurationMs = 6 * 60 * 60 * 1000; // 6 hours
+
+    if (durationMs < minDurationMs) {
+      setPriceSummary({
+        rentalCost: 0,
+        insuranceCost: 0,
+        basePrice: 0,
+        gst: 0,
+        convFee: 100,
+        total: 0,
+        hours: 0,
+        error: "Minimum booking duration is 6 hours.",
+        serverCalculated: false,
+      });
+      toast.error("Minimum booking duration is 6 hours.");
+      setTimeout(() => router.push('/'), 2500);
       return;
     }
 
@@ -1331,18 +1374,59 @@ export default function EnhancedCheckoutPage() {
               </div>
 
               <div className={styles.infoCard}>
-                <h3>Cancellation</h3>
-                <p className={styles.small}>50% of trip amount or INR 4000 (whichever is lower)</p>
-                <p className={styles.smallMuted}>Until 19 Nov 2025, 07:00 PM · Convenience fee is non refundable</p>
+                <h3>Cancellation Policy</h3>
+                {pickup && (() => {
+                  const start = parseDateInput(pickup);
+                  if (!start) return <p className={styles.small}>Policy details unavailable.</p>;
 
-                <div className={styles.refundLabel}>Refund upon cancellation</div>
-                <div className={styles.refundBar}>
-                  <div className={styles.refundFill}></div>
-                  <div className={styles.refundEmpty}></div>
-                </div>
+                  const deadline90 = new Date(start.getTime() - 24 * 60 * 60 * 1000);
+                  const deadline50 = new Date(start.getTime() - 4 * 60 * 60 * 1000);
 
-                <div className={styles.refundTime}>50% Refund before Nov 19 • 07:00 PM</div>
-                <p className={styles.refundTimebelow}><b>Important</b><span className={styles.refundTimebelowstar}>*</span> :(MMMiles may revise the cancellation policy to align with the regulations of each city.)</p>
+                  const formatDate = (d) => d.toLocaleString('en-IN', {
+                    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true
+                  });
+
+                  return (
+                    <>
+                      {/* 90% Refund Policy */}
+                      <div style={{ marginBottom: '15px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: '600', color: '#374151' }}>
+                          <span>90% Refund</span>
+                          <span style={{ color: '#bf9860' }}>Before {formatDate(deadline90)}</span>
+                        </div>
+                        <p className={styles.smallMuted} style={{ marginTop: '2px', fontSize: '12px' }}>
+                          Cancel before 24 hrs of pickup.
+                        </p>
+                      </div>
+
+                      {/* 50% Refund Policy */}
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', fontWeight: '600', color: '#374151' }}>
+                          <span>50% Refund</span>
+                          <span style={{ color: '#856404' }}>Before {formatDate(deadline50)}</span>
+                        </div>
+                        <p className={styles.smallMuted} style={{ marginTop: '2px', fontSize: '12px' }}>
+                          Cancel between {formatDate(deadline90)} and {formatDate(deadline50)} (4 hrs before pickup).
+                        </p>
+                      </div>
+
+                      {/* Visual Bar */}
+                      <div style={{
+                        marginTop: '15px',
+                        height: '8px',
+                        borderRadius: '4px',
+                        background: 'linear-gradient(90deg, #bf9860 60%, #eaddc5 60%)',
+                        overflow: 'hidden'
+                      }}>
+                      </div>
+
+                      <p className={styles.refundTimebelow} style={{ marginTop: '12px' }}>
+                        <b>Important</b><span className={styles.refundTimebelowstar}>*</span>:
+                        No refund if cancelled after {formatDate(deadline50)}. Convenience fee is non-refundable.
+                      </p>
+                    </>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -1422,6 +1506,18 @@ export default function EnhancedCheckoutPage() {
                 <div className={styles.totalText}>Total:</div>
                 <div className={styles.totalAmt}>₹{priceSummary.total}</div>
               </div>
+
+              {/* KM Limit Note */}
+              {car.range_km_limit && car.range_km_limit.range_km_limit && (
+                <div className={styles.kmLimitNote}>
+                  <span className={styles.kmIcon}>🛣️</span>
+                  <span>
+                    Price includes only <strong>{car.range_km_limit.range_km_limit} km</strong> of ride.
+                    <br />
+                    Extra usage charged at <strong>₹{car.range_km_limit.price_per_extra_km}/km</strong> after that.
+                  </span>
+                </div>
+              )}
 
               <button
                 className={styles.payBtn}

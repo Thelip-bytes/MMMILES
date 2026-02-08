@@ -210,6 +210,10 @@ export default function SearchBar() {
   }, []);
 
   const handleCitySelect = (city) => {
+    if (city !== "Chennai") {
+      router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
+      return;
+    }
     setLocation(city);
     setSelectedCity(city); // Update context for TrendingSection
     setIsCitySelectorOpen(false);
@@ -311,6 +315,21 @@ export default function SearchBar() {
 
     // Check if detected city matches any city in our CITIES array
     if (detectedCity) {
+      if (detectedCity !== "Chennai") {
+          // If detected city is not Chennai, we don't auto-set it in location state to avoid confusion,
+          // OR we could redirect immediately. The request implies "auto city selector... wen selected... direct to coming soon".
+          // If we auto-select here, it might be better to just let the user see "Chennai" or "Select" 
+          // but if they try to pick it, it redirects.
+          // However, for "auto city selector", if the user clicks "Use My Location" and it detects "Mumbai",
+          // we should probably redirect them then.
+          // The current function `extractAndSelectCity` is called from `handleUseMyLocation` and `handlePickSuggestion`.
+          
+          // Let's modify the caller or handle it here. 
+          // If we want to be aggressive:
+          router.push(`/comingsoon?city=${encodeURIComponent(detectedCity)}`);
+          return;
+      }
+
       const matchedCity = CITIES.find(city =>
         city.toLowerCase() === detectedCity.toLowerCase()
       );

@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 16px 20px;
+  text-align: center;
+}
+
+.iconWrapper {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.emptyImg {
+  width: 100%;
+  height: auto;
+  max-height: 120px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.message {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+.actionBtn {
+  background: linear-gradient(135deg, #bf9860 0%, #a67c40 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(191, 152, 96, 0.3);
+}
+
+.actionBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(191, 152, 96, 0.4);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}

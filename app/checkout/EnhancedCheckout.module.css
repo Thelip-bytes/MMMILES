@@ -87,51 +87,189 @@
 /* line */
 .stepLine {
   flex: 0 0 160px;
-  height: 6px;
+  height: 2px; /* Thinner */
   border-radius: 6px;
-  background: linear-gradient(90deg, #797775);
-  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.02);
+  background: linear-gradient(90deg, #e5e7eb);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Micro-animation fill */
+.stepLine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: #bf9860;
+  transition: width 0.6s ease;
+}
+
+.stepActive + .stepLine::after {
+  width: 100%; /* Fill next line when active */
 }
 
 /* ===== Main grid ===== */
 .mainGrid {
   display: grid;
-  grid-template-columns: 1fr 340px !important;
-  gap: 28px;
+  grid-template-columns: 1.6fr 1fr; /* Balanced layout */
+  gap: 32px;
   align-items: start;
 }
 
-/* ===== Left column ===== */
-.leftCol {
+/* ... existing Left Column / Car Card ... */
+
+/* ===== RIGHT COLUMN / Summary card ===== */
+.rightCol {
+  position: sticky;
+  top: 24px;
+  align-self: start;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
+/* premium summary card */
+.summaryCard {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+}
 
-/* ===== Car Card ===== */
-.carCard {
+.summaryTitle {
+  margin: 0 0 16px 0;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  color: #111827;
+  font-weight: 700;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 12px;
+}
+
+.summaryGroup {
   display: flex;
-  gap: 28px;
-  align-items: center;
-  padding: 18px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, #ffffff, #fbf9f6);
-  
-  backdrop-filter: blur(6px);
+  flex-direction: column;
+  gap: 10px;
 }
 
+/* rows */
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.rowLight {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.rowLabel {
+  font-weight: 500;
+}
+
+.rowLabelWithIcon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: help;
+  position: relative;
+}
+
+.infoIcon {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+}
+
+/* Tooltip */
+.tooltipParams:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltipParams {
+  display: inline-flex;
+  position: relative;
+}
+
+.tooltipText {
+  visibility: hidden;
+  width: 160px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.rowValue {
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+  min-width: 80px; /* Align visual vertical axis */
+}
+
+/* divider */
+.divider {
+  height: 1px;
+  background: #f3f4f6;
+  margin: 16px 0;
+}
+
+/* totals */
+.totalDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 16px 0;
+}
+
+.totalBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+}
+
+.totalText {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111827;
+}
+
+.totalAmt {
+  font-weight: 800;
+  font-size: 20px;
+  color: #111827;
+}
 /* image stage with spotlight and subtle reflection */
 .carImageStage {
   position: relative;
-  padding: 15px;
+  padding: 10px;
   border-radius: 20px;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 320px;
-  height: 180px;
+  flex: 0 0 380px; /* Increased width */
+  height: 220px; /* Increased height */
   overflow: hidden;
 }
 
@@ -139,22 +277,14 @@
   border-radius: 12px;
   object-fit: contain;
   width: 100%;
-  max-width: 300px;
-  max-height: 160px;
+  max-width: 360px; /* Increased */
+  max-height: 200px; /* Increased */
   height: auto;
+  transition: transform 0.3s ease;
 }
 
-/* spotlight ground under car */
-.groundSpot::after {
-  content: "";
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 55%;
-  height: 40px;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.22), transparent 70%);
-  filter: blur(10px);
+.carCard:hover .carImage {
+  transform: scale(1.05); /* Micro-interaction */
 }
 
 /* meta */
@@ -166,7 +296,7 @@
 .title {
   margin: 0;
   font-family: poppins;
-  font-size: 20px;
+  font-size: 22px; /* Slightly larger */
   color: #0b1722;
   letter-spacing: -0.2px;
   font-weight: 700;
@@ -178,46 +308,54 @@
   font-size: 14px;
 }
 
-/* features & price */
-.features {
-  margin-top: 10px;
+/* New Features Grid with Icons */
+.featuresGrid {
   display: flex;
+  gap: 16px;
+  margin-top: 14px;
   flex-wrap: wrap;
-  gap: 10px 18px;
-  color: #6b7280;
-  font-size: 13px;
 }
 
-.features span {
-  white-space: nowrap;
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.featureIcon {
+  width: 16px;
+  height: 16px;
+  color: #bf9860;
 }
 
 .priceRow {
-  margin-top: 14px;
+  margin-top: 18px;
   display: flex;
   align-items: center;
-  gap: 18px;
-}
-
-.discount {
-  background: linear-gradient(to right, #D8B480 0%, #BF9860 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 500;
-  font-size: 15px;
+  gap: 12px; /* Closer visually */
 }
 
 .price {
-  font-weight: 900;
-  font-size: 28px;
+  font-weight: 800;
+  font-size: 26px;
   font-family: poppins;
   color: #081026;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .priceper {
   font-weight: 500;
   font-size: 14px;
-  color: #081026;
+  color: #6b7280;
+  text-transform: lowercase;
 }
 
 /* ===== Info row (two cards) ===== */
@@ -456,35 +594,49 @@
 }
 
 /* PAY button - gold metallic with subtle shine animation */
+/* PAY button - gold metallic with subtle shine animation */
 .payBtn {
   width: 100%;
-  margin-top: 14px;
-  padding: 11px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(170, 120, 50, 0.18);
-  background: linear-gradient(to right, #d8b480 0%, #bf9860 100%);
+  margin-top: 16px;
+  padding: 16px; /* Increased height */
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #bf9860 0%, #a67c40 100%);
   color: #fff;
-  font-weight: 800;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 16px;
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(191, 152, 96, 0.3); /* Soft shadow */
+  transition: all 0.2s ease;
+  position: sticky;
+  bottom: 20px; /* Sticky behavior */
+  z-index: 100;
+}
 
-  transition: transform .18s ease, box-shadow .18s ease, opacity .02s ease;
+.payBtn:hover {
+  transform: translateY(-2px); /* Micro-interaction */
+  box-shadow: 0 6px 20px rgba(191, 152, 96, 0.4);
+}
+
+.payBtnContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.lockIcon {
+  width: 18px;
+  height: 18px;
+  color: rgba(255,255,255,0.9);
 }
 
 .payBtn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-}
-
-.payBtn:not(:disabled):hover {}
-
-/* subtle shimmer (one-pass) */
-.payBtn::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
+  background: #d1d5db;
 }
 
 /* ===== Terms strip below right card ===== */

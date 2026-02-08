@@ -7,6 +7,14 @@
   overflow: hidden;
 }
 
+.trendy-section-empty {
+  background: #fef9f5;
+  text-align: center;
+  padding: 20px 100px 0px;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
 .trendy-heading {
     color: #000;
     margin-bottom: -4px;
@@ -420,4 +428,36 @@
     gap: 10px;
     margin-top: -11px;
   }
+  
+  .skeleton-container {
+    padding: 20px 10px;
+    gap: 16px;
+  }
+  
+  .skeleton-card {
+    min-width: 280px;
+  }
+}
+
+/* Skeleton Loading Styles */
+.skeleton-container {
+  display: flex;
+  justify-content: center;
+  gap: 29px;
+  padding: 30px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.skeleton-container::-webkit-scrollbar {
+  display: none;
+}
+
+.skeleton-card {
+  background: #f9f4ec;
+  border-radius: 16px;
+  min-width: 310px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #f8eeee;
 }

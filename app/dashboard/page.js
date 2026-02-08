@@ -5,6 +5,9 @@ import { useSearchParams } from "next/navigation";
 import styles from "./dashboard.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import Skeleton from "../components/Skeleton";
+import Loading from "../components/Loading";
+import EmptyState from "../components/EmptyState";
 import { motion } from "framer-motion";
 
 import {
@@ -541,8 +544,12 @@ function DashboardContent() {
             </div>
 
             <div className={styles.profileInfoText}>
-              <h3 className={styles.profileName}>{loading ? "Loading..." : profileData.name}</h3>
-              <div className={styles.profileMeta}>{profileData.phone || "No phone"}</div>
+              <h3 className={styles.profileName}>
+                {loading ? <Skeleton width="180px" height="28px" /> : profileData.name}
+              </h3>
+              <div className={styles.profileMeta}>
+                {loading ? <Skeleton width="120px" height="20px" style={{marginTop: '8px'}} /> : (profileData.phone || "No phone")}
+              </div>
             </div>
           </div>
 
@@ -558,7 +565,7 @@ function DashboardContent() {
             <label>Full Name</label>
             <div className={styles.infoContent}>
               <UserCircleIcon className={styles.infoIcon} />
-              <span>{loading ? "Loading..." : profileData.name}</span>
+              {loading ? <Skeleton width="160px" /> : <span>{profileData.name}</span>}
             </div>
           </div>
 
@@ -566,7 +573,7 @@ function DashboardContent() {
             <label>Email</label>
             <div className={styles.infoContent}>
               <EnvelopeIcon className={styles.infoIcon} />
-              <span>{loading ? "Loading..." : profileData.email || "Not provided"}</span>
+              {loading ? <Skeleton width="200px" /> : <span>{profileData.email || "Not provided"}</span>}
             </div>
           </div>
 
@@ -574,21 +581,21 @@ function DashboardContent() {
             <label>Phone</label>
             <div className={styles.infoContent}>
               <PhoneIcon className={styles.infoIcon} />
-              <span>{loading ? "Loading..." : profileData.phone || "Not provided"}</span>
+              {loading ? <Skeleton width="120px" /> : <span>{profileData.phone || "Not provided"}</span>}
             </div>
           </div>
 
           <div className={`${styles.infoBox} ${styles.card}`}>
             <label>Gender</label>
             <div className={styles.infoContent}>
-              <span>{loading ? "Loading..." : profileData.gender || "Not specified"}</span>
+              {loading ? <Skeleton width="80px" /> : <span>{profileData.gender || "Not specified"}</span>}
             </div>
           </div>
 
           <div className={`${styles.infoBoxFull} ${styles.card}`}>
             <label>Address</label>
             <div className={styles.infoContent}>
-              <span>{loading ? "Loading..." : profileData.address || "Not provided"}</span>
+              {loading ? <Skeleton width="100%" height="24px" /> : <span>{profileData.address || "Not provided"}</span>}
             </div>
           </div>
         </section>
@@ -599,7 +606,7 @@ function DashboardContent() {
             <label>Total Bookings</label>
             <div className={styles.infoContent}>
               <ShoppingBagIcon className={styles.infoIcon} />
-              <span>{loadingBookings ? "Loading..." : bookingStats.totalBookings}</span>
+              {loadingBookings ? <Skeleton width="40px" /> : <span>{bookingStats.totalBookings}</span>}
             </div>
           </div>
 
@@ -607,7 +614,7 @@ function DashboardContent() {
             <label>Upcoming Bookings</label>
             <div className={styles.infoContent}>
               <span style={{ color: '#10b981', fontWeight: 'bold' }}>
-                {loadingBookings ? "Loading..." : bookingStats.upcomingBookings}
+                {loadingBookings ? <Skeleton width="30px" /> : bookingStats.upcomingBookings}
               </span>
             </div>
           </div>
@@ -616,7 +623,7 @@ function DashboardContent() {
             <label>Completed Bookings</label>
             <div className={styles.infoContent}>
               <span style={{ color: '#6b7280', fontWeight: 'bold' }}>
-                {loadingBookings ? "Loading..." : bookingStats.completedBookings}
+                {loadingBookings ? <Skeleton width="30px" /> : bookingStats.completedBookings}
               </span>
             </div>
           </div>
@@ -836,16 +843,16 @@ function DashboardContent() {
 
         {/* Loading State */}
         {loading && (
-          <div className={styles.loadingState}>
-            <p>Loading your bookings...</p>
-          </div>
+          <Loading fullScreen={false} size={40} />
         )}
 
         {/* Empty State */}
         {!loading && filtered.length === 0 && (
-          <div className={styles.emptyState}>
-            <p>No {orderTab === "all" ? "" : orderTab} bookings found.</p>
-          </div>
+          <EmptyState 
+            icon="📋"
+            title={`No ${orderTab === "all" ? "" : orderTab + " "}bookings`}
+            message="Your bookings will appear here once you make a reservation."
+          />
         )}
 
         {/* Orders List - Premium Cards */}
@@ -1195,7 +1202,7 @@ function DashboardContent() {
 
 export default function Dashboard() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading fullScreen={true} size={60} />}>
       <DashboardContent />
     </Suspense>
   );

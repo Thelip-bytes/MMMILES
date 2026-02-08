@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
 import { estimatePrice } from "../../lib/pricing";
@@ -9,6 +9,8 @@ import { FaFilter, FaSearch, FaMapMarkerAlt, FaClock, FaCar, FaGasPump, FaCog, F
 import styles from "./filters.module.css";
 import LocationPickerModal from "../components/LocationPickerModal";
 import CalendarModal from "../components/CalendarModal";
+import Skeleton from "../components/Skeleton";
+import EmptyState from "../components/EmptyState";
 
 // debounce helper
 function useDebounce(value, delay = 400) {
@@ -18,6 +20,19 @@ function useDebounce(value, delay = 400) {
     return () => clearTimeout(handler);
   }, [value, delay]);
   return debounced;
+}
+
+// Enforce Chennai-only logic
+function useCityEnforcement() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const city = searchParams.get("city");
+    if (city && city !== "Chennai") {
+      router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
+    }
+  }, [searchParams, router]);
 }
 
 // Supabase storage base URL for car images
@@ -485,6 +500,12 @@ export default function SearchPage() {
 
   const handleLocationSelect = (location) => {
     const newCity = location.city || city;
+    
+    if (newCity && newCity !== "Chennai") {
+      router.push(`/comingsoon?city=${encodeURIComponent(newCity)}`);
+      return;
+    }
+
     const params = new URLSearchParams({
       city: newCity,
       pickupTime: pickup,
@@ -714,7 +735,7 @@ export default function SearchPage() {
         <div className={styles.content}>
           <div className={styles.secondaryBar}>
             <div className={styles.resultCount}>
-              {loading ? 'Loading...' : `${cars.length} vehicles in ${city || 'your area'}`}
+              {loading ? <Skeleton width="180px" height="18px" /> : `${cars.length} vehicles in ${city || 'your area'}`}
             </div>
             <button className={styles.recommendedBtn}>Most Recommended</button>
           </div>
@@ -739,14 +760,19 @@ export default function SearchPage() {
               <div className={styles.grid}>
                 {[1, 2, 3, 4, 5, 6].map((s) => (
                   <div key={s} className={styles.card}>
-                    <div style={{ height: '200px', background: '#f0f0f0', borderRadius: '8px', marginBottom: '12px' }}></div>
-                    <div style={{ height: '16px', background: '#f0f0f0', marginBottom: '8px' }}></div>
-                    <div style={{ height: '14px', background: '#f0f0f0', width: '60%' }}></div>
+                    <Skeleton width="100%" height="200px" borderRadius="8px" style={{ marginBottom: '12px' }} />
+                    <Skeleton width="80%" height="18px" style={{ marginBottom: '8px' }} />
+                    <Skeleton width="60%" height="14px" style={{ marginBottom: '8px' }} />
+                    <Skeleton width="40%" height="24px" />
                   </div>
                 ))}
               </div>
             ) : cars.length === 0 ? (
-              <p>No cars found matching your criteria.</p>
+              <EmptyState 
+                icon="🚗"
+                title="No cars available"
+                message="No cars found matching your criteria. Try adjusting your filters or search location."
+              />
             ) : (
                 <div className={styles.grid}>
                 {cars.map((car) => (

@@ -4,10 +4,44 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import {
+  UserIcon,
+  CogIcon,
+  CalendarIcon,
+  InformationCircleIcon,
+  LockClosedIcon
+} from "@heroicons/react/24/solid";
+import Loading from "../components/Loading";
+import EmptyState from "../components/EmptyState";
 import { makeAuthenticatedRequest } from "../../lib/customSupabaseClient";
 import { testAuth } from "../../lib/authTest";
 import { parseDate, formatDateTimeForDB, parseBookingRawDateTime } from "../../lib/dateUtils";
 import styles from "./EnhancedCheckout.module.css";
+
+// Enforce Chennai-only logic
+function useCityEnforcement() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const city = searchParams.get("city");
+    if (city && city !== "Chennai") {
+      router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
+    }
+  }, [searchParams, router]);
+}
+
+// Helper to format duration
+const formatDuration = (totalHours) => {
+  if (!totalHours) return "0 Hours";
+  const days = Math.floor(totalHours / 24);
+  const hours = totalHours % 24;
+
+  if (days > 0) {
+    return `${days} Day${days > 1 ? 's' : ''} ${hours > 0 ? ` ${hours} Hour${hours > 1 ? 's' : ''}` : ''}`;
+  }
+  return `${hours} Hour${hours > 1 ? 's' : ''}`;
+};
 
 // Supabase storage base URL for car images
 const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/object/public/car-images/";
@@ -44,6 +78,7 @@ function toNumberClean(v) {
 /*                             MAIN COMPONENT                                   */
 /* -------------------------------------------------------------------------- */
 export default function EnhancedCheckoutPage() {
+  useCityEnforcement();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -1026,8 +1061,16 @@ export default function EnhancedCheckoutPage() {
   /*                                   UI                                        */
   /* -------------------------------------------------------------------------- */
 
-  if (loading) return <p className={styles.loading}>Loading...</p>;
-  if (!car) return <p className={styles.error}>Car Not Found</p>;
+  if (loading) return <Loading fullScreen={true} size={60} />;
+  if (!car) return (
+    <EmptyState
+      icon="🚗"
+      title="Vehicle Not Found"
+      message="This vehicle is no longer available. Please search for another car."
+      actionLabel="Find Cars"
+      onAction={() => router.push('/search')}
+    />
+  );
 
   const formatTimeRemaining = (ms) => {
     if (ms <= 0) return "00:00";
@@ -1342,22 +1385,28 @@ export default function EnhancedCheckoutPage() {
               <div className={styles.carMeta}>
                 <h1 className={styles.title}>{car.make.toUpperCase()} {car.model.toUpperCase()}</h1>
 
-                <div className={styles.features}>
-                  <span>✔ Serviced</span>
-                  <span>✔ {car.seating_capacity} Seat</span>
-                  <span>✔ {car.transmission_type}</span>
-                </div>
-                <div className={styles.features}>
-                  <span>✔ {car.model_year} model</span>
-                  <span>✔ good tyre condition</span>
-                </div>
-                <div className={styles.features}>
-                  <span>✔ Insurance covered</span>
-                  <span>✔ Luggage space</span>
+                <div className={styles.featuresGrid}>
+                  <div className={styles.featureItem}>
+                    <UserIcon className={styles.featureIcon} />
+                    <span>{car.seating_capacity} Seat</span>
+                  </div>
+                  <div className={styles.featureItem}>
+                    <CogIcon className={styles.featureIcon} />
+                    <span>{car.transmission_type}</span>
+                  </div>
+                  <div className={styles.featureItem}>
+                    <CalendarIcon className={styles.featureIcon} />
+                    <span>{car.model_year} Model</span>
+                  </div>
                 </div>
 
+                <div className={styles.divider} />
+
                 <div className={styles.priceRow}>
-                  <div className={styles.price}>Rs.{priceSummary.total} <span className={styles.priceper}>For {priceSummary.hours}hours</span></div>
+                  <div className={styles.price}>
+                    ₹{priceSummary.total.toLocaleString('en-IN')}
+                    <span className={styles.priceper}>For {formatDuration(priceSummary.hours)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1365,12 +1414,12 @@ export default function EnhancedCheckoutPage() {
             <div className={styles.infoRow}>
               <div className={styles.infoCard}>
                 <h3>Inclusion / Exclusions</h3>
-                <ul className={styles.infoList}>
+                <div className={styles.infoList}>
                   <p><span className={styles.infoListicon}>✖</span> Fuel not included. Guest should return the car with the same fuel level as at start.</p>
                   <p><span className={styles.infoListicon}>✖</span> Toll/Fastag charges not included. Check with host for Fastag recharge.</p>
                   <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</p>
                   <p><span className={styles.infoListicongreen}>✔</span> You need to carry ID proof while starting the Drive for Host verification.</p>
-                </ul>
+                </div>
               </div>
 
               <div className={styles.infoCard}>
@@ -1436,75 +1485,50 @@ export default function EnhancedCheckoutPage() {
             <div className={styles.summaryCard}>
               <h2 className={styles.summaryTitle}>Trip Summary</h2>
 
-              <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Duration:</div>
-                <div className={styles.rowValue}>{priceSummary.hours} hours</div>
-              </div>
-
-              <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Rental Cost:</div>
-                <div className={styles.rowValue}>₹{priceSummary.rentalCost}</div>
-              </div>
-
-              <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Insurance:</div>
-                <div className={styles.rowValue}>₹{priceSummary.insuranceCost}</div>
-              </div>
-
-              <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>Convenience Fee:</div>
-                <div className={styles.rowValue}>₹{priceSummary.convFee}</div>
-              </div>
-
-              <div className={styles.summaryRow}>
-                <div className={styles.rowLabel}>GST (18%):</div>
-                <div className={styles.rowValue}>₹{priceSummary.gst}</div>
-              </div>
-
-              {/* {discount > 0 && (
+              <div className={styles.summaryGroup}>
                 <div className={styles.summaryRow}>
-                  <div className={styles.rowLabel}>Discount Applied:</div>
-                  <div className={styles.rowValue}>-₹{discount}</div>
+                  <div className={styles.rowLabel}>Duration</div>
+                  <div className={styles.rowValue}>{formatDuration(priceSummary.hours)}</div>
                 </div>
-              )} */}
 
-              <div className={styles.divider} />
+                <div className={styles.summaryRow}>
+                  <div className={styles.rowLabel}>Rental Cost</div>
+                  <div className={styles.rowValue}>₹{priceSummary.rentalCost.toLocaleString('en-IN')}</div>
+                </div>
 
-              {/* <div className={styles.couponSection}>
-                <div className={styles.totalLabel}>Apply coupons:</div>
-                {couponInfo ? (
-                  <div className={styles.appliedCoupon}>
-                    <span className={styles.couponCode}>{couponInfo.code}</span>
-                    <button
-                      className={styles.removeCouponBtn}
-                      onClick={handleRemoveCoupon}
-                    >
-                      Remove
-                    </button>
+                <div className={`${styles.summaryRow} ${styles.rowLight}`}>
+                  <div className={styles.rowLabelWithIcon}>
+                    Insurance
+                    <div className={styles.tooltipParams}>
+                      <InformationCircleIcon className={styles.infoIcon} />
+                      <span className={styles.tooltipText}>Covered for standard damages</span>
+                    </div>
                   </div>
-                ) : (
-                  <div className={styles.couponInputGroup}>
-                    <input
-                      type="text"
-                      className={styles.couponInput}
-                      placeholder="Enter code"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                    />
-                    <button
-                      className={styles.applyCouponBtn}
-                      onClick={handleApplyCoupon}
-                      disabled={applyingCoupon || !couponCode}
-                    >
-                      {applyingCoupon ? '...' : 'Apply'}
-                    </button>
+                  <div className={styles.rowValue}>₹{priceSummary.insuranceCost.toLocaleString('en-IN')}</div>
+                </div>
+
+                <div className={`${styles.summaryRow} ${styles.rowLight}`}>
+                  <div className={styles.rowLabel}>Convenience Fee</div>
+                  <div className={styles.rowValue}>₹{priceSummary.convFee.toLocaleString('en-IN')}</div>
+                </div>
+
+                <div className={`${styles.summaryRow} ${styles.rowLight}`}>
+                  <div className={styles.rowLabelWithIcon}>
+                    GST (18%)
+                    <div className={styles.tooltipParams}>
+                      <InformationCircleIcon className={styles.infoIcon} />
+                      <span className={styles.tooltipText}>Calculated on base fare</span>
+                    </div>
                   </div>
-                )}
-              </div> */}
+                  <div className={styles.rowValue}>₹{priceSummary.gst.toLocaleString('en-IN')}</div>
+                </div>
+              </div>
+
+              <div className={styles.totalDivider} />
 
               <div className={styles.totalBar}>
-                <div className={styles.totalText}>Total:</div>
-                <div className={styles.totalAmt}>₹{priceSummary.total}</div>
+                <div className={styles.totalText}>Total Amount</div>
+                <div className={styles.totalAmt}>₹{priceSummary.total.toLocaleString('en-IN')}</div>
               </div>
 
               {/* KM Limit Note */}
@@ -1547,9 +1571,15 @@ export default function EnhancedCheckoutPage() {
                 ) : lockStatus.blocked ? (
                   "Currently Unavailable"
                 ) : lockStatus.canProceed ? (
-                  `Pay ₹${priceSummary.total} ✓`
+                  <div className={styles.payBtnContent}>
+                    <LockClosedIcon className={styles.lockIcon} />
+                    <span>Pay ₹{priceSummary.total.toLocaleString('en-IN')}</span>
+                  </div>
                 ) : (
-                  `Pay ₹${priceSummary.total}`
+                  <div className={styles.payBtnContent}>
+                    <LockClosedIcon className={styles.lockIcon} />
+                    <span>Pay ₹{priceSummary.total.toLocaleString('en-IN')}</span>
+                  </div>
                 )}
               </button>
             </div>

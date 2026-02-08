@@ -1,10 +1,16 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import styles from "./ComingSoon.module.css";
 
-export default function ComingSoonHero() {
+function ComingSoonContent() {
+  const searchParams = useSearchParams();
+  const cityParam = searchParams.get("city");
+  // Capitalize first letter if it's generic text, otherwise use as is
+  const city = cityParam || "Your City";
+
   const [comingsoonOpen, setComingsoonOpen] = useState(false);
   const [comingsoonSuccess, setComingsoonSuccess] = useState(false);
   const [comingsoonError, setComingsoonError] = useState("");
@@ -13,7 +19,7 @@ export default function ComingSoonHero() {
   const [comingsoonForm, setComingsoonForm] = useState({
     name: "",
     phone: "",
-    city: "",
+    city: cityParam || "",
   });
 
   const comingsoonValidatePhone = (phone) =>
@@ -71,7 +77,7 @@ export default function ComingSoonHero() {
       {/* ================= HERO (UNCHANGED DESIGN) ================= */}
       <section className={styles.ComingSoonhero}>
         <p className={styles.ComingSooncoming}>Coming Soon</p>
-        <h1 className={styles.ComingSooncity}>Bangalore</h1>
+        <h1 className={styles.ComingSooncity}>{city}</h1>
 
         <div className={styles["ComingSooncar-lock"]}>
           <Image
@@ -182,9 +188,23 @@ export default function ComingSoonHero() {
                 <p>You’re on the waitlist!</p>
               </div>
             )}
+            <span
+              className={styles.comingsoonClose}
+              onClick={() => setComingsoonOpen(false)}
+            >
+              ✕
+            </span>
           </div>
         </div>
       )}
     </>
+  );
+}
+
+export default function ComingSoonHero() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ComingSoonContent />
+    </Suspense>
   );
 }

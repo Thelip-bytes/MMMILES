@@ -7,6 +7,8 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { estimatePrice } from "../../../lib/pricing";
 import { supabase } from "../../../lib/supabaseClient";
+import Loading from "../../components/Loading";
+import EmptyState from "../../components/EmptyState";
 import styles from "./carDetail.module.css";
 import Counter from "../../components/Counter";
 import CarCard from "../../components/CarCard";
@@ -21,9 +23,18 @@ const getFullImageUrl = (imageUrl) => {
 };
 
 export default function CarPage() {
-  const { id } = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Enforce Chennai-only logic
+  useEffect(() => {
+    const city = searchParams.get("city");
+    if (city && city !== "Chennai") {
+      router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
+    }
+  }, [searchParams, router]);
+
+  const { id } = useParams();
   const pickup = searchParams.get("pickup") || searchParams.get("pickupTime");
   const returnTime = searchParams.get("return") || searchParams.get("returnTime");
 
@@ -137,8 +148,16 @@ export default function CarPage() {
     router.push(`/checkout?car=${id}&pickup=${pickup}&return=${returnTime}`);
   };
 
-  if (loading) return <p className={styles.loading}>Loading...</p>;
-  if (!car) return <p className={styles.error}>Car not found</p>;
+  if (loading) return <Loading fullScreen={true} />;
+  if (!car) return (
+    <EmptyState 
+      icon="🚗"
+      title="Car Not Found"
+      message="This vehicle is no longer available or the link is invalid."
+      actionLabel="Browse All Cars"
+      onAction={() => router.push('/search')}
+    />
+  );
 
   // Insurance is now calculated automatically based on booking duration tier
   // No user selection needed - insurance is included in the total price

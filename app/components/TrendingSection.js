@@ -13,6 +13,8 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { useCity } from "../context/CityContext";
+import Skeleton from "./Skeleton";
+import EmptyState from "./EmptyState";
 import styles from "./TrendingSection.module.css";
 
 export default function TrendingSection() {
@@ -218,12 +220,27 @@ export default function TrendingSection() {
     return null;
   }
 
-  // Loading state
+  // Loading state - Skeleton cards
   if (loading) {
     return (
       <section className={styles["trendy-section"]}>
         <h2 className={styles["trendy-heading"]}>Drive What's Trending in {selectedCity}</h2>
-        <p className={styles["trendy-subheading"]}>Loading trending cars...</p>
+        <p className={styles["trendy-subheading"]}>Hot Rides, High Demand</p>
+        <div className={styles["skeleton-container"]}>
+          {[1, 2, 3].map((i) => (
+            <div key={i} className={styles["skeleton-card"]}>
+              <Skeleton width="100%" height="180px" borderRadius="12px" style={{ marginBottom: '16px' }} />
+              <Skeleton width="60%" height="14px" style={{ marginBottom: '8px' }} />
+              <Skeleton width="80%" height="20px" style={{ marginBottom: '12px' }} />
+              <Skeleton width="100%" height="14px" style={{ marginBottom: '6px' }} />
+              <Skeleton width="90%" height="14px" style={{ marginBottom: '16px' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Skeleton width="80px" height="24px" />
+                <Skeleton width="100px" height="36px" borderRadius="8px" />
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
     );
   }
@@ -231,9 +248,12 @@ export default function TrendingSection() {
   // Error state
   if (error) {
     return (
-      <section className={styles["trendy-section"]}>
+      <section className={styles["trendy-section-empty"]}>
         <h2 className={styles["trendy-heading"]}>Drive What's Trending in {selectedCity}</h2>
-        <p className={styles["trendy-subheading"]}>Unable to load trending cars. Please try again later.</p>
+        <EmptyState 
+          title="Unable to load"
+          message="We couldn't load trending cars. Please try again later."
+        />
       </section>
     );
   }
@@ -241,9 +261,12 @@ export default function TrendingSection() {
   // Empty state
   if (vehicles.length === 0) {
     return (
-      <section className={styles["trendy-section"]}>
+      <section className={styles["trendy-section-empty"]}>
         <h2 className={styles["trendy-heading"]}>Drive What's Trending in {selectedCity}</h2>
-        <p className={styles["trendy-subheading"]}>No trending cars available in {selectedCity} right now.</p>
+        <EmptyState 
+          title="No trending cars"
+          message={`No trending cars available in ${selectedCity} right now. Check back soon!`}
+        />
       </section>
     );
   }

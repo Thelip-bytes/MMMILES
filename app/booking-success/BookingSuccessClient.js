@@ -2,6 +2,8 @@
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { formatDateTimeForDisplay } from "../../lib/dateUtils.js";
+import Loading from "../components/Loading";
+import EmptyState from "../components/EmptyState";
 import "./bookingSuccess.css";
 
 export default function BookingSuccess() {
@@ -63,47 +65,30 @@ export default function BookingSuccess() {
   }, [bookingId]);
 
   if (loading) {
-    return (
-      <div className="booking-success-page">
-        <div className="success-card">
-          <h1 className="title">Loading Booking Details...</h1>
-          <p className="subtitle">Please wait while we fetch your booking information.</p>
-        </div>
-      </div>
-    );
+    return <Loading fullScreen={true} size={60} />;
   }
 
   if (error) {
     return (
-      <div className="booking-success-page">
-        <div className="success-card">
-          <h1 className="title" style={{ color: '#721c24' }}>Error Loading Booking</h1>
-          <p className="subtitle">{error}</p>
-          <button
-            className="back-btn"
-            onClick={() => (window.location.href = "/")}
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
+      <EmptyState 
+        icon="⚠️"
+        title="Error Loading Booking"
+        message={error}
+        actionLabel="Back to Home"
+        onAction={() => (window.location.href = "/")}
+      />
     );
   }
 
   if (!bookingData) {
     return (
-      <div className="booking-success-page">
-        <div className="success-card">
-          <h1 className="title">Booking Not Found</h1>
-          <p className="subtitle">We couldn't find your booking details.</p>
-          <button
-            className="back-btn"
-            onClick={() => (window.location.href = "/")}
-          >
-            Back to Home
-          </button>
-        </div>
-      </div>
+      <EmptyState 
+        icon="📋"
+        title="Booking Not Found"
+        message="We couldn't find your booking details."
+        actionLabel="Back to Home"
+        onAction={() => (window.location.href = "/")}
+      />
     );
   }
 

@@ -58,8 +58,7 @@ export default function Hero() {
     <div className="card">
     <img src="/images/mission.png" alt="Mission Icon" className="card-icon" />
     <h3>Our Mission</h3>
-    <p>To provide travelers with the freedom to explore, in cars that inspire confidence and class. We empower every customer with
-    the keys to comfort, control, and unforgettable journeys, creating a legacy of road trips and memories. </p> 
+    <p>We exist to give travelers the freedom to explore—wrapped in comfort, confidence, and class. Every drive is an invitation to create unforgettable journeys that last long after the engine stops.</p> 
     
     </div>
     </section>

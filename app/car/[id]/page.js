@@ -241,7 +241,7 @@ export default function CarPage() {
         {/* --- Right Column --- */}
         <div className={styles.rightColumn}>
           <h1 className={styles.carName}>
-            {car.make} {car.model} ({car.model_year})
+            {car.make} {car.model} {/*({car.model_year})*/}
           </h1>
           <p className={styles.priceTag}>
             <span className={styles.startingAt}>Starting At</span>

@@ -166,7 +166,7 @@ function CarCard({ car, pickup, returndate, router, city }) {
           
           <div className={styles.cardInfoRight}>
             <div className={styles.ratingPill}>
-              <FaStar color="#f59e0b" size={10} /> 5.0 <span style={{color: '#6b7280', fontWeight: 400}}>(8)</span>
+              <FaStar color="#f59e0b" size={10} /> 4.8 <span style={{color: '#6b7280', fontWeight: 400}}>(8)</span>
             </div>
             <span className={styles.ratingText}>Excellent</span>
           </div>

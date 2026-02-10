@@ -8,7 +8,7 @@ export async function GET(request) {
     const announcements = [
       {
         id: 1,
-        date: "12/12/2024",
+        date: "10/02/2026",
         title: "Welcome to MM Miles",
         desc: "Thank you for choosing MM Miles for your car rental needs. We're here to provide you with the best service.",
         time: "10:30 PM, Monday",
@@ -16,7 +16,7 @@ export async function GET(request) {
       },
       {
         id: 2,
-        date: "13/12/2024",
+        date: "09/02/2026",
         title: "Service Update",
         desc: "All our vehicles are regularly sanitized and serviced to ensure your safety and comfort. Book with confidence!",
         time: "10:30 PM, Tuesday",
@@ -24,7 +24,7 @@ export async function GET(request) {
       },
       {
         id: 3,
-        date: "14/12/2024",
+        date: "14/02/2026",
         title: "Special Offers",
         desc: "Check out our latest offers and discounts on car rentals across major cities in India.",
         time: "09:20 PM, Wednesday",
@@ -32,7 +32,7 @@ export async function GET(request) {
       },
       {
         id: 4,
-        date: "15/12/2024",
+        date: "10/02/2026",
         title: "24/7 Support",
         desc: "Our customer support team is available round the clock to assist you with any queries.",
         time: "11:15 AM, Thursday",
@@ -40,9 +40,9 @@ export async function GET(request) {
       },
       {
         id: 5,
-        date: "16/12/2024",
-        title: "New Cities Added",
-        desc: "We're excited to announce car rental services now available in 5 new cities across India.",
+        date: "06/02/2026",
+        title: "Coming Soon",
+        desc: "We’re gearing up to launch our car rental services in new cities across India. Stay tuned—your city might be next!",
         time: "02:45 PM, Friday",
         color: "#fae3c8ff",
       }

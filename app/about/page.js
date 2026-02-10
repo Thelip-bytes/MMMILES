@@ -31,7 +31,7 @@ export default function Hero() {
         
       </section>
 
-      {/* ===== Team ===== */}
+      {/* ===== Team =====
       <section className="team-section">
         <div className="team-member">
           <Image src="/images/ko2.jpg" alt="Team Member" width={120} height={120} className="team-img"/>
@@ -44,6 +44,7 @@ export default function Hero() {
           <p>Co-Founder</p>
         </div>
       </section>
+       */}
 
       {/* ===== Vision & Mission ===== */}
       <section className="vision-mission-section">

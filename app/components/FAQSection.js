@@ -13,12 +13,12 @@ export default function FAQSection() {
     {
       question: "What is the minimum age to rent a car?",
       answer:
-        "The minimum age is 21 years.",
+        "The minimum age is 18 years.",
     },
     {
       question: "Do I need to pay a security deposit?",
       answer:
-        "Yes. A refundable security deposit is required before the trip. It will be refunded after vehicle inspection (within 3–7 business days).",
+        "No. We do not require any security deposit at any stage of the booking or trip.",
     },
     {
       question: "How does fuel policy work?",
@@ -29,7 +29,7 @@ export default function FAQSection() {
      {
       question: "Is there a kilometer limit?",
       answer:
-        "Yes. Each rental includes a fixed km/day. Extra kilometers will be charged at the rate specified during booking.",
+        "Most cars have unlimited kms. Kilometer limits apply only to select premium cars and will be mentioned during booking.",
     },
   ];
 

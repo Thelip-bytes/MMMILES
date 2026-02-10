@@ -16,11 +16,11 @@ const AdvantageSection = () => {
           </div>
           <div className="advantage-card">
             <img src="/2.jpg" alt="Location" />
-            <p>100+ Locations in 15 cities</p>
+            <p>10+ Hubs in Each City</p>
           </div>
           <div className="advantage-card">
             <img src="/3.jpg" alt="Delivery" />
-            <p>Home and Airport Delivery</p>
+            <p>Home Delivery and Pickup</p>
           </div>
           <div className="advantage-card">
             <img src="/4.jpg" alt="Privacy" />
@@ -32,7 +32,7 @@ const AdvantageSection = () => {
           </div>
           <div className="advantage-card">
             <img src="/6.jpg" alt="City" />
-            <p>15+ Cities Across India</p>
+            <p>Launching Across India</p>
           </div>
           <div className="advantage-card">
             <img src="/7.jpg" alt="Insurance" />
@@ -40,7 +40,7 @@ const AdvantageSection = () => {
           </div>
           <div className="advantage-card">
             <img src="/8.jpg" alt="Rating" />
-            <p>4.5 / 5 <br></br>20k+ reviewers</p>
+            <p>4.5 / 5 <br></br>10k+ reviewers</p>
           </div>
         </div>
       </div>

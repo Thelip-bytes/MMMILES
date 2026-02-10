@@ -12,8 +12,7 @@ const CITY_DATA = [
     { name: "Kochi", image: "/icons/koch.avif" },
     { name: "Hyderabad", image: "/icons/hyd.png" },
     { name: "Mumbai", image: "/icons/mumbai.avif" },
-    // Adding Delhi/NCR if you have the icon
-    { name: "Delhi-NCR", image: "/icons/ncr.avif" },
+    
 ];
 
 export default function CitySelector({ isOpen, onClose, onSelect, selectedCity }) {

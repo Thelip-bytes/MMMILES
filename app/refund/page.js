@@ -12,17 +12,16 @@ export default function RefundPolicyPage() {
         <ul>
           <li>All rental payments are billed upfront at the time of booking.</li>
           <li>Payments are non-refundable once processed, except as specified below.</li>
-          <li>Cancelling a booking will stop any future charges, but no refunds will be issued for unused rental periods.
-          </li>
+          
         </ul>
       </section>
 
       <section className="refund-section">
         <h2>2. Cancellations by the Customer</h2>
         <ul>
-        <li>More than 24 hours before scheduled pickup: Customers may cancel and receive a full refund of the rental fee.</li>
-        <li>Within 24 hours of scheduled pickup: The booking is non-refundable. The customer may reschedule (subject to vehicle availability) but no refund will be issued.</li>
-        <li>No-show (failure to pick up vehicle): No refund will be provided.</li>
+        <li>More than 24 hours before scheduled pickup: are eligible for a 90% refund of the rental fees.</li>
+        <li>Cancellations made less than 24 hours but more than 4 hours before pickup will receive a 50% refund of the rental fees.</li>
+        <li>Cancellations made within 4 hours of the scheduled pickup time are non-refundable, as the vehicle and resources are fully committed for your journey.</li>
           </ul>
       </section>
 
@@ -38,7 +37,7 @@ export default function RefundPolicyPage() {
       <section className="refund-section">
         <h2>4. Early Returns</h2>
         <ul>
-        <li>Returning vehicles before the agreed date/time will entitle the renter to a partial refund for unused time.</li>
+        <li>Returning vehicles before the agreed date/time will entitle the renter to a no refund for unused time.</li>
         </ul>
       </section>
 

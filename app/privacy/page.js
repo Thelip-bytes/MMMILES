@@ -87,14 +87,7 @@ export default function PrivacyPage() {
         </ul>
       </section>
 
-      <section className="privacy-section">
-      <h2>9. Contact Us</h2>
-        <ul>
-          <p>For questions or concerns about privacy, please contact:</p>
-          <li>📧 Email: mmmiles.chennai@gmail.com</li>
-          <li>📞 Phone: +91 97906 09111</li>
-        </ul>
-      </section>
+      
 
       <p className="privacy-footer">
         ⚠️ MM MILES is committed to protecting your privacy while ensuring safe

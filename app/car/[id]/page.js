@@ -82,6 +82,8 @@ export default function CarPage() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentMainMedia, setCurrentMainMedia] = useState(null);
+  const [showInsuranceModal, setShowInsuranceModal] = useState(false);
+
   
   useEffect(() => {
     async function fetchCar() {
@@ -253,7 +255,14 @@ export default function CarPage() {
           <p className={styles.description}>{car.description || "TODO: Add car description."}</p>
           
           
-          {/* --- Single Insurance Banner --- */}
+
+
+
+
+
+
+{/* ================= INSURANCE SECTION ================= */}
+
 <div className={styles.singleinsurance}>
   <div className={styles.singleinsuranceLeft}>
     <p className={styles.singleinsuranceTitle}>
@@ -280,8 +289,70 @@ export default function CarPage() {
     />
   </div>
 
-  <span className={styles.singleinsuranceTc}>T&C*</span>
+  <a
+    className={styles.singleinsuranceTc}
+    onClick={() => setShowInsuranceModal(true)}
+  >
+    T&C*
+  </a>
 </div>
+
+
+{/* ================= INSURANCE MODAL ================= */}
+
+<div
+  className={`${styles.insuranceOverlay} ${
+    showInsuranceModal ? styles.showModal : ""
+  }`}
+>
+  <div className={styles.insuranceModal}>
+    <button
+      className={styles.insuranceClose}
+      onClick={() => setShowInsuranceModal(false)}
+    >
+      ✕
+    </button>
+
+    <p className={styles.insuranceHeading}>
+      Worry-Free Miles Guaranteed
+    </p>
+
+    
+
+    <div className={styles.insuranceSection}>
+      <h3 className={styles.redTitle}>Policy Exceptions</h3>
+      <ul>
+        <li>Driving under the influence of alcohol or drugs</li>
+        <li>Overspeeding beyond legal limits</li>
+        <li>Off-roading, racing, or stunt driving</li>
+        <li>Using the vehicle for commercial goods transport</li>
+        <li>Not valid in government-declared danger zones</li>
+        <li>Driving through flooded or waterlogged areas</li>
+        <li>Travel in certain restricted regions</li>
+      </ul>
+    </div>
+
+    <button
+      className={styles.insuranceButton}
+      onClick={() => setShowInsuranceModal(false)}
+    >
+      OK, GOT IT!
+    </button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {/* --- Range Limit Banner (Conditional) --- */}
 {car.range_km_limit && car.range_km_limit.range_km_limit && (

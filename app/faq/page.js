@@ -20,7 +20,7 @@ export default function FAQPage() {
     {
       question: "Do I need to pay a security deposit?",
       answer:
-        "Yes. A refundable security deposit is required before the trip. It will be refunded after vehicle inspection (within 3–7 business days).",
+        "No. We do not require any security deposit at any stage of the booking or trip.",
     },
     {
       question: "How does fuel policy work?",
@@ -30,7 +30,7 @@ export default function FAQPage() {
     {
       question: "Is there a kilometer limit?",
       answer:
-        "Yes. Each rental includes a fixed km/day. Extra kilometers will be charged at the rate specified during booking.",
+        "Most cars have unlimited kms. Kilometer limits apply only to select premium cars and will be mentioned during booking.",
     },
     {
       question: "What happens if I return the car late?",
@@ -61,9 +61,8 @@ export default function FAQPage() {
       answer: (
         <>
           <p>• Yes.</p>
-          <p>• More than 24 hrs. before trip: 90% refund.</p>
-          <p>• Within 24 hrs: 50% refund.</p>
-          <p>• No-show: No refund.</p>
+          <p>• 90% Refund : Cancel before 24 hrs of pickup</p>
+          <p>• 50% Refund : Cancel 4 hrs before pickup.</p>
         </>
       ),
     },
@@ -80,7 +79,7 @@ export default function FAQPage() {
     {
       question: "How do I book a car with MM MILES?",
       answer:
-        "Simply share your travel dates and car preference on WhatsApp, and our team will confirm your booking.",
+        "www.mmmiles.com",
     },
   ];
 

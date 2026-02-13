@@ -160,7 +160,7 @@ function CarCard({ car, pickup, returndate, router, city }) {
               {car.make} {car.model} 
             </h3>
             <p className={styles.carSubtitle}>
-              {car.model_year} <span className={styles.dotSeparator}></span> {car.fuel_type} <span className={styles.dotSeparator}></span> {car.seating_capacity} Seats
+              {car.model_year} <span className={styles.dotSeparator}></span> {car.fuel_type} <span className={styles.dotSeparator}></span> {car.transmission_type}
             </p>
           </div>
           

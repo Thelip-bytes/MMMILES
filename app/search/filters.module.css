@@ -987,7 +987,7 @@
 @media (min-width: 1440px){
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(315px, 360px)) !important;
+    grid-template-columns: repeat(auto-fill, minmax(315px, 340px)) !important;
     gap: 30px;
     row-gap: 32px;
     justify-content: start;

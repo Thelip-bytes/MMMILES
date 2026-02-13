@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./Hero.module.css";
 
 const desktopImages = ["/tn-hero.jpg", "/kerala-hero.jpg", "/hero22.png"];
-const mobileImages = ["/hero-promo1.png", "/hero-promo2.png", "/hero-promo3.png"]; // <-- your mobile images
+const mobileImages = ["/hero-promo1.png", "/hero-promo222.png", "/hero-promo3.png"]; // <-- your mobile images
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);

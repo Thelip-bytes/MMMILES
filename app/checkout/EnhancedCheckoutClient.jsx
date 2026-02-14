@@ -156,6 +156,15 @@ export default function EnhancedCheckoutPage() {
     paymentId: null
   });
 
+  const [publicCoupons, setPublicCoupons] = useState([]);
+  const [showCouponDropdown, setShowCouponDropdown] = useState(false);
+  const [couponFeedback, setCouponFeedback] = useState({
+    show: false,
+    type: null, // 'success', 'removed', 'error'
+    message: '',
+    discount: 0
+  });
+
   /* -------------------------------------------------------------------------- */
   /*                            REDIRECT LOGIC                                   */
   /* -------------------------------------------------------------------------- */
@@ -277,6 +286,34 @@ export default function EnhancedCheckoutPage() {
 
     if (carId) go();
   }, [carId]);
+
+  /* -------------------------------------------------------------------------- */
+  /*                             FETCH PUBLIC COUPONS                             */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    async function fetchCoupons() {
+      try {
+        const now = new Date().toISOString();
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/active_coupons?status=eq.Active&is_admin_coupon=eq.false&valid_until=gt.${now}&select=*`,
+          {
+            headers: {
+              apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setPublicCoupons(data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch coupons:", err);
+      }
+    }
+    fetchCoupons();
+  }, []);
 
   /* -------------------------------------------------------------------------- */
   /*                           LOCK COUNTDOWN TIMER                               */
@@ -541,7 +578,12 @@ export default function EnhancedCheckoutPage() {
   /* -------------------------------------------------------------------------- */
   async function handleApplyCoupon() {
     if (!couponCode.trim()) {
-      alert("Please enter a coupon code");
+      setCouponFeedback({
+        show: true,
+        type: 'error',
+        message: "Please enter a coupon code",
+        discount: 0
+      });
       return;
     }
 
@@ -556,7 +598,7 @@ export default function EnhancedCheckoutPage() {
         },
         body: JSON.stringify({
           code: couponCode,
-          subtotal: priceSummary.basePrice // Use basePrice usually, or total depending on logic
+          subtotal: priceSummary.basePrice
         })
       });
 
@@ -565,15 +607,31 @@ export default function EnhancedCheckoutPage() {
       if (data.valid) {
         setDiscount(data.discount);
         setCouponInfo(data.coupon);
-        alert(`Coupon applied! You saved ₹${data.discount}`);
+        setCouponFeedback({
+          show: true,
+          type: 'success',
+          message: `Hurray! '${data.coupon.code}' Applied`,
+          discount: data.discount
+        });
+        setShowCouponDropdown(false); // Close dropdown if open
       } else {
         setDiscount(0);
         setCouponInfo(null);
-        alert(data.message || "Invalid coupon code");
+        setCouponFeedback({
+          show: true,
+          type: 'error',
+          message: data.message || "Invalid coupon code",
+          discount: 0
+        });
       }
     } catch (error) {
       console.error("Error applying coupon:", error);
-      alert("Failed to apply coupon");
+      setCouponFeedback({
+        show: true,
+        type: 'error',
+        message: "Failed to apply coupon",
+        discount: 0
+      });
     } finally {
       setApplyingCoupon(false);
     }
@@ -583,7 +641,12 @@ export default function EnhancedCheckoutPage() {
     setDiscount(0);
     setCouponInfo(null);
     setCouponCode("");
-    alert("Coupon removed");
+    setCouponFeedback({
+      show: true,
+      type: 'removed',
+      message: "Coupon Removed",
+      discount: 0
+    });
   }
 
   /* -------------------------------------------------------------------------- */
@@ -1522,6 +1585,67 @@ export default function EnhancedCheckoutPage() {
                   </div>
                   <div className={styles.rowValue}>₹{priceSummary.gst.toLocaleString('en-IN')}</div>
                 </div>
+
+                {discount > 0 && (
+                  <div className={`${styles.summaryRow} ${styles.rowLight}`}>
+                    <div className={styles.rowLabel}>Discount</div>
+                    <div className={styles.rowValue} style={{ color: '#16a34a' }}>-₹{discount.toLocaleString('en-IN')}</div>
+                  </div>
+                )}
+              </div>
+
+
+              <div className={styles.couponSection}>
+                {discount > 0 ? (
+                  <div className={styles.appliedCoupon}>
+                    <span className={styles.couponCode}>Code {couponInfo?.code} applied</span>
+                    <button className={styles.removeCouponBtn} onClick={handleRemoveCoupon}>Remove</button>
+                  </div>
+                ) : (
+                  <div className={styles.couponInputGroup}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                      <input
+                        type="text"
+                        className={styles.couponInput}
+                        placeholder="Enter Coupon Code"
+                        value={couponCode}
+                        onChange={(e) => {
+                          setCouponCode(e.target.value.toUpperCase());
+                          setShowCouponDropdown(true);
+                        }}
+                        onFocus={() => setShowCouponDropdown(true)}
+                        onBlur={() => setTimeout(() => setShowCouponDropdown(false), 200)}
+                      />
+                      {showCouponDropdown && publicCoupons.length > 0 && (
+                        <div className={styles.couponDropdown}>
+                          {publicCoupons
+                            .filter(c => c.code.toLowerCase().includes(couponCode.toLowerCase()))
+                            .map((c) => (
+                              <div
+                                key={c.id}
+                                className={styles.couponDropdownItem}
+                                onMouseDown={(e) => {
+                                  e.preventDefault(); // Prevent blur
+                                  setCouponCode(c.code);
+                                  setShowCouponDropdown(false);
+                                }}
+                              >
+                                <div className={styles.dropdownCode}>{c.code}</div>
+                                <div className={styles.dropdownDesc}>{c.description}</div>
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className={styles.applyCouponBtn}
+                      onClick={handleApplyCoupon}
+                      disabled={!couponCode || applyingCoupon}
+                    >
+                      {applyingCoupon ? "..." : "Apply"}
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className={styles.totalDivider} />
@@ -1663,6 +1787,32 @@ export default function EnhancedCheckoutPage() {
               ) : (
                 `Pay ₹${priceSummary.total}`
               )}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Coupon Feedback Modal */}
+      {couponFeedback.show && (
+        <div className={styles.couponFeedbackOverlay} onClick={() => setCouponFeedback({ ...couponFeedback, show: false })}>
+          <div className={styles.couponFeedbackCard} onClick={(e) => e.stopPropagation()}>
+            <div className={`${styles.feedbackIcon} ${styles[couponFeedback.type]}`}>
+              {couponFeedback.type === 'success' && '🎉'}
+              {couponFeedback.type === 'removed' && '🗑️'}
+              {couponFeedback.type === 'error' && '⚠️'}
+            </div>
+            <h3 className={styles.feedbackTitle}>
+              {couponFeedback.type === 'success' ? 'Savings Unlocked!' :
+                couponFeedback.type === 'removed' ? 'Coupon Removed' : 'Oops!'}
+            </h3>
+            <p className={styles.feedbackMessage}>{couponFeedback.message}</p>
+            {couponFeedback.type === 'success' && (
+              <div className={styles.savedAmount}>You saved ₹{couponFeedback.discount}</div>
+            )}
+            <button
+              className={styles.feedbackCloseBtn}
+              onClick={() => setCouponFeedback({ ...couponFeedback, show: false })}
+            >
+              Okay
             </button>
           </div>
         </div>

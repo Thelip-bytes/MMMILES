@@ -40,10 +40,12 @@ export async function POST(request) {
 
     // 1. Check if status is Active (or not Expired) based on user data
     // The user data shows "status": "Expired" for invalid ones. We assume "Active" for valid ones.
-    if (coupon.status === 'Expired') {
+    // 1. Check if status is Active based on user data
+    // The user data shows "status": "Expired" for invalid ones. We assume "Active" for valid ones.
+    if (coupon.status !== 'Active') {
       return NextResponse.json({ 
         valid: false, 
-        message: 'This coupon has expired' 
+        message: 'This coupon is no longer active' 
       }, { status: 400 });
     }
 

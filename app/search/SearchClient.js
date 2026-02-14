@@ -140,10 +140,7 @@ function CarCard({ car, pickup, returndate, router, city }) {
           </>
         )}
 
-        {/* Heart Icon */}
-        <button className={styles.heartBtn} onClick={handleWishlist}>
-          {isWishlisted ? <FaHeart color="#ef4444" size={16} /> : <FaRegHeart color="#111827" size={16} />}
-        </button>
+
 
         {/* Info Overlay - Title, Details, Rating */}
         <div className={styles.cardInfoOverlay}>
@@ -166,9 +163,8 @@ function CarCard({ car, pickup, returndate, router, city }) {
           
           <div className={styles.cardInfoRight}>
             <div className={styles.ratingPill}>
-              <FaStar color="#f59e0b" size={10} /> 4.8 <span style={{color: '#6b7280', fontWeight: 400}}>(8)</span>
+              <FaStar color="#f59e0b" size={10} /> {car.rating ? car.rating : 'New'}
             </div>
-            <span className={styles.ratingText}>Excellent</span>
           </div>
         </div>
       </div>

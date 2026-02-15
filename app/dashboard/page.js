@@ -927,6 +927,8 @@ function DashboardContent() {
                           <PhoneIcon className={styles.phoneIconSmall} />
                         </button>
                       )}
+
+                      
                     </div>
 
                     {/* Price Badge */}
@@ -961,7 +963,9 @@ function DashboardContent() {
                             <span className={styles.plateLabel}>IND</span>
                             <span className={styles.plateValue}>{o.registrationNumber}</span>
                          </div>
+                         
                        </div>
+                       
                     )}
                   </div>
                 </div>

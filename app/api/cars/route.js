@@ -72,30 +72,22 @@ export async function GET(req) {
 
     console.log("🚗 Found vehicles:", vehiclesData.length);
 
-    // If pickup and return times are provided, filter out vehicles with overlapping bookings
-    let availableVehicles = vehiclesData;
-    
+    // If pickup and return times are provided, use the scalable RPC
+    let availableVehicles = [];
+
     if (pickupTimeRaw && returnTimeRaw) {
       try {
         // Parse date from DD/MM/YYYY HH:MM format to ISO timestamp
         const parseDate = (dateString) => {
           if (!dateString) return null;
-          
-          // Handle URL encoded format: "17%2F11%2F2025+09%3A00" -> "17/11/2025 09:00"
           const decoded = decodeURIComponent(dateString);
-          
-          // Replace + with space and parse DD/MM/YYYY HH:MM format
           const cleanDate = decoded.replace(/\+/g, ' ');
-          
-          // Parse DD/MM/YYYY HH:MM format
           const match = cleanDate.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})/);
           if (!match) {
-            console.warn("❌ Date format not recognized:", dateString, "-> decoded:", decoded, "-> clean:", cleanDate);
+            console.warn("❌ Date format not recognized:", dateString);
             return null;
           }
-          
           const [, day, month, year, hour, minute] = match;
-          // Create ISO string: YYYY-MM-DDTHH:MM:00Z
           return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour}:${minute}:00+00:00`;
         };
 
@@ -103,163 +95,54 @@ export async function GET(req) {
         const returnTimeISO = parseDate(returnTimeRaw);
 
         if (!pickupTimeISO || !returnTimeISO) {
-          console.error("❌ Failed to parse dates:", { pickupTimeRaw, returnTimeRaw });
-          return Response.json([], { status: 200 }); // Return empty array instead of error
+          console.error("❌ Failed to parse dates for RPC:", { pickupTimeRaw, returnTimeRaw });
+          return Response.json([], { status: 200 });
         }
 
-        console.log("📅 Searching for bookings between:", {
-          pickup: pickupTimeISO,
-          return: returnTimeISO
-        });
+        console.log("⚡ Fetching available vehicles via RPC:", { city, pickupTimeISO, returnTimeISO });
 
-        // 🔍 COMPREHENSIVE BOOKING CHECK - Try multiple approaches
+        let rpcQuery = supabase
+          .rpc('get_available_vehicles', {
+            city_param: city,
+            pickup_time: pickupTimeISO,
+            return_time: returnTimeISO
+          })
+          .select('*,vehicle_images(*),buffer_hours'); // Get related data too
+
+        // Apply filters to RPC result
+        if (type) rpcQuery = rpcQuery.eq("vehicle_type", type);
+        if (fuel) rpcQuery = rpcQuery.eq("fuel_type", fuel);
+        if (transmission) rpcQuery = rpcQuery.eq("transmission_type", transmission);
+        if (seats) rpcQuery = rpcQuery.eq("seating_capacity", parseInt(seats));
+        if (year) rpcQuery = rpcQuery.eq("model_year", parseInt(year));
+        if (brand) rpcQuery = rpcQuery.eq("make", brand);
+        if (priceMin) rpcQuery = rpcQuery.gte("base_daily_rate", parseFloat(priceMin) * 24);
+        if (priceMax) rpcQuery = rpcQuery.lte("base_daily_rate", parseFloat(priceMax) * 24);
+        if (gps === "true") rpcQuery = rpcQuery.eq("has_gps", true);
+        if (ac === "true") rpcQuery = rpcQuery.eq("has_ac", true);
+
+        const { data: rpcData, error: rpcError } = await rpcQuery;
+
+        if (rpcError) {
+          console.error("❌ RPC Error:", rpcError);
+          // Fallback or error handling
+          throw rpcError;
+        }
         
-        // Approach 1: Check for bookings with common status values
-        const statusOptions = [
-          ["confirmed", "pending"], 
-          ["booked"], 
-          ["active"], 
-          ["confirmed"],
-          ["pending"]
-        ];
+        availableVehicles = rpcData || [];
+        console.log(`⚡ RPC returned ${availableVehicles.length} vehicles.`);
 
-        let overlappingBookings = [];
-        let bookingError = null;
-
-        for (const statuses of statusOptions) {
-          console.log(`🔍 Trying status values: [${statuses.join(", ")}]`);
-          
-          // Fetch all confirmed/pending bookings for the time window
-          // We'll add buffer time when checking for conflicts
-          const { data, error } = await supabase
-            .from("bookings")
-            .select("vehicle_id, status, start_time, end_time")
-            .in("status", statuses)
-            .lt("start_time", returnTimeISO);  // booking starts before requested return
-
-          if (error) {
-            console.log(`❌ Error with status [${statuses.join(", ")}]:`, error.message);
-            bookingError = error;
-            continue;
-          }
-
-          console.log(`✅ Found ${data?.length || 0} bookings with status [${statuses.join(", ")}]`);
-          
-          if (data && data.length > 0) {
-            overlappingBookings = data;
-            console.log("📋 Sample bookings:", data.slice(0, 3));
-            break; // Success, no need to try other status options
-          }
-        }
-
-        // Approach 2: If no bookings found, check if any bookings exist at all
-        if (overlappingBookings.length === 0) {
-          console.log("🔍 No overlapping bookings found. Checking if any bookings exist...");
-          
-          const { data: allBookings, error: allBookingsError } = await supabase
-            .from("bookings")
-            .select("vehicle_id, status, start_time, end_time")
-            .limit(5);
-
-          if (allBookingsError) {
-            console.error("❌ Cannot access bookings table at all:", allBookingsError);
-            console.log("💡 This suggests RLS policies or connection issues");
-          } else {
-            console.log(`📊 Total bookings in database: ${allBookings?.length || 0}`);
-            if (allBookings && allBookings.length > 0) {
-              const statusCounts = allBookings.reduce((acc, booking) => {
-                acc[booking.status] = (acc[booking.status] || 0) + 1;
-                return acc;
-              }, {});
-              console.log("📈 Status distribution:", statusCounts);
-              
-              // Try with actual status values from database
-              const actualStatuses = Object.keys(statusCounts);
-              console.log(`🔍 Retrying with actual status values: [${actualStatuses.join(", ")}]`);
-              
-              const { data: retryBookings, error: retryError } = await supabase
-                .from("bookings")
-                .select("vehicle_id, status, start_time, end_time")
-                .in("status", actualStatuses)
-                .lt("start_time", returnTimeISO)
-                .gt("end_time", pickupTimeISO);
-
-              if (!retryError && retryBookings && retryBookings.length > 0) {
-                overlappingBookings = retryBookings;
-                console.log("✅ Success with actual status values!");
-              }
-            } else {
-              console.log("⚠️ No bookings found in database at all!");
-            }
-          }
-        }
-
-        // If we still can't access bookings due to errors, proceed with all vehicles
-        if (overlappingBookings.length === 0 && bookingError) {
-          console.log("⚠️ Unable to check bookings due to database access issues");
-          console.log("💡 Returning all vehicles (booking check failed)");
-          return new Response(JSON.stringify(availableVehicles || []), {
-            status: 200,
-            headers: {
-              "Content-Type": "application/json",
-              "Cache-Control": "s-maxage=30, stale-while-revalidate=60",
-            },
-          });
-        }
-
-        console.log(`🎯 Final overlapping bookings count: ${overlappingBookings.length}`);
-
-        // Create a Set of booked vehicle IDs for faster lookup
-        const bookedVehicleIds = new Set(
-          overlappingBookings.map((booking) => booking.vehicle_id)
-        );
-
-        console.log("🚫 Booked vehicle IDs:", Array.from(bookedVehicleIds));
-
-        // Filter out vehicles that have overlapping bookings (including buffer time)
-        const requestedPickup = new Date(pickupTimeISO);
-        
-        availableVehicles = vehiclesData.filter((vehicle) => {
-          // Check if vehicle has any overlapping bookings
-          if (bookedVehicleIds.has(vehicle.id)) {
-            // Check if the conflict is real (accounting for buffer time)
-            const vehicleBookings = overlappingBookings.filter(b => b.vehicle_id === vehicle.id);
-            for (const booking of vehicleBookings) {
-              const bookingEnd = new Date(booking.end_time);
-              const bufferHours = vehicle.buffer_hours || 6;
-              const bufferEndTime = new Date(bookingEnd.getTime() + (bufferHours * 60 * 60 * 1000));
-              
-              // If pickup is before buffer end time, vehicle is not available
-              if (requestedPickup < bufferEndTime) {
-                console.log(`🚫 Vehicle ${vehicle.id} blocked: booking ends at ${bookingEnd.toISOString()}, buffer until ${bufferEndTime.toISOString()}, requested pickup ${requestedPickup.toISOString()}`);
-                return false;
-              }
-            }
-          }
-          
-          // Also check next_available field if set
-          if (vehicle.next_available) {
-            const nextAvailable = new Date(vehicle.next_available);
-            if (requestedPickup < nextAvailable) {
-              console.log(`🚫 Vehicle ${vehicle.id} blocked: next_available is ${nextAvailable.toISOString()}, requested pickup ${requestedPickup.toISOString()}`);
-              return false;
-            }
-          }
-          
-          return true;
-        });
-
-        console.log(`✅ Available vehicles after filtering (with ${vehiclesData[0]?.buffer_hours || 6}hr buffer): ${availableVehicles.length}/${vehiclesData.length}`);
-
-      } catch (dateError) {
-        console.error("💥 Date parsing error:", dateError);
-        return Response.json(vehiclesData, { status: 200 }); // Return all vehicles if date parsing fails
+      } catch (err) {
+        console.error("💥 Error in RPC flow:", err);
+        return Response.json({ error: "Availability check failed" }, { status: 500 });
       }
+
+    } else {
+      // No dates provided: Just return the statically filtered list from above
+      availableVehicles = vehiclesData;
     }
 
-    console.log("🎉 Returning vehicles:", availableVehicles.length);
-
-    return new Response(JSON.stringify(availableVehicles || []), {
+    return new Response(JSON.stringify(availableVehicles), {
       status: 200,
       headers: {
         "Content-Type": "application/json",

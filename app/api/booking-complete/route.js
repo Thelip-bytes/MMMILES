@@ -1,6 +1,7 @@
 // app/api/booking-complete/route.js
 import { NextRequest } from 'next/server';
 import { getUserFromAuthHeader } from '../../../lib/auth.js';
+import { calculatePricing } from '../../../lib/pricing.js';
 
 // Razorpay SDK for payment verification
 const Razorpay = require('razorpay');
@@ -107,9 +108,9 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // 3. Get vehicle details to get buffer_hours
+    // 3. Get vehicle details (UPDATED: Fetch all needed fields for notification)
     const vehicleResponse = await fetch(
-      `${supabaseUrl}/rest/v1/vehicles?id=eq.${vehicle_id}&select=buffer_hours,current_status`,
+      `${supabaseUrl}/rest/v1/vehicles?id=eq.${vehicle_id}&select=buffer_hours,current_status,make,model,registration_number,city,location_name`,
       {
         headers: {
           'apikey': supabaseKey,
@@ -194,6 +195,152 @@ export async function POST(request) {
       });
     } catch (cleanupError) {
       console.warn('Warning: Cleanup function failed, but this is non-critical');
+    }
+
+    // 7. SEND TELEGRAM NOTIFICATION (Non-blocking)
+    try {
+      // A. Fetch Customer Details
+      const customerResponse = await fetch(
+        `${supabaseUrl}/rest/v1/customers?user_id=eq.${user.sub}&select=first_name,last_name,phone`,
+        {
+          headers: {
+             'apikey': supabaseKey,
+             'Authorization': request.headers.get('authorization')
+          }
+        }
+      );
+      
+      const customers = await customerResponse.json();
+      const customer = customers?.[0] || { first_name: 'Unknown', last_name: 'User', phone: 'N/A' };
+      const customerName = `${customer.first_name} ${customer.last_name}`;
+      const customerPhone = customer.phone || 'N/A';
+
+      // B. Format Dates
+      // IMPORTANT: We use UTC methods because we store "Face Value" dates (Fake UTC)
+      // e.g. stored '2026-02-22T09:00:00Z' means 9:00 AM, so we extract 09:00 via getUTCHours
+      const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        const d = new Date(dateString);
+        const day = String(d.getUTCDate()).padStart(2, '0');
+        const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const year = d.getUTCFullYear();
+        const hour = String(d.getUTCHours()).padStart(2, '0');
+        const minute = String(d.getUTCMinutes()).padStart(2, '0');
+        return `${day}/${month}/${year}, ${hour}:${minute}`;
+      };
+
+      const startTime = formatDate(booking.start_time);
+      const endTime = formatDate(booking.end_time);
+
+      // C. Calculate Duration
+      const start = new Date(booking.start_time);
+      const end = new Date(booking.end_time);
+      const diffMs = end - start;
+      const diffHrs = Math.floor(diffMs / 3600000);
+      const durationStr = `${diffHrs} Hours`;
+
+      // D. Breakdown Pricing & Calculate Discount
+      // To get exact breakdown of Rental vs Insurance vs ConvFee, we need to recalculate
+      // because the DB only stores aggregated 'base_price' (which includes all 3).
+      let rentalCost = 0;
+      let insuranceCost = 0;
+      let convFeeVal = 0;
+      let gstVal = 0;
+      let totalVal = 0;
+      let discountVal = 0;
+
+      try {
+        // We need base_daily_rate to recalculate precise breakdown
+        const vehicleRateResponse = await fetch(
+          `${supabaseUrl}/rest/v1/vehicles?id=eq.${vehicle_id}&select=base_daily_rate,make,model,registration_number,city,location_name`,
+           { headers: { 'apikey': supabaseKey, 'Authorization': request.headers.get('authorization') } }
+        );
+        const rateData = await vehicleRateResponse.json();
+        const baseDailyRate = parseFloat(rateData[0]?.base_daily_rate || 0);
+
+        // Recalculate pricing breakdown
+        // We use new Date(booking.start_time) which works because start_time is ISO string
+        const pricing = calculatePricing({
+          baseDailyRate,
+          pickupTime: new Date(booking.start_time),
+          returnTime: new Date(booking.end_time),
+          discount: 0 // Get base pricing first
+        });
+
+        rentalCost = pricing.costs.rentalCost;
+        insuranceCost = pricing.costs.insuranceCost;
+        
+        // Use DB values for trusted totals and tax
+        convFeeVal = parseFloat(booking.conv_fee || 0);
+        gstVal = parseFloat(booking.gst || 0);
+        const dbTotal = parseFloat(booking.total_amount || 0);
+        
+        // Calculate Discount = (Rental + Insurance + Conv + GST) - Total Paid
+        const subtotal = rentalCost + insuranceCost + convFeeVal + gstVal;
+        discountVal = subtotal - dbTotal;
+        if (discountVal < 1) discountVal = 0;
+        discountVal = Math.round(discountVal);
+        
+        totalVal = dbTotal;
+
+      } catch (err) {
+        console.error("Pricing breakdown calculation error", err);
+        // Fallback to aggregated
+        totalVal = parseFloat(booking.total_amount || 0);
+        gstVal = parseFloat(booking.gst || 0);
+        convFeeVal = parseFloat(booking.conv_fee || 0);
+        rentalCost = (parseFloat(booking.base_price || 0) - convFeeVal); 
+      }
+
+      // E. Construct Message
+      const message = `
+🚗 *New Booking Alert* 🚗
+
+*Booking Details*
+🆔 *Booking ID:* \`${booking_id}\`
+📅 *Start:* \`${startTime}\`
+📅 *End:* \`${endTime}\`
+
+*Customer Details*
+👤 *Name:* \`${customerName}\`
+📞 *Phone:* \`${customerPhone}\`
+
+*Vehicle Details*
+🚘 *Car:* \`${vehicle.make} ${vehicle.model}\`
+🔢 *Reg No:* \`${vehicle.registration_number}\`
+📍 *Car Address:* \`${vehicle.location_name || vehicle.city}\`
+
+*Pricing Breakdown*
+⏳ *Duration:* \`${durationStr}\`
+💵 *Rental Cost:* \`₹${rentalCost}\`
+🛡️ *Insurance:* \`₹${insuranceCost}\`
+yi *Conv. Fee:* \`₹${convFeeVal}\`
+tax *GST:* \`₹${gstVal}\`
+${discountVal > 0 ? `🎫 *Discount:* \`-₹${discountVal}\`\n` : ''}💰 *Total Amount:* \`₹${totalVal}\`
+      `.trim();
+
+      // F. Send to Telegram
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+
+      if (botToken && chatId) {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'Markdown'
+          })
+        });
+        console.log('✅ Telegram notification sent.');
+      } else {
+        console.warn('⚠️ Telegram config missing. Notification skipped.');
+      }
+
+    } catch (telegramError) {
+      console.error('❌ Failed to send Telegram notification:', telegramError);
+      // Do not block the booking response
     }
 
     return Response.json({

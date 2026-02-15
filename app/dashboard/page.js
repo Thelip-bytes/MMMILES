@@ -858,15 +858,24 @@ function DashboardContent() {
         {/* Orders List - Premium Cards */}
         <div className={styles.orderList}>
           {filtered.map((o) => {
-            // Format dates for display
-            const formatDateShort = (dateStr) => {
+            // Format dates for display (with Time in AM/PM)
+            const formatDateTime = (dateStr) => {
               if (!dateStr) return 'N/A';
               const d = new Date(dateStr);
-              return d.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+              // Use UTC to preserve "Face Value" time stored in DB
+              return d.toLocaleString('en-IN', { 
+                timeZone: 'UTC',
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true 
+              });
             };
 
-            const startDate = formatDateShort(o.startTime);
-            const endDate = formatDateShort(o.endTime);
+            const startDate = formatDateTime(o.startTime);
+            const endDate = formatDateTime(o.endTime);
 
             return (
               <div key={o.id} className={styles.orderCard}>

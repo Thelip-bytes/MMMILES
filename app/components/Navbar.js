@@ -66,7 +66,9 @@ export default function Navbar() {
 
   if (!mounted) return null;
 
+
   return (
+    
     <div ref={menuRef}>
       <nav className="navbar">
         {/* Logo */}
@@ -84,10 +86,12 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <ul className="navLinks">
+          <li><Link href="/car"></Link></li>
           <li><Link href="/about">About Us</Link></li>
           <li><Link href="/reviews">Reviews</Link></li>
           <li><Link href="/faq">FAQ&apos;s</Link></li>
           <li><Link href="/contact">Contact Us</Link></li>
+          
         </ul>
 
         {/* Login/Dashboard Button */}
@@ -136,6 +140,7 @@ export default function Navbar() {
                 }}
               >
                 {[
+                  { name: "", link: "/car" },
                   { name: "About Us", link: "/about" },
                   { name: "Reviews", link: "/reviews" },
                   { name: "FAQ's", link: "/faq" },

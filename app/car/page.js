@@ -1,4 +1,5 @@
 // app/car/page.js
+import Link from "next/link";
 
 export const dynamic = "force-static";
 
@@ -37,7 +38,7 @@ export const metadata = {
 export default function CarsPage() {
   return (
     <main style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto" }}>
-      
+
       {/* =========================
           PRIMARY H1
       ========================= */}
@@ -73,17 +74,71 @@ export default function CarsPage() {
       ========================= */}
       <section style={{ marginTop: "32px" }}>
         <h2>Car Rental Services in Chennai</h2>
-        <p>
-          Our self drive car rental services are designed for professionals,
-          families, and travelers who want flexibility without ownership.
-          All vehicles are well-maintained and supported by 24/7 customer care.
-        </p>
 
         <ul>
           <li>Self drive cars for daily office commute</li>
           <li>Weekend and holiday travel rentals</li>
           <li>Airport pickup and drop car rentals</li>
           <li>Long-term monthly car rental plans</li>
+        </ul>
+      </section>
+
+      <h2>Explore Self Drive Rentals in Chennai</h2>
+      <ul>
+        <li><Link href="/car/chennai/suv">SUV Rental Chennai</Link></li>
+        <li><Link href="/car/chennai/cheap">Cheap Car Rental Chennai</Link></li>
+        <li><Link href="/car/chennai/automatic">Automatic Cars Chennai</Link></li>
+      </ul>
+
+      <h2>Popular Self Drive Cars</h2>
+      <ul>
+        <li><Link href="/rent/maruti-fronx">Maruti Fronx Self Drive</Link></li>
+        <li><Link href="/rent/toyota-fortuner">Toyota Fortuner Rental</Link></li>
+        <li><Link href="/rent/innova-crysta">Innova Crysta Rental</Link></li>
+      </ul>
+
+      {/* =========================
+          🧠 ELITE SEO ADDITION (NEW)
+          ALL CAR MODELS
+      ========================= */}
+      <section style={{ marginTop: "40px" }}>
+        <h2>Browse Self Drive Cars by Model</h2>
+
+        <ul>
+          <li><Link href="/rent/tata-harrier">Tata Harrier Rental Chennai</Link></li>
+          <li><Link href="/rent/tata-nexon">Tata Nexon Rental Chennai</Link></li>
+          <li><Link href="/rent/tata-safari">Tata Safari Rental Chennai</Link></li>
+          <li><Link href="/rent/mahindra-thar">Mahindra Thar Rental Chennai</Link></li>
+          <li><Link href="/rent/mahindra-xuv700">Mahindra XUV700 Rental Chennai</Link></li>
+          <li><Link href="/rent/mahindra-scorpio">Mahindra Scorpio Rental Chennai</Link></li>
+          <li><Link href="/rent/hyundai-creta">Hyundai Creta Rental Chennai</Link></li>
+          <li><Link href="/rent/hyundai-i20">Hyundai i20 Rental Chennai</Link></li>
+          <li><Link href="/rent/honda-city">Honda City Rental Chennai</Link></li>
+          <li><Link href="/rent/honda-amaze">Honda Amaze Rental Chennai</Link></li>
+          <li><Link href="/rent/volkswagen-virtus">Volkswagen Virtus Rental Chennai</Link></li>
+          <li><Link href="/rent/kia-seltos">Kia Seltos Rental Chennai</Link></li>
+          <li><Link href="/rent/mg-hector">MG Hector Rental Chennai</Link></li>
+        </ul>
+      </section>
+
+      {/* =========================
+          🧠 ELITE SEO ADDITION (NEW)
+          CHENNAI AREA LINKS
+      ========================= */}
+      <section style={{ marginTop: "40px" }}>
+        <h2>Self Drive Cars by Chennai Area</h2>
+
+        <ul>
+          <li><Link href="/car/chennai/anna-nagar">Self Drive Cars Anna Nagar</Link></li>
+          <li><Link href="/car/chennai/velachery">Self Drive Cars Velachery</Link></li>
+          <li><Link href="/car/chennai/omr">Self Drive Cars OMR</Link></li>
+          <li><Link href="/car/chennai/ecr">Self Drive Cars ECR</Link></li>
+          <li><Link href="/car/chennai/t-nagar">Self Drive Cars T Nagar</Link></li>
+          <li><Link href="/car/chennai/porur">Self Drive Cars Porur</Link></li>
+          <li><Link href="/car/chennai/tambaram">Self Drive Cars Tambaram</Link></li>
+          <li><Link href="/car/chennai/adyar">Self Drive Cars Adyar</Link></li>
+          <li><Link href="/car/chennai/guindy">Self Drive Cars Guindy</Link></li>
+          <li><Link href="/car/chennai/nungambakkam">Self Drive Cars Nungambakkam</Link></li>
         </ul>
       </section>
 
@@ -101,17 +156,9 @@ export default function CarsPage() {
         </ul>
       </section>
 
-      {/* =========================
-          LOCATION RELEVANCE
-      ========================= */}
-      <section style={{ marginTop: "32px" }}>
-        <h2>Self Drive Cars Available Across Chennai</h2>
-        <p>
-          MM Miles operates across major areas including Anna Nagar, OMR,
-          Velachery, Tambaram, and surrounding locations—ensuring easy access
-          wherever you are in Chennai.
-        </p>
-      </section>
+
+
+
 
       {/* =========================
           FAQ SCHEMA (RICH RESULTS)

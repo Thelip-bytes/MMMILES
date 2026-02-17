@@ -86,7 +86,8 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <ul className="navLinks">
-          <li><Link href="/car"></Link></li>
+          <li className="seo-nav"><Link href="/car"></Link></li>
+          <li className="seo-nav"><Link href="/car/chennai">Self Drive Cars Chennai</Link></li>
           <li><Link href="/about">About Us</Link></li>
           <li><Link href="/reviews">Reviews</Link></li>
           <li><Link href="/faq">FAQ&apos;s</Link></li>

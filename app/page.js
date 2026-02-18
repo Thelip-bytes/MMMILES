@@ -32,7 +32,7 @@ export default function HomePage() {
         <Hero />
         <HomeContent />
         <AdvantageSection />
-        {/*< OffersSection /> */}
+        < OffersSection /> 
         <DriveDiscoverSection/>
         <BookingSteps />
         <GuidePage />

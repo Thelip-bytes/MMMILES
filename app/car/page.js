@@ -95,6 +95,7 @@ export default function CarsPage() {
         <li><Link href="/rent/maruti-fronx">Maruti Fronx Self Drive</Link></li>
         <li><Link href="/rent/toyota-fortuner">Toyota Fortuner Rental</Link></li>
         <li><Link href="/rent/innova-crysta">Innova Crysta Rental</Link></li>
+        <li><Link href="/rent/swift">swift car Rental</Link></li>
       </ul>
 
       {/* =========================
@@ -118,6 +119,12 @@ export default function CarsPage() {
           <li><Link href="/rent/volkswagen-virtus">Volkswagen Virtus Rental Chennai</Link></li>
           <li><Link href="/rent/kia-seltos">Kia Seltos Rental Chennai</Link></li>
           <li><Link href="/rent/mg-hector">MG Hector Rental Chennai</Link></li>
+
+          <li><Link href="/rent/tata-punch">Tata punch Rental Chennai</Link></li>
+          <li><Link href="/rent/kie-sonet">Kei Sonet Rental Chennai</Link></li>
+          <li><Link href="/rent/maruthi-suzuki-Baleno">Maruthi Suzuki Baleno Rental Chennai</Link></li>
+          <li><Link href="/rent/mahindra-tharroxx">Mahindra Thar-roxx Rental Chennai</Link></li>
+          <li><Link href="/rent/hyundai-verna">Verna Rental Chennai</Link></li>
         </ul>
       </section>
 

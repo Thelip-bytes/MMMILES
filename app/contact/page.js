@@ -13,7 +13,8 @@ import {
   faInstagram, 
   faPinterestP, 
   faFacebookF, 
-  faTwitter 
+  faTwitter, 
+  faWhatsapp
 } from '@fortawesome/free-brands-svg-icons';
 // Note: faTwitter is used instead of faX-twitter for wider compatibility and a cleaner look.
 // You can use faXTwitter if you specifically install that icon pack.
@@ -26,27 +27,23 @@ export default function ContactPage() {
       <div className={styles.cleftSection}>
         <h1 className={styles.cmainTitle}>Customer Support</h1>
         
-        <p className={styles.cphone}>Phone: 9790609111</p>
-        <p className={styles.cemail}>Email: mmmiles.chennai@gmail.com</p>
+        <p className={styles.cphone}>Phone: 8050953607</p>
+        <p className={styles.cemail}>Email: Support@mmmiles.com</p>
         
         <h2 className={styles.csectionTitle}>Find us on</h2>
         <div className={styles.csocialIcons}>
           {/* Replaced Image tags with FontAwesomeIcon components */}
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.linkedin.com/company/mm-miles/?viewAsMember=true" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faLinkedinIn} style={{ width: '24px', height: '24px' }} />
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/mmmiles_official?igsh=NDI1dDgxamt6bWZ4" target="_blank" rel="noopener noreferrer">
             <FontAwesomeIcon icon={faInstagram} style={{ width: '24px', height: '24px' }} />
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faPinterestP} style={{ width: '24px', height: '24px' }} />
+          <a href="https://wa.me/+918050953607" target="_blank" rel="noopener noreferrer">
+            <FontAwesomeIcon icon={faWhatsapp} style={{ width: '24px', height: '24px' }} />
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faFacebookF} style={{ width: '24px', height: '24px' }} />
-          </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faTwitter} style={{ width: '24px', height: '24px' }} />
-          </a>
+          
+          
         </div>
         
         <h2 className={styles.csectionTitle}>Corporate Office</h2>

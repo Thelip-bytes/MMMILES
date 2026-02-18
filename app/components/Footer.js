@@ -28,7 +28,7 @@ export default function Footer() {
               </a>
             </p>
             <p>
-              Office Number: <a href="tel:9096299666"> +91 9096299666</a>
+              Office Number: <a href="tel:8050953607">8050953607</a>
             </p>
             <p>
               Email:{" "}
@@ -44,7 +44,7 @@ export default function Footer() {
               <span className={styles.followText}>Follow us & Stay Notified</span>
               <div className={styles.socialIcons}>
                 <a
-                  href="https://www.instagram.com/mmmiles_chennai/"
+                  href="https://www.instagram.com/mmmiles_official?igsh=NDI1dDgxamt6bWZ4"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
@@ -60,7 +60,7 @@ export default function Footer() {
                   <FaLinkedin className={`${styles.icon} ${styles.facebook}`} />
                 </a>
                 <a
-                  href="https://wa.me/9790609111"
+                  href="https://wa.me/+918050953607"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WhatsApp"

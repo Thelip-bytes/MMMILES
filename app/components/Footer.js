@@ -32,8 +32,8 @@ export default function Footer() {
             </p>
             <p>
               Email:{" "}
-              <a href="mailto:urbandrive.chennai@gmail.com">
-                urbandrive.chennai@gmail.com
+              <a href="mailto:Support@mmmiles.com">
+                Support@mmmiles.com
               </a>
             </p>
           </div>

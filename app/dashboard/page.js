@@ -1120,15 +1120,23 @@ function DashboardContent() {
               <EnvelopeIcon className={styles.infoIcon} />
               <div>
                 <b>Email</b>
-                <div className={styles.muted}>mmmiles.chennai@gmail.com</div>
+                <div className={styles.muted}>Support@mmmiles.com</div>
               </div>
             </div>
 
             <div className={`${styles.supportMethod} ${styles.card}`}>
               <PhoneIcon className={styles.infoIcon} />
               <div>
-                <b>Phone</b>
-                <div className={styles.muted}>9096299666</div>
+                <b>User Helpline</b>
+                <div className={styles.muted}>8050953607</div>
+              </div>
+            </div>
+
+            <div className={`${styles.supportMethod} ${styles.card}`}>
+              <PhoneIcon className={styles.infoIcon} />
+              <div>
+                <b>Host Helpline</b>
+                <div className={styles.muted}>8050953609</div>
               </div>
             </div>
           </div>

@@ -107,11 +107,11 @@ export default function Hero() {
       {/* ===== Stats Section ===== */}
         <div className="stats">
           <div className="stat">
-            <h4>5000+</h4>
+            <h4>2000+</h4>
             <p>journeys of trust</p>
           </div>
           <div className="stat">
-            <h4>15k+</h4>
+            <h4>20k+</h4>
             <p>Kilo-meters in a Month</p>
           </div>
           <div className="stat" id="stat">

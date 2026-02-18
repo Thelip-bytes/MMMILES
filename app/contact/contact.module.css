@@ -249,6 +249,9 @@
     .cleftSection, .crightSection {
         padding: 30px 20px 10px;
     }
+    .ccontainer{
+      padding-top: 30px;
+    }
     .cmainTitle {
         font-size: 24px;
     }

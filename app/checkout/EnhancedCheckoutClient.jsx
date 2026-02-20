@@ -1481,7 +1481,7 @@ export default function EnhancedCheckoutPage() {
                   <p><span className={styles.infoListicon}>✖</span> Fuel not included. Guest should return the car with the same fuel level as at start.</p>
                   <p><span className={styles.infoListicon}>✖</span> Toll/Fastag charges not included. Check with host for Fastag recharge.</p>
                   <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</p>
-                  <p><span className={styles.infoListicongreen}>✔</span> You need to carry ID proof while starting the Drive for Host verification.</p>
+                  <p><span className={styles.infoListicongreen}>✔</span> Carry original DL & valid ID proof. Required for Host Verification at Drive Start.</p>
                 </div>
               </div>
 
@@ -1527,7 +1527,7 @@ export default function EnhancedCheckoutPage() {
                         marginTop: '15px',
                         height: '8px',
                         borderRadius: '4px',
-                        background: 'linear-gradient(90deg, #bf9860 60%, #eaddc5 60%)',
+                        background: 'linear-gradient(90deg, #bf9860 50%, #eaddc5 50%)',
                         overflow: 'hidden'
                       }}>
                       </div>

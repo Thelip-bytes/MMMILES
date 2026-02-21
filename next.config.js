@@ -1,6 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 1. Move experimental packages to the root level (Fixes the Warning)
+
+  // ✅ FORCE NON-WWW → WWW (CRITICAL SEO FIX)
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "mmmiles.com",
+          },
+        ],
+        destination: "https://www.mmmiles.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
+  // Existing configs (UNCHANGED)
   serverExternalPackages: ['jsonwebtoken', 'google-spreadsheet'],
 
   eslint: {
@@ -18,9 +36,8 @@ const nextConfig = {
   },
 
   experimental: {
-    // 2. Increase the Body Size Limit for your image uploads
     serverActions: {
-      bodySizeLimit: '20mb', 
+      bodySizeLimit: '20mb',
     },
   },
 

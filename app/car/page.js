@@ -35,9 +35,13 @@ export const metadata = {
 /* =========================
    PAGE COMPONENT
 ========================= */
+import ClientRedirect from "../components/ClientRedirect";
+
 export default function CarsPage() {
   return (
-    <main style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto" }}>
+    <>
+      <ClientRedirect to="/" />
+      <main style={{ padding: "40px 20px", maxWidth: "1200px", margin: "0 auto", opacity: 0 }}>
 
       {/* =========================
           PRIMARY H1
@@ -227,5 +231,6 @@ export default function CarsPage() {
         }}
       />
     </main>
+    </>
   );
 }

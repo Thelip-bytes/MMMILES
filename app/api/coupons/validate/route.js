@@ -24,11 +24,12 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // Query active_coupons table
+    // Query coupons table directly (active_coupons view lacks new columns)
     const { data: coupon, error } = await supabase
-      .from('active_coupons')
+      .from('coupons')
       .select('*')
       .eq('code', code.toUpperCase())
+      .eq('is_active', true)
       .single();
 
     if (error || !coupon) {
@@ -38,11 +39,8 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
-    // 1. Check if status is Active (or not Expired) based on user data
-    // The user data shows "status": "Expired" for invalid ones. We assume "Active" for valid ones.
-    // 1. Check if status is Active based on user data
-    // The user data shows "status": "Expired" for invalid ones. We assume "Active" for valid ones.
-    if (coupon.status !== 'Active') {
+    // 1. Check if coupon is active
+    if (!coupon.is_active) {
       return NextResponse.json({ 
         valid: false, 
         message: 'This coupon is no longer active' 
@@ -70,22 +68,73 @@ export async function POST(request) {
 
     // 3. Minimum amount validation
     const minAmount = parseFloat(coupon.min_amount || 0);
-    if (subtotal < minAmount) {
+    // Determine which amount to check against (orderTotal is pre-discount gross total, subtotal is basePrice)
+    const amountToCheck = body.orderTotal || body.subtotal || subtotal; 
+    
+    if (amountToCheck < minAmount) {
       return NextResponse.json({ 
         valid: false, 
         message: `Minimum order amount of ₹${minAmount} required to use this coupon` 
       }, { status: 400 });
     }
 
-    // 4. Usage limit validation
+    // 4. Global Usage limit validation
     if (coupon.usage_limit !== null && coupon.used_count >= coupon.usage_limit) {
       return NextResponse.json({ 
         valid: false, 
-        message: 'Coupon usage limit exceeded' 
+        message: 'Coupon usage limit exceeded across the platform' 
       }, { status: 400 });
     }
 
-    // 5. Calculate discount
+    // 5. User-Specific Logic (Fetch past bookings)
+    const token = request.headers.get('authorization');
+    if (token) {
+      try {
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token.replace('Bearer ', ''));
+        if (user && !authError) {
+          
+          // Fetch all confirmed/completed bookings for this user to calculate their history
+          const { data: pastBookings, error: bookingsError } = await supabase
+            .from('bookings')
+            .select('id, applied_coupon')
+            .eq('user_id', user.id)
+            .in('status', ['confirmed', 'completed']);
+
+          if (!bookingsError) {
+            const pastCouponsUsedCount = pastBookings.filter(b => b.applied_coupon !== null).length;
+            const pastUsedCodes = pastBookings.map(b => b.applied_coupon).filter(Boolean);
+
+            // A. Single Use Enforcement
+            if (coupon.is_single_use && pastUsedCodes.includes(coupon.code)) {
+              return NextResponse.json({ 
+                valid: false, 
+                message: 'You have already used this coupon' 
+              }, { status: 400 });
+            }
+
+            // B. Sequence Gating Enforcement
+            const requiredCount = coupon.required_previous_coupons_used;
+            if (requiredCount !== undefined && requiredCount !== null && requiredCount >= 0) {
+              if (pastCouponsUsedCount !== requiredCount) {
+                // Formatting a friendly error message
+                let errorMsg = 'This coupon is not valid for your current sequence';
+                if (requiredCount === 0) errorMsg = 'This coupon is for first-time coupon users only';
+                else if (requiredCount === 1) errorMsg = 'This coupon is unlocked for your second coupon use';
+                else errorMsg = `This coupon requires exactly ${requiredCount} previous coupon uses`;
+
+                return NextResponse.json({ valid: false, message: errorMsg }, { status: 400 });
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Error verifying user for coupon usage checks:", e);
+        // Fail open or closed? If token provided but fails to parse, we should probably evaluate carefully.
+        // For now, we skip user-specific blockage if we can't identify the user.
+      }
+    }
+
+    // 6. Calculate discount
     let discount = 0;
     const discountValue = parseFloat(coupon.discount_value || 0);
 

@@ -8,6 +8,7 @@ const nextConfig = {
   },
 
   images: {
+    unoptimized: true, // Tell Next.js to skip Vercel image optimization
     remotePatterns: [
       {
         protocol: 'https',

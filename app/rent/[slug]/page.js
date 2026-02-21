@@ -1,5 +1,5 @@
-
 import Link from "next/link";
+import ClientRedirect from "../../components/ClientRedirect";
 
 const cars = [
   "toyota-fortuner",
@@ -43,12 +43,14 @@ export async function generateStaticParams() {
   return cars.map((slug) => ({ slug }));
 }
 
-export default function RentPage({ params }) {
-
-  const name = params.slug.replaceAll("-", " ");
+export default async function RentPage({ params }) {
+  const resolvedParams = await params;
+  const name = resolvedParams.slug.replaceAll("-", " ");
 
   return (
-    <main style={{ padding: 40 }}>
+    <>
+      <ClientRedirect to="/" />
+      <main style={{ padding: 40, opacity: 0 }}>
 
       <h1>{name} Self Drive Rental in Chennai</h1>
 
@@ -66,5 +68,6 @@ export default function RentPage({ params }) {
       </ul>
 
     </main>
+    </>
   );
 }

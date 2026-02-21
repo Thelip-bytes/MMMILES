@@ -7,6 +7,13 @@ body {
   padding-top: 60px; /* Height of the fixed navbar */
 }
 
+.seo-hidden {
+  position: absolute;
+  left: -9999px;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
 
 @keyframes fadeIn {
   from {

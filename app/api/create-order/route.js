@@ -103,7 +103,7 @@ export async function POST(request) {
         if (couponCode) {
             try {
                 const couponResponse = await fetch(
-                    `${supabaseUrl}/rest/v1/active_coupons?code=eq.${couponCode.toUpperCase()}&select=*`,
+                    `${supabaseUrl}/rest/v1/coupons?code=eq.${couponCode.toUpperCase()}&is_active=eq.true&select=*`,
                     {
                         headers: {
                             'apikey': supabaseKey,
@@ -116,6 +116,7 @@ export async function POST(request) {
                     const coupons = await couponResponse.json();
                     if (coupons.length > 0) {
                         const coupon = coupons[0];
+                        console.log('🎫 create-order: Found coupon:', coupon.code, 'is_active:', coupon.is_active);
                         
                         // Validate Coupon Conditions
                         const now = new Date();
@@ -124,11 +125,49 @@ export async function POST(request) {
                         const minAmount = parseFloat(coupon.min_amount || 0);
 
                         let isValid = true;
-                        if (coupon.status === 'Expired') isValid = false;
+                        if (!coupon.is_active) isValid = false;
                         if (validFrom && now < validFrom) isValid = false;
                         if (validUntil && now > validUntil) isValid = false;
-                        if (subtotal < minAmount) isValid = false;
+                        if (initialPricing.total < minAmount) isValid = false;
                         if (coupon.usage_limit !== null && coupon.used_count >= coupon.usage_limit) isValid = false;
+
+                        // User-Specific Logic (Sequence API & Single Use)
+                        if (isValid) {
+                          try {
+                            const bookingsRes = await fetch(
+                               `${supabaseUrl}/rest/v1/bookings?user_id=eq.${user.sub}&select=id,applied_coupon&status=in.(confirmed,completed)`,
+                               { headers: { 'apikey': supabaseKey, 'Authorization': request.headers.get('authorization') } }
+                            );
+                            if (bookingsRes.ok) {
+                              const pastBookings = await bookingsRes.json();
+                              const pastCouponsUsedCount = pastBookings.filter(b => b.applied_coupon !== null).length;
+                              const pastUsedCodes = pastBookings.map(b => b.applied_coupon).filter(Boolean);
+                              console.log('🎫 create-order user history:', { pastCouponsUsedCount, pastUsedCodes });
+
+                              // Single use
+                              if (coupon.is_single_use && pastUsedCodes.includes(coupon.code)) {
+                                isValid = false;
+                                console.log('🎫 create-order: Blocked - single use already used');
+                              }
+
+                              // Sequence gating
+                              const requiredCount = coupon.required_previous_coupons_used;
+                              if (requiredCount !== undefined && requiredCount !== null && requiredCount >= 0) {
+                                if (pastCouponsUsedCount !== requiredCount) {
+                                  isValid = false;
+                                  console.log('🎫 create-order: Blocked - sequence mismatch', { requiredCount, pastCouponsUsedCount });
+                                }
+                              }
+                            } else {
+                              console.warn('🎫 create-order: Failed to fetch user bookings, skipping user-specific checks');
+                            }
+                          } catch (userCheckErr) {
+                            console.error('🎫 create-order: User-specific check error:', userCheckErr);
+                            // Don't block the coupon - the validate API already checked this
+                          }
+                        }
+
+                        console.log('🎫 create-order: Final isValid =', isValid);
 
                         if (isValid) {
                             appliedCouponCode = coupon.code;

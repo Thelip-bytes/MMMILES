@@ -292,10 +292,11 @@ export default function EnhancedCheckoutPage() {
   /* -------------------------------------------------------------------------- */
   useEffect(() => {
     async function fetchCoupons() {
+      if (!loggedInUser?.sub) return;
       try {
         const now = new Date().toISOString();
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/active_coupons?status=eq.Active&is_admin_coupon=eq.false&valid_until=gt.${now}&select=*`,
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/coupons?is_active=eq.true&is_admin_coupon=eq.false&valid_until=gt.${now}&select=*`,
           {
             headers: {
               apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -305,15 +306,46 @@ export default function EnhancedCheckoutPage() {
         );
 
         if (response.ok) {
-          const data = await response.json();
-          setPublicCoupons(data || []);
+          const allCoupons = await response.json() || [];
+
+          // 1. Fetch user's past bookings to determine coupon eligibility
+          const { data: pastBookings, error } = await makeAuthenticatedRequest(
+            "GET",
+            `bookings?user_id=eq.${loggedInUser.sub}&status=in.(confirmed,completed)&select=id,applied_coupon`
+          ).then(data => ({ data, error: null })).catch(e => ({ data: null, error: e }));
+
+          let pastCouponsUsedCount = 0;
+          let pastUsedCodes = [];
+
+          if (!error && pastBookings) {
+            pastCouponsUsedCount = pastBookings.filter(b => b.applied_coupon !== null).length;
+            pastUsedCodes = pastBookings.map(b => b.applied_coupon).filter(Boolean);
+          }
+
+          // 2. Filter the coupons based on sequence and single-use rules
+          const filteredCoupons = allCoupons.filter(coupon => {
+            // A. Single use check
+            if (coupon.is_single_use && pastUsedCodes.includes(coupon.code)) {
+              return false;
+            }
+            // B. Sequence check
+            const reqCount = coupon.required_previous_coupons_used;
+            if (reqCount !== undefined && reqCount !== null && reqCount >= 0) {
+              if (pastCouponsUsedCount !== reqCount) {
+                return false;
+              }
+            }
+            return true;
+          });
+
+          setPublicCoupons(filteredCoupons);
         }
       } catch (err) {
         console.error("Failed to fetch coupons:", err);
       }
     }
     fetchCoupons();
-  }, []);
+  }, [loggedInUser]);
 
   /* -------------------------------------------------------------------------- */
   /*                           LOCK COUNTDOWN TIMER                               */
@@ -598,7 +630,8 @@ export default function EnhancedCheckoutPage() {
         },
         body: JSON.stringify({
           code: couponCode,
-          subtotal: priceSummary.basePrice
+          subtotal: priceSummary.basePrice,
+          orderTotal: priceSummary.rentalCost + priceSummary.insuranceCost + priceSummary.convFee + priceSummary.gst + discount
         })
       });
 
@@ -952,6 +985,7 @@ export default function EnhancedCheckoutPage() {
       end_time: formatDateTimeForDB(end),
       status: "confirmed",
       created_at: formatDateTimeForDB(new Date()),
+      applied_coupon: couponInfo?.code || null,
     };
 
     const dup = await makeAuthenticatedRequest(
@@ -1067,6 +1101,8 @@ export default function EnhancedCheckoutPage() {
             }
 
             console.log('Booking completed successfully with verified payment');
+
+            // Note: Coupon used_count is incremented server-side in booking-complete via RPC
 
             // Show success card
             setBookingResult({

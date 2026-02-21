@@ -55,6 +55,7 @@ export async function POST(request) {
     // 2. VERIFY PAYMENT INTEGRITY (Security Gold Standard)
     // We fetch the payment AND the associated order from Razorpay to verify against
     // the metadata (notes) we stored securely during the 'create-order' step.
+    let rzpOrder = null; // Hoisted so coupon tracking code can access it later
     try {
       // Fetch payment details
       const payment = await razorpay.payments.fetch(payment_id);
@@ -64,7 +65,7 @@ export async function POST(request) {
       }
 
       // Fetch the original order to get the tamper-proof metadata (notes)
-      const rzpOrder = await razorpay.orders.fetch(payment.order_id);
+      rzpOrder = await razorpay.orders.fetch(payment.order_id);
       const notes = rzpOrder.notes || {};
 
       const paidAmount = payment.amount / 100;
@@ -129,7 +130,7 @@ export async function POST(request) {
     }
 
     const vehicle = vehicles[0];
-    const bufferHours = vehicle.buffer_hours || 6;
+    const bufferHours = vehicle.buffer_hours || 4;
 
     // 2. Calculate next available time (end_time + buffer_hours)
     const endTime = new Date(booking.end_time);
@@ -181,6 +182,52 @@ export async function POST(request) {
 
     if (!lockUpdateResponse.ok) {
       console.warn('Warning: Failed to convert lock status, but booking was successful');
+    }
+
+    // 5.5 Update applied_coupon tracking & increment used_count if a coupon was used
+    try {
+      // Get the verified coupon code explicitly stored in Razorpay notes securely
+      const appliedCouponCode = rzpOrder?.notes?.coupon_code;
+      console.log('🎫 Coupon tracking: rzpOrder notes =', JSON.stringify(rzpOrder?.notes), 'appliedCouponCode =', appliedCouponCode);
+      
+      if (appliedCouponCode && appliedCouponCode.trim() !== '') {
+        // A. Save it to the booking
+        console.log(`🎫 Saving applied_coupon '${appliedCouponCode}' to booking ${booking_id}`);
+        const bookingPatchRes = await fetch(`${supabaseUrl}/rest/v1/bookings?id=eq.${booking_id}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': request.headers.get('authorization'),
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            applied_coupon: appliedCouponCode.trim()
+          })
+        });
+        console.log(`🎫 Booking PATCH response: ${bookingPatchRes.status} ${bookingPatchRes.statusText}`);
+        if (!bookingPatchRes.ok) {
+          const errText = await bookingPatchRes.text();
+          console.error(`🎫 Booking PATCH failed:`, errText);
+        }
+
+        // B. Increment the global used_count on the coupons table
+        // B. Increment the global used_count via RPC (bypasses RLS)
+        await fetch(`${supabaseUrl}/rest/v1/rpc/increment_coupon_usage`, {
+          method: 'POST',
+          headers: {
+            'apikey': supabaseKey,
+            'Authorization': request.headers.get('authorization'),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ coupon_code: appliedCouponCode.trim() })
+        });
+        console.log(`🎫 Coupon used_count incremented via RPC for ${appliedCouponCode}`);
+      } else {
+        console.log('🎫 No coupon was applied for this booking.');
+      }
+    } catch (couponUsageErr) {
+      console.error('Warning: Failed to log coupon usage or increment used counter', couponUsageErr);
     }
 
     // 6. Trigger cleanup of any expired locks
@@ -338,10 +385,65 @@ ${discountVal > 0 ? `🎫 *Discount:* \`-₹${discountVal}\`\n` : ''}💰 *Total
         console.warn('⚠️ Telegram config missing. Notification skipped.');
       }
 
+        // 8. SEND WHATSAPP CONFIRMATION VIA GUPSHUP (Non-blocking)
+        try {
+          const gApiKey = process.env.GUPSHUP_API_KEY;
+          const gSource = process.env.GUPSHUP_SOURCE;
+          const tId = process.env.BOOKING_COMPLETE_TEMPLETE_ID;
+
+          if (gApiKey && gSource && tId && customerPhone && customerPhone !== 'N/A') {
+            // DB already stores '91xxxxxxxxxx' so we just strip any accidental spaces/dashes
+            const formattedPhone = customerPhone.replace(/\D/g, '');
+
+            // Set up the exact 5 parameters requested by the user's template
+            const waParams = [
+              customerName,
+              `${vehicle.make} ${vehicle.model} | Pickup: ${startTime} | Return: ${endTime}`,
+              booking_id.toString(),
+              "MMMiles",
+              "MMMiles"
+            ];
+
+            // Match the exact payload format used by the working OTP flow
+            const formData = new URLSearchParams();
+            formData.append('channel', 'whatsapp');
+            formData.append('source', gSource);
+            formData.append('destination', formattedPhone);
+            formData.append('src.name', process.env.GUPSHUP_APP_NAME || 'MMMiles');
+            formData.append('template', JSON.stringify({
+              id: tId,
+              params: waParams
+            }));
+
+            const waResponse = await fetch('https://api.gupshup.io/wa/api/v1/template/msg', {
+              method: 'POST',
+              headers: {
+                'Cache-Control': 'no-cache',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'apikey': gApiKey
+              },
+              body: formData.toString()
+            });
+
+            if (waResponse.ok) {
+               const waBody = await waResponse.text();
+               console.log(`✅ WhatsApp confirmation sent to ${formattedPhone}. Response:`, waBody);
+            } else {
+               const errText = await waResponse.text();
+               console.error(`❌ WhatsApp API Error:`, errText);
+            }
+          } else {
+            console.warn('⚠️ WhatsApp config or customer phone missing. WhatsApp Notification skipped.');
+          }
+        } catch (waError) {
+          console.error('❌ Failed to send WhatsApp notification:', waError);
+        }
+
     } catch (telegramError) {
-      console.error('❌ Failed to send Telegram notification:', telegramError);
+      console.error('❌ Failed to send Telegram notification (or Fetch customer error):', telegramError);
       // Do not block the booking response
     }
+
 
     return Response.json({
       message: 'Booking completion handled successfully',

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Navbar from "./components/Navbar";
 import ReviewSection from "./components/ReviewSection";
 import Footer from "./components/Footer";
@@ -32,24 +33,24 @@ export default function HomePage() {
       
       <main>
         
-        <h1 style={{display:"none"}}>
+        <h1 className="seo-hidden">
           Self Drive Car Rentals in Chennai | Rent Cars Chennai | MM Miles
           </h1>
         <Hero />
-        <section style={{maxWidth:"1200px",margin:"0 auto",padding:"20px"}}>
+        <section className="seo-hidden">
             
-          <h2>Self Drive Car Rental in Chennai</h2>
+          <h2 className="seo-hidden">Self Drive Car Rental in Chennai</h2>
 
-          <p>
+          <p className="seo-hidden">
           MM Miles offers premium self drive car rentals in Chennai including SUVs,
           hatchbacks and sedans for hourly, daily and monthly rental. Whether you need
           a car for office commute, weekend trips or long travel, MM Miles provides
           affordable and flexible rental options.
           </p>
 
-          <h3>Explore Popular Rental Options</h3>
+          <h3 className="seo-hidden">Explore Popular Rental Options</h3>
 
-          <ul>
+          <ul className="seo-hidden">
           <li><Link href="/car">Browse Available Cars</Link></li>
           <li><Link href="/car/chennai/suv">SUV Rental Chennai</Link></li>
           <li><Link href="/car/chennai/cheap">Budget Car Rental Chennai</Link></li>
@@ -68,7 +69,7 @@ export default function HomePage() {
         <BecomeHost />
         
 
-        <section style={{padding:"20px"}}>
+        <section className="seo-hidden">
 
           <h2>Lowest Self Drive Cars in Chennai</h2>
 

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ClientRedirect from "../../components/ClientRedirect";
 
 const cars = [
   "toyota-fortuner",
@@ -48,9 +47,7 @@ export default async function RentPage({ params }) {
   const name = resolvedParams.slug.replaceAll("-", " ");
 
   return (
-    <>
-      <ClientRedirect to="/" />
-      <main style={{ padding: 40, opacity: 0 }}>
+    <main style={{ padding: 40 }}>
 
       <h1>{name} Self Drive Rental in Chennai</h1>
 
@@ -68,6 +65,5 @@ export default async function RentPage({ params }) {
       </ul>
 
     </main>
-    </>
   );
 }

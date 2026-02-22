@@ -4,13 +4,9 @@ export const metadata = {
     "Book self drive cars in Chennai with MM Miles. Affordable pricing, premium vehicles and instant booking.",
 };
 
-import ClientRedirect from "../../components/ClientRedirect";
-
 export default function ChennaiCars() {
   return (
-    <>
-      <ClientRedirect to="/" />
-      <main style={{ opacity: 0 }}>
+    <main>
 
       <h1>Self Drive Car Rental in Chennai</h1>
 
@@ -24,6 +20,5 @@ export default function ChennaiCars() {
       <a href="/car">Browse Available Cars</a>
 
     </main>
-    </>
   );
 }

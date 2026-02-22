@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ClientRedirect from "../../../components/ClientRedirect";
 
 const areas = [
   "anna-nagar",
@@ -24,14 +23,11 @@ export async function generateStaticParams() {
 }
 
 export default async function AreaPage({ params }) {
-  // Await params to fix Next 15 requirement
   const resolvedParams = await params;
   const areaName = resolvedParams.area.replaceAll("-", " ");
 
   return (
-    <>
-      <ClientRedirect to="/" />
-      <main style={{ padding: 40, opacity: 0 }}>
+    <main style={{ padding: 40 }}>
 
       <h1>Self Drive Car Rentals in {areaName}, Chennai</h1>
 
@@ -49,6 +45,5 @@ export default async function AreaPage({ params }) {
       </ul>
 
     </main>
-    </>
   );
 }

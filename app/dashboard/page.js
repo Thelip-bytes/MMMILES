@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import styles from "./dashboard.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,10 +34,23 @@ import {
 
 function DashboardContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  
   const [active, setActive] = useState("announcement");
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [profileImage, setProfileImage] = useState("/user.jpg");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+  // Authentication Check
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    if (!token) {
+      router.push("/login?redirect=/dashboard");
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [router]);
 
   // Handle tab query parameter on mount
   useEffect(() => {
@@ -1180,7 +1193,10 @@ function DashboardContent() {
 
 
 
-  
+  if (isCheckingAuth) {
+    return <Loading fullScreen={true} size={60} />;
+  }
+
   return (
     <div className={`${styles.root} ${styles.container} ${isSidebarCollapsed ? styles.sidebarCollapsed : ""}`}>
       <aside className={styles.sidebar}>

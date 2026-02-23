@@ -91,9 +91,9 @@ export default function TrendingSection() {
       deal: "Trending",
       price: Math.round((vehicle.base_daily_rate || 0) / 24),
       features: [
-        vehicle.seats ? `${vehicle.seats} Seater` : "5 Seater",
-        "4.5 rating",
-        vehicle.year ? `${vehicle.year} Model` : "2023 Model",
+        vehicle.seating_capacity ? `${vehicle.seating_capacity} Seater` : "5 Seater",
+        vehicle.rating ? `${vehicle.rating} rating` : "New",
+        vehicle.model_year ? `${vehicle.model_year} Model` : "2023 Model",
         vehicle.fuel_type || "Petrol",
         "Vaccinated after every ride",
       ],

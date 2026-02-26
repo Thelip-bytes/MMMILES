@@ -41,7 +41,7 @@ async function proxyRequest(request, context, method) {
     
     // Forward relevant headers
     const headers = {};
-    const forwardHeaders = ["apikey", "authorization", "content-type", "prefer", "range"];
+    const forwardHeaders = ["apikey", "authorization", "content-type", "prefer", "range", "accept"];
     for (const key of forwardHeaders) {
       const val = request.headers.get(key);
       if (val) headers[key] = val;

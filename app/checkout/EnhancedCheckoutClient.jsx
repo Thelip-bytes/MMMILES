@@ -265,7 +265,8 @@ export default function EnhancedCheckoutPage() {
   useEffect(() => {
     async function go() {
       try {
-        const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/vehicles?id=eq.${carId}&select=*,hosts(*),vehicle_images(*)`;
+        const supabaseBase = typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const url = `${supabaseBase}/rest/v1/vehicles?id=eq.${carId}&select=*,hosts(*),vehicle_images(*)`;
 
         const r = await fetch(url, {
           headers: {
@@ -296,7 +297,7 @@ export default function EnhancedCheckoutPage() {
       try {
         const now = new Date().toISOString();
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/coupons?is_active=eq.true&is_admin_coupon=eq.false&valid_until=gt.${now}&select=*`,
+          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/coupons?is_active=eq.true&is_admin_coupon=eq.false&valid_until=gt.${now}&select=*`,
           {
             headers: {
               apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -717,7 +718,7 @@ export default function EnhancedCheckoutPage() {
       console.log('🗄️ Fetching existing bookings for vehicle:', car.id);
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&select=id,start_time,end_time,pickup_datetime_raw,return_datetime_raw`,
+        `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&select=id,start_time,end_time,pickup_datetime_raw,return_datetime_raw`,
         {
           headers: {
             apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,

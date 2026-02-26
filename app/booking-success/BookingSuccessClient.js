@@ -29,7 +29,7 @@ export default function BookingSuccess() {
           throw new Error("Authentication required");
         }
 
-        const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const baseUrl = typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL;
         const apiKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
         // Fetch booking with related vehicle and host data

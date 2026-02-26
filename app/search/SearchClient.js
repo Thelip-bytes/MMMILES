@@ -36,7 +36,7 @@ function useCityEnforcement() {
 }
 
 // Supabase storage base URL for car images
-const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/object/public/car-images/";
+const STORAGE_BASE_URL = "/api/sb/storage/v1/object/public/car-images/";
 
 // Helper to get ALL image URLs
 function getCarImages(car) {

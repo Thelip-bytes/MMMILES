@@ -33,7 +33,7 @@ export default function TrendingSection() {
   const touchStartX = useRef(0);
 
   // Supabase storage base URL for car images
-  const STORAGE_BASE_URL = "https://tktfsjtlfjxbqfvbcoqr.supabase.co/storage/v1/object/public/car-images/";
+  const STORAGE_BASE_URL = "/api/sb/storage/v1/object/public/car-images/";
 
   // Helper to get primary image URL
   const getPrimaryImageUrl = (vehicle) => {

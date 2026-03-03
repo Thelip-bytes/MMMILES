@@ -1516,9 +1516,9 @@ export default function EnhancedCheckoutPage() {
                 <h3>Inclusion / Exclusions</h3>
                 <div className={styles.infoList}>
                   <p><span className={styles.infoListicon}>✖</span> Fuel not included. Guest should return the car with the same fuel level as at start.</p>
-                  <p><span className={styles.infoListicon}>✖</span> Toll/Fastag charges not included. Check with host for Fastag recharge.</p>
+                  <p><span className={styles.infoListicon}>✖</span> Check with host for Fastag recharge.</p>
                   <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</p>
-                  <p><span className={styles.infoListicongreen}>✔</span> Carry original DL & valid ID proof. Required for Host Verification at Drive Start.</p>
+                  <p><span className={styles.infoListicongreen}>✔</span> Carry original DL, valid ID and additional proof of submission as per the host requirements.</p>
                 </div>
               </div>
 
@@ -1756,8 +1756,8 @@ export default function EnhancedCheckoutPage() {
                 />
                 <span>
                   By proceeding, I confirm that I agree to the{" "}
-                  <a href="#" className={styles.link}>Cancellation Policy</a> and{" "}
-                  <a href="#" className={styles.link}>Terms of Service</a>.
+                  <a href="/refund" className={styles.link}>Cancellation Policy</a> and{" "}
+                  <a href="/terms" className={styles.link}>Terms of Service</a>.
                 </span>
               </label>
             </div>

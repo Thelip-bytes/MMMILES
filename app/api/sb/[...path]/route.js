@@ -78,7 +78,7 @@ async function proxyRequest(request, context, method) {
       if (val) responseHeaders[key] = val;
     }
     
-    return new NextResponse(data, {
+    return new NextResponse(response.status === 204 ? null : data, {
       status: response.status,
       statusText: response.statusText,
       headers: responseHeaders,

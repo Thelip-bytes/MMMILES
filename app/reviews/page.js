@@ -7,13 +7,13 @@ export default function ReviewsPage() {
   const reviews = [
     {
       id: 1,
-      name: "Rohan K.",
+      name: "Rohan Kumar.",
       role: "Family Trip",
       text: `MM Miles made our family trip smooth and stress-free.
 The SUV was spotless, spacious, and super comfortable.
 Customer support was always available when needed.
 Truly the best family travel experience we’ve had.`,
-      image: "/profile1.jpg",
+      image: "/r11.jpg",
     },
     {
       id: 2,
@@ -23,27 +23,27 @@ Truly the best family travel experience we’ve had.`,
 A replacement arrived within an hour of booking.
 Their polite, professional staff made it effortless.
 Fast, reliable, and truly dependable service.`,
-      image: "/profile2.jpg",
+      image: "/r22.jpg",
     },
     {
       id: 3,
-      name: "Arjun P.",
+      name: "Arjundas.",
       role: "Frequent Traveler",
       text: `Even during peak holiday rush, cars were on time.
 Pickup and drop were smooth without any waiting.
 Every vehicle I rent feels fresh and well-maintained.
 MM Miles always ensures a premium experience and excellence.`,
-      image: "/profile3.jpg",
+      image: "/r33.jpg",
     },
     {
       id: 4,
-      name: "Kavita D.",
+      name: "Kavita Dev.",
       role: "Corporate Client",
       text: `I rent cars from MM Miles for work trips often and MM Miles never fails.
 Booking and delivery are seamless every single time.
 The cars are spotless, reliable, and stylish too.
 Perfect for clients who expect professionalism.`,
-      image: "/profile4.jpg",
+      image: "/r44.jpg",
     },
      {
       id: 5,
@@ -53,17 +53,17 @@ Perfect for clients who expect professionalism.`,
 It was clean, perfectly maintained, and fuel-efficient.
 Pickup was quick, return even faster with no hassle.
 MM Miles made travel feel effortless and fun.`,
-      image: "/profile1.jpg",
+      image: "/r55.jpg",
     },
     {
       id: 6,
-      name: "Priya N.",
+      name: "Priyanka.",
       role: "Corporate Event",
       text: `We hired cars from MM Miles for a company event in Bangalore.
 All vehicles arrived early and spotless inside out.
 Drivers were polite and well-dressed professionals.
 A flawless execution from start to finish.`,
-      image: "/profile2.jpg",
+      image: "/r66.jpg",
     },
     {
       id: 7,
@@ -73,17 +73,17 @@ A flawless execution from start to finish.`,
 Renewals and payments are smooth and well managed.
 Cars always arrive freshly detailed and maintained.
 They make recurring rentals completely stress-free.`,
-      image: "/profile3.jpg",
+      image: "/r77.jpg",
     },
     {
       id: 8,
-      name: "Meera J.",
+      name: "Meera jain.",
       role: "Leisure Traveler",
       text: `We toured South India using MM Miles premium SUV.
 The ride was smooth even on long scenic stretches.
 Their support team checked in midway to ensure comfort.
 It truly felt like traveling with complete peace of mind.`,
-      image: "/profile4.jpg",
+      image: "/r88.jpg",
     },
     {
       id: 9,
@@ -93,17 +93,17 @@ It truly felt like traveling with complete peace of mind.`,
 Affordable pricing with excellent vehicle condition.
 Pickup and return were seamless, quick, and easy.
 A premium experience even for a student budget.`,
-      image: "/profile1.jpg",
+      image: "/r99.jpg",
     },
     {
       id: 10,
-      name: "Neha R.",
+      name: "Neha joshna.",
       role: "Airport Pickup",
       text: `Booked a 5 AM airport transfer and the car arrived early.
 Driver was courteous and drove safely the whole way.
 Clean interiors and fresh fragrance made it pleasant.
 MM Miles has become my go-to for every trip.`,
-      image: "/profile2.jpg",
+      image: "/r1010.jpg",
     },
     {
       id: 11,
@@ -113,7 +113,7 @@ MM Miles has become my go-to for every trip.`,
 The car arrived shining, elegant, and with a sweet note.
 Every tiny detail reflected class and professionalism.
 A perfect blend of style, comfort, and reliability.`,
-      image: "/profile3.jpg",
+      image: "/r1111.jpg",
     },
     {
       id: 12,
@@ -123,7 +123,7 @@ A perfect blend of style, comfort, and reliability.`,
 Monthly renewals are effortless with zero downtime.
 Car swaps are instant, clean, and well organized.
 Truly dependable and premium in every sense.`,
-      image: "/profile4.jpg",
+      image: "/r1212.jpg",
     },
   ];
 

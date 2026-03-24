@@ -1,5 +1,3 @@
-"use server";
-
 export const metadata = {
   title: "Self Drive Car Rental FAQs Chennai | MM Miles",
   description:
@@ -21,7 +19,6 @@ export const metadata = {
       "All your self drive car rental questions answered. Zero deposit, unlimited km, home delivery and more.",
     url: "https://www.mmmiles.com/faq",
   },
-  // FAQ page SHOULD be indexed — huge People Also Ask potential
   robots: {
     index: true,
     follow: true,

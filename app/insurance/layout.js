@@ -1,5 +1,3 @@
-"use server";
-
 export const metadata = {
   title: "Car Rental Insurance Coverage | MM Miles Chennai",
   description:
@@ -19,7 +17,6 @@ export const metadata = {
       "All MM Miles self drive cars are fully insured. Learn what is covered on every rental.",
     url: "https://www.mmmiles.com/insurance",
   },
-  // Insurance page SHOULD be indexed — customers search for this
   robots: {
     index: true,
     follow: true,

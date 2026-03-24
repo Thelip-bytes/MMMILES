@@ -1,11 +1,9 @@
-"use server";
-
 export const metadata = {
   title: "Privacy Policy | MM Miles Car Rental Chennai",
   description:
     "MM Miles privacy policy. How we collect, use and protect your personal data when you use our self drive car rental services in Chennai.",
   robots: {
-    index: false,   // Privacy pages must NOT appear in Google
+    index: false,
     follow: true,
   },
   alternates: {

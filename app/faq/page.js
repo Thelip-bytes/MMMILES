@@ -3,20 +3,6 @@ import React, { useState } from "react";
 import styles from "./faq.module.css";
 
 
-export const metadata = {
-  title: "Self Drive Car Rental FAQs Chennai | MM Miles",
-  description:
-    "Answers to all your self drive car rental questions in Chennai. Security deposit, documents needed, unlimited km, home delivery, fuel policy, insurance coverage and more.",
-  alternates: {
-    canonical: "https://www.mmmiles.com/faq",
-  },
-  openGraph: {
-    title: "Car Rental FAQs Chennai | MM Miles",
-    description:
-      "All your self drive car rental questions answered. Zero deposit, unlimited km, home delivery and more.",
-    url: "https://www.mmmiles.com/faq",
-  },
-};
 
 
 export default function FAQPage() {

@@ -1,18 +1,7 @@
 "use client";
 import "./refund.css";
 
-export const metadata = {
-  title: "Refund & Cancellation Policy | MM Miles Chennai",
-  description:
-    "Read MM Miles refund and cancellation policy for self drive car rental bookings in Chennai. Free cancellation up to 48 hours before pickup.",
-  robots: {
-    index: false,  // DO NOT index this page in Google
-    follow: true,
-  },
-  alternates: {
-    canonical: "https://www.mmmiles.com/refund",
-  },
-};
+
 
 
 export default function RefundPolicyPage() {

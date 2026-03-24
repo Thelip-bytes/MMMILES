@@ -20,6 +20,23 @@ import {
 // You can use faXTwitter if you specifically install that icon pack.
 // ------------------------------------
 
+
+export const metadata = {
+  title: "Contact MM Miles | Self Drive Car Rental Chennai",
+  description:
+    "Contact MM Miles for self drive car rental in Chennai. Call +91 80509 53607, WhatsApp or email support@mmmiles.com. Available 24/7 for bookings and support.",
+  alternates: {
+    canonical: "https://www.mmmiles.com/contact",
+  },
+  openGraph: {
+    title: "Contact MM Miles | Car Rental Chennai",
+    description:
+      "Get in touch with MM Miles. Call, WhatsApp or email — available 24/7 for bookings and support.",
+    url: "https://www.mmmiles.com/contact",
+  },
+};
+
+
 export default function ContactPage() {
   return (
     <div className={styles.ccontainer}>

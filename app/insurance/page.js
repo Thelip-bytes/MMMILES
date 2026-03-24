@@ -1,6 +1,22 @@
 "use client";
 import "./insurance.css";
 
+export const metadata = {
+  title: "Car Rental Insurance Coverage | MM Miles Chennai",
+  description:
+    "All MM Miles self drive cars are fully insured. Learn about our insurance coverage, what is included, deductibles and how you are protected on every trip in Chennai.",
+  alternates: {
+    canonical: "https://www.mmmiles.com/insurance",
+  },
+  openGraph: {
+    title: "Car Rental Insurance | MM Miles Chennai",
+    description:
+      "All MM Miles self drive cars are fully insured. Learn what is covered on every rental.",
+    url: "https://www.mmmiles.com/insurance",
+  },
+};
+
+
 export default function RenterInsurance() {
   return (
     <main className="refund-container">

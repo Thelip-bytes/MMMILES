@@ -2,6 +2,22 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+
+export const metadata = {
+  title: "Top Self Drive Cars in Chennai | Best Rated Rentals | MM Miles",
+  description:
+    "Browse the top rated self drive cars available for rent in Chennai. SUVs, sedans and hatchbacks — best reviewed by 10,000+ customers at MM Miles. Book now!",
+  alternates: {
+    canonical: "https://www.mmmiles.com/top-cars",
+  },
+  openGraph: {
+    title: "Top Self Drive Cars Chennai | MM Miles",
+    description:
+      "Best rated self drive cars for rent in Chennai. Reviewed by 10,000+ customers. Book now!",
+    url: "https://www.mmmiles.com/top-cars",
+  },
+};
+
 export default function TopCarsPage() {
   return (
     <div className="min-h-screen bg-black text-white py-16 px-4 sm:px-6 lg:px-8 mt-16 font-sans">

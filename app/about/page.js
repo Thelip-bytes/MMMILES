@@ -2,6 +2,21 @@ import React from "react";
 import Image from "next/image";
 import "./about.css";
 
+export const metadata = {
+  title: "About MM Miles | Self Drive Car Rental Chennai",
+  description:
+    "MM Miles is Chennai's trusted self drive car rental company. Zero deposit, unlimited km, home delivery across all Chennai areas. Learn about our story, fleet and values.",
+  alternates: {
+    canonical: "https://www.mmmiles.com/about",
+  },
+  openGraph: {
+    title: "About MM Miles | Self Drive Car Rental Chennai",
+    description:
+      "Learn about MM Miles — Chennai's top rated self drive car rental service with zero deposit and unlimited km.",
+    url: "https://www.mmmiles.com/about",
+  },
+};
+
 export default function Hero() {
   return (
     <div className="heroabout">

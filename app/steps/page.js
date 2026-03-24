@@ -2,6 +2,23 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+
+export const metadata = {
+  title: "How to Book Self Drive Car Rental in Chennai | MM Miles",
+  description:
+    "Book self drive car rental in Chennai in 5 easy steps with MM Miles. Select your car, choose dates, upload documents, pay online and get home delivery. Book in 2 minutes!",
+  alternates: {
+    canonical: "https://www.mmmiles.com/steps",
+  },
+  openGraph: {
+    title: "How to Book Car Rental in Chennai | MM Miles",
+    description:
+      "Book self drive car rental in Chennai in 5 easy steps. Zero deposit, home delivery included.",
+    url: "https://www.mmmiles.com/steps",
+  },
+};
+
+
 export default function StepsToBook() {
   return (
     <div className="min-h-screen bg-black text-white py-16 px-4 sm:px-6 lg:px-8 mt-16 font-sans">

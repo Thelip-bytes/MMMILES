@@ -1,6 +1,21 @@
 "use client";
 import "./terms.css";
 
+
+export const metadata = {
+  title: "Terms & Conditions | MM Miles Car Rental Chennai",
+  description:
+    "Read the terms and conditions for self drive car rental at MM Miles Chennai. Booking policy, cancellation, fuel, insurance and usage rules.",
+  robots: {
+    index: false,  // DO NOT index this page in Google
+    follow: true,  // still follow links on this page
+  },
+  alternates: {
+    canonical: "https://www.mmmiles.com/terms",
+  },
+};
+
+
 export default function TermsPage() {
   return (
     <main className="terms-container">

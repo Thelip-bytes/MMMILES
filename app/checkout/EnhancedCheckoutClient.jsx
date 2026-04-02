@@ -1517,8 +1517,8 @@ export default function EnhancedCheckoutPage() {
                 <div className={styles.infoList}>
                   <p><span className={styles.infoListicon}>✖</span> Fuel not included. Guest should return the car with the same fuel level as at start.</p>
                   <p><span className={styles.infoListicon}>✖</span> Check with host for Fastag recharge.</p>
-                  <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, illegal use, restricted zones.</p>
-                  <p><span className={styles.infoListicongreen}>✔</span> Carry original DL, valid ID and additional proof of submission as per the host requirements.</p>
+                  <p><span className={styles.infoListicon}>✖</span> Trip Protection excludes: Off-road use, driving under influence, over-speeding, restricted zones.</p>
+                  <p><span className={styles.infoListicongreen}>✔</span> Carry orginal Driving License and Aadhar card along with Bike as a proof of submission as per the Host requirements.</p>
                 </div>
               </div>
 

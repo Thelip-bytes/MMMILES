@@ -90,6 +90,7 @@ export default function Footer() {
 
               <div>
                 <h4>Handy Links</h4>
+                <Link href="/blog">Blogs</Link>
                 <a href="https://www.thrillophilia.com/places-to-visit-in-south-india">
                   Explore Places
                 </a>

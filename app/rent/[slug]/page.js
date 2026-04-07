@@ -3,6 +3,18 @@ import { notFound } from "next/navigation";
 import { cars, getCarBySlug } from "@/lib/cars";
 import { getActiveCities } from "@/lib/cities";
 
+import Hero from "@/app/components/Hero";
+import HomeContent from "@/app/components/HomeContent";
+import AdvantageSection from "@/app/components/AdvantageSection";
+import OffersSection from "@/app/components/OfferSection";
+import DriveDiscoverSection from "@/app/components/DriveDiscoverSection";
+import BookingSteps from "@/app/components/BookingSteps";
+import GuidePage from "@/app/components/guide";
+import ReviewSlider from "@/app/components/ReviewSlider";
+import ReviewSection from "@/app/components/ReviewSection";
+import BecomeHost from "@/app/components/BecomeHost";
+import FAQSection from "@/app/components/FAQSection";
+
 export async function generateStaticParams() {
   return cars.map((car) => ({ slug: car.slug }));
 }
@@ -38,15 +50,15 @@ export default async function RentPage({ params }) {
       name: `${car.name} Self Drive Rental`,
       description: car.description,
       brand: { "@type": "Brand", name: "MM Miles" },
-      offers: { "@type": "AggregateOffer", lowPrice: car.pricePerHour, highPrice: car.pricePerDay, priceCurrency: "INR", availability: "https://schema.org/InStock", seller: { "@type": "Organization", name: "MM Miles" } },
+      offers: { "@type": "AggregateOffer", lowPrice: car.pricePerHour, highPrice: car.pricePerDay, priceCurrency: "INR", availability: "https://schema.org/InStock" },
     },
     {
       "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: [
         { "@type": "Question", name: `What is the price to rent ${car.name}?`, acceptedAnswer: { "@type": "Answer", text: `₹${car.pricePerHour}/hour or ₹${car.pricePerDay}/day. No security deposit required.` } },
         { "@type": "Question", name: `Is there a security deposit for ${car.name} rental?`, acceptedAnswer: { "@type": "Answer", text: `No. MM Miles charges zero security deposit.` } },
-        { "@type": "Question", name: `Does ${car.name} rental include unlimited km?`, acceptedAnswer: { "@type": "Answer", text: `Yes. All rentals include unlimited km — drive anywhere without extra charges.` } },
-        { "@type": "Question", name: `Can I get ${car.name} home delivered?`, acceptedAnswer: { "@type": "Answer", text: `Yes. We deliver across all Chennai, Coimbatore and Bangalore areas.` } },
+        { "@type": "Question", name: `Does ${car.name} rental include unlimited km?`, acceptedAnswer: { "@type": "Answer", text: `Yes. All rentals include unlimited km.` } },
+        { "@type": "Question", name: `Can I get ${car.name} home delivered?`, acceptedAnswer: { "@type": "Answer", text: `Yes. We deliver across Chennai, Coimbatore and Bangalore.` } },
       ],
     },
   ];
@@ -57,77 +69,57 @@ export default async function RentPage({ params }) {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
 
-      <main style={{ padding: 40, maxWidth: 900, margin: "0 auto" }}>
-        <nav style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
-          <Link href="/">Home</Link> &rsaquo; <Link href="/car">Cars</Link> &rsaquo; <span>{car.name}</span>
-        </nav>
+      {/* ── SEO CONTENT — hidden from users via .seo-hidden ──────────────────── */}
+      <section className="seo-hidden">
+        <h1>{car.name} Self Drive Rental in Chennai | No Deposit | MM Miles</h1>
+        <p>Rent {car.name} starting from ₹{car.pricePerHour}/hour or ₹{car.pricePerDay}/day. Zero deposit, unlimited km, fully insured, home delivery. {car.description}</p>
 
-        <h1>{car.name} Self Drive Rental in Chennai</h1>
-        <p style={{ fontSize: 17, color: "#555", marginBottom: 24 }}>
-          Rent {car.name} starting from <strong>₹{car.pricePerHour}/hour</strong> or{" "}
-          <strong>₹{car.pricePerDay}/day</strong>. Zero deposit · Unlimited km · Home delivery · Fully insured.
-        </p>
+        <h2>About {car.name}</h2>
+        <ul>
+          <li>Transmission: {car.transmission}</li>
+          <li>Seats: {car.seats}</li>
+          <li>Fuel: {car.fuel}</li>
+          <li>Features: {car.features.join(", ")}</li>
+          <li>Price: ₹{car.pricePerHour}/hour · ₹{car.pricePerDay}/day · ₹{car.pricePerMonth}/month</li>
+        </ul>
 
-        <div style={{ display: "flex", gap: 16, marginBottom: 32, flexWrap: "wrap" }}>
-          {[["Per Hour", `₹${car.pricePerHour}`], ["Per Day", `₹${car.pricePerDay}`], ["Per Month", `₹${car.pricePerMonth.toLocaleString("en-IN")}`]].map(([label, price]) => (
-            <div key={label} style={{ border: "1px solid #ddd", borderRadius: 12, padding: "16px 24px", minWidth: 140, textAlign: "center" }}>
-              <div style={{ fontSize: 13, color: "#888", marginBottom: 4 }}>{label}</div>
-              <div style={{ fontSize: 24, fontWeight: 700 }}>{price}</div>
-            </div>
+        <h2>Rent {car.name} in Other Cities</h2>
+        <ul>
+          {cities.map((city) => (
+            <li key={city.slug}><Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} Rental in {city.name}</Link></li>
           ))}
-        </div>
+        </ul>
 
-        <section style={{ marginBottom: 32 }}>
-          <h2>About {car.name}</h2>
-          <p>{car.description}</p>
-          <ul style={{ marginTop: 12, paddingLeft: 20, lineHeight: 2 }}>
-            <li>Transmission: {car.transmission.charAt(0).toUpperCase() + car.transmission.slice(1)}</li>
-            <li>Seats: {car.seats}</li>
-            <li>Fuel: {car.fuel.charAt(0).toUpperCase() + car.fuel.slice(1)}</li>
-            <li>Features: {car.features.join(" · ")}</li>
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Rent {car.name} in Other Cities</h2>
-          <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-            {cities.map((city) => (
-              <li key={city.slug}><Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} Rental in {city.name}</Link></li>
-            ))}
-          </ul>
-        </section>
-
-        {relatedCars.length > 0 && (
-          <section style={{ marginBottom: 32 }}>
-            <h2>Similar {car.type.charAt(0).toUpperCase() + car.type.slice(1)}s You Can Rent</h2>
-            <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-              {relatedCars.map((c) => (
-                <li key={c.slug}><Link href={`/rent/${c.slug}`}>{c.name} Rental — ₹{c.pricePerDay}/day</Link></li>
-              ))}
-            </ul>
-          </section>
-        )}
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>FAQs</h2>
-          {[
-            { q: `What is the price to rent ${car.name}?`, a: `₹${car.pricePerHour}/hour or ₹${car.pricePerDay}/day. No security deposit required.` },
-            { q: `Is there a security deposit?`, a: `No. MM Miles charges zero security deposit.` },
-            { q: `Does it include unlimited km?`, a: `Yes. All MM Miles rentals include unlimited km.` },
-            { q: `Can I get home delivery?`, a: `Yes. We deliver across Chennai, Coimbatore and Bangalore.` },
-          ].map(({ q, a }) => (
-            <details key={q} style={{ marginBottom: 12, borderBottom: "1px solid #eee", paddingBottom: 12 }}>
-              <summary style={{ fontWeight: 600, cursor: "pointer" }}>{q}</summary>
-              <p style={{ marginTop: 8, color: "#555" }}>{a}</p>
-            </details>
+        <h2>Similar {car.type} Cars</h2>
+        <ul>
+          {relatedCars.map((c) => (
+            <li key={c.slug}><Link href={`/rent/${c.slug}`}>{c.name} Rental — ₹{c.pricePerDay}/day</Link></li>
           ))}
-        </section>
+        </ul>
 
-        <section style={{ background: "#f5f5f5", borderRadius: 12, padding: 24, textAlign: "center" }}>
-          <h2>Book {car.name} Self Drive Now</h2>
-          <p>Zero deposit · Unlimited km · Home delivery · 24/7 support</p>
-          <Link href="/car" style={{ display: "inline-block", marginTop: 12, background: "#000", color: "#fff", padding: "12px 32px", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>Browse All Cars →</Link>
-        </section>
+        <h2>Why Rent {car.name} from MM Miles?</h2>
+        <ul>
+          <li>Zero security deposit — no money blocked</li>
+          <li>Unlimited km — drive anywhere</li>
+          <li>Home delivery across Chennai, Coimbatore and Bangalore</li>
+          <li>Fully insured {car.name}</li>
+          <li>24/7 roadside assistance</li>
+        </ul>
+      </section>
+
+      {/* ── YOUR HOMEPAGE COMPONENTS — exactly what users see ───────────────── */}
+      <main>
+        <Hero />
+        <HomeContent />
+        <AdvantageSection />
+        <OffersSection />
+        <DriveDiscoverSection />
+        <BookingSteps />
+        <GuidePage />
+        <ReviewSlider />
+        <ReviewSection />
+        <BecomeHost />
+        <FAQSection />
       </main>
     </>
   );

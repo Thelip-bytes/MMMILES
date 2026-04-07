@@ -3,42 +3,41 @@ import { notFound } from "next/navigation";
 import { cars, carTypes, getCarsByType } from "@/lib/cars";
 import { getActiveCities, getCityBySlug, getAreaBySlug } from "@/lib/cities";
 
-// ─── generateStaticParams ─────────────────────────────────────────────────────
-// Generates BOTH area slugs (omr, velachery...) AND type slugs (suv, automatic...)
-// under the same [segment] dynamic folder — zero conflicts
+import Hero from "@/app/components/Hero";
+import HomeContent from "@/app/components/HomeContent";
+import AdvantageSection from "@/app/components/AdvantageSection";
+import OffersSection from "@/app/components/OfferSection";
+import DriveDiscoverSection from "@/app/components/DriveDiscoverSection";
+import BookingSteps from "@/app/components/BookingSteps";
+import GuidePage from "@/app/components/guide";
+import ReviewSlider from "@/app/components/ReviewSlider";
+import ReviewSection from "@/app/components/ReviewSection";
+import BecomeHost from "@/app/components/BecomeHost";
+import FAQSection from "@/app/components/FAQSection";
+
 export async function generateStaticParams() {
   const params = [];
   getActiveCities().forEach((city) => {
-    // Area segments
-    city.areas.forEach((area) => {
-      params.push({ city: city.slug, segment: area.slug });
-    });
-    // Type segments
-    carTypes.forEach((type) => {
-      params.push({ city: city.slug, segment: type.slug });
-    });
+    city.areas.forEach((area) => params.push({ city: city.slug, segment: area.slug }));
+    carTypes.forEach((type) => params.push({ city: city.slug, segment: type.slug }));
   });
   return params;
 }
 
-// ─── generateMetadata ─────────────────────────────────────────────────────────
 export async function generateMetadata({ params }) {
   const p = await params;
   const city = getCityBySlug(p.city);
   if (!city) return { title: "Not Found" };
 
-  // Check if segment is a car type
   const typeData = carTypes.find((t) => t.slug === p.segment);
   if (typeData) {
     return {
       title: `${typeData.name} Rental in ${city.name} | Self Drive | No Deposit | MM Miles`,
       description: `Rent ${typeData.name.toLowerCase()} cars in ${city.name}. Zero deposit, unlimited km, home delivery. From ₹${city.priceFrom}/day.`,
-      keywords: [`${typeData.name.toLowerCase()} rental ${city.name}`, `self drive ${typeData.name.toLowerCase()} ${city.name}`].join(", "),
       alternates: { canonical: `https://www.mmmiles.com/cities/${city.slug}/${p.segment}` },
     };
   }
 
-  // Otherwise it's an area
   const area = getAreaBySlug(p.city, p.segment);
   if (area) {
     return {
@@ -57,102 +56,43 @@ export async function generateMetadata({ params }) {
   return { title: "Not Found" };
 }
 
-// ─── Page Component ───────────────────────────────────────────────────────────
 export default async function SegmentPage({ params }) {
   const p = await params;
   const city = getCityBySlug(p.city);
   if (!city) notFound();
 
-  // Detect: is this segment a car type or an area?
   const typeData = carTypes.find((t) => t.slug === p.segment);
   const area = getAreaBySlug(p.city, p.segment);
-
   if (!typeData && !area) notFound();
 
-  // ── Render TYPE page ───────────────────────────────────────────────────────
-  if (typeData) {
-    const typeCars = getCarsByType(p.segment);
-    const otherTypes = carTypes.filter((t) => t.slug !== p.segment);
-
-    return (
-      <main style={{ padding: 40, maxWidth: 960, margin: "0 auto" }}>
-        <nav style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
-          <Link href="/">Home</Link> &rsaquo;{" "}
-          <Link href={`/cities/${city.slug}`}>Car Rental {city.name}</Link> &rsaquo;{" "}
-          <span>{typeData.name}</span>
-        </nav>
-
-        <h1>{typeData.name} Rental in {city.name} | Self Drive</h1>
-        <p style={{ fontSize: 17, color: "#555", marginBottom: 24 }}>
-          Rent {typeData.name.toLowerCase()} cars in {city.name} starting from{" "}
-          <strong>₹{city.priceFrom}/day</strong>. Zero deposit · Unlimited km · Home delivery.
-        </p>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>All {typeData.name} Cars Available in {city.name}</h2>
-          <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-            {typeCars.map((car) => (
-              <li key={car.slug}>
-                <Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} Rental in {city.name}</Link>
-                {" "}— ₹{car.pricePerDay}/day · {car.seats} Seats · {car.transmission}
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Other Car Types in {city.name}</h2>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            {otherTypes.map(({ slug, name }) => (
-              <Link key={slug} href={`/cities/${city.slug}/${slug}`} style={{ border: "1px solid #ddd", borderRadius: 8, padding: "8px 16px", textDecoration: "none", color: "#333", fontSize: 14 }}>
-                {name} Rental
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>{typeData.name} Rental by Area in {city.name}</h2>
-          <ul style={{ paddingLeft: 20, columns: 2, lineHeight: 2.2 }}>
-            {city.areas.map((a) => (
-              <li key={a.slug}>
-                <Link href={`/cities/${city.slug}/${a.slug}`}>{typeData.name} Rental {a.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section style={{ background: "#f5f5f5", borderRadius: 12, padding: 24, textAlign: "center" }}>
-          <h2>Book {typeData.name} Rental in {city.name}</h2>
-          <p>Zero deposit · Unlimited km · Home delivery</p>
-          <Link href="/car" style={{ display: "inline-block", marginTop: 12, background: "#000", color: "#fff", padding: "12px 32px", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>Browse All Cars →</Link>
-        </section>
-      </main>
-    );
-  }
-
-  // ── Render AREA page ───────────────────────────────────────────────────────
   const popularCars = cars.filter((c) => c.popular);
-  const nearbyAreas = city.areas.filter((a) => a.slug !== area.slug).slice(0, 10);
+  const typeCars = typeData ? getCarsByType(p.segment) : [];
+  const otherTypes = carTypes.filter((t) => t.slug !== p.segment);
+  const nearbyAreas = city.areas.filter((a) => a.slug !== p.segment).slice(0, 10);
 
   const schemas = [
     {
       "@context": "https://schema.org", "@type": "LocalBusiness",
       name: "MM Miles",
-      description: `Self drive car rental in ${area.name}, ${city.name}.`,
-      url: `https://www.mmmiles.com/cities/${city.slug}/${area.slug}`,
+      description: area
+        ? `Self drive car rental in ${area.name}, ${city.name}.`
+        : `${typeData?.name} rental in ${city.name}.`,
+      url: `https://www.mmmiles.com/cities/${city.slug}/${p.segment}`,
       telephone: city.phone,
-      address: { "@type": "PostalAddress", streetAddress: area.name, addressLocality: city.name, addressRegion: city.state, addressCountry: "IN" },
+      address: { "@type": "PostalAddress", addressLocality: city.name, addressRegion: city.state, addressCountry: "IN" },
       geo: { "@type": "GeoCoordinates", latitude: city.coordinates.lat, longitude: city.coordinates.lng },
       aggregateRating: { "@type": "AggregateRating", ratingValue: "4.5", reviewCount: "10000" },
       openingHours: "Mo-Su 00:00-23:59", priceRange: "₹₹",
     },
     {
       "@context": "https://schema.org", "@type": "FAQPage",
-      mainEntity: [
+      mainEntity: area ? [
         { "@type": "Question", name: `Does MM Miles offer car rental in ${area.name}, ${city.name}?`, acceptedAnswer: { "@type": "Answer", text: `Yes. Zero deposit, unlimited km, home delivery in ${area.name}, ${city.name}.` } },
         { "@type": "Question", name: `What is the price for car rental in ${area.name}?`, acceptedAnswer: { "@type": "Answer", text: `Starts from ₹${city.priceFrom}/day. No security deposit required.` } },
         { "@type": "Question", name: `Can I get a car delivered to my home in ${area.name}?`, acceptedAnswer: { "@type": "Answer", text: `Yes. We deliver to your door in ${area.name} within 2 hours of booking.` } },
+      ] : [
+        { "@type": "Question", name: `What ${typeData?.name} cars are available in ${city.name}?`, acceptedAnswer: { "@type": "Answer", text: `MM Miles has ${typeCars.length} ${typeData?.name} options in ${city.name} with zero deposit and unlimited km.` } },
+        { "@type": "Question", name: `Is there a security deposit for ${typeData?.name} rental in ${city.name}?`, acceptedAnswer: { "@type": "Answer", text: `No. MM Miles charges zero security deposit in ${city.name}.` } },
       ],
     },
     {
@@ -160,7 +100,7 @@ export default async function SegmentPage({ params }) {
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: "https://www.mmmiles.com" },
         { "@type": "ListItem", position: 2, name: `Car Rental ${city.name}`, item: `https://www.mmmiles.com/cities/${city.slug}` },
-        { "@type": "ListItem", position: 3, name: `Car Rental ${area.name}`, item: `https://www.mmmiles.com/cities/${city.slug}/${area.slug}` },
+        { "@type": "ListItem", position: 3, name: area ? area.name : typeData?.name, item: `https://www.mmmiles.com/cities/${city.slug}/${p.segment}` },
       ],
     },
   ];
@@ -171,102 +111,92 @@ export default async function SegmentPage({ params }) {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
 
-      <main style={{ padding: 40, maxWidth: 960, margin: "0 auto" }}>
-        <nav style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>
-          <Link href="/">Home</Link> &rsaquo;{" "}
-          <Link href={`/cities/${city.slug}`}>Car Rental {city.name}</Link> &rsaquo;{" "}
-          <span>{area.name}</span>
-        </nav>
+      {/* ── SEO CONTENT — hidden from users via .seo-hidden ──────────────────── */}
+      <section className="seo-hidden">
+        {area ? (
+          <>
+            <h1>Self Drive Car Rental in {area.name}, {city.name}</h1>
+            <p>Rent self drive cars in {area.name}, {city.name} starting from ₹{city.priceFrom}/day. Home delivery to {area.name}. Zero deposit, unlimited km. Serving {area.landmarks?.join(", ")}.</p>
 
-        <h1>Self Drive Car Rental in {area.name}, {city.name}</h1>
-        <p style={{ fontSize: 17, color: "#555", marginBottom: 8 }}>
-          Rent self drive cars in {area.name}, {city.name} starting from{" "}
-          <strong>₹{city.priceFrom}/day</strong>. Home delivery to {area.name} · Zero deposit · Unlimited km.
-        </p>
-        {area.landmarks?.length > 0 && (
-          <p style={{ fontSize: 14, color: "#777", marginBottom: 24 }}>
-            Serving {area.landmarks.join(", ")} and surrounding areas.
-          </p>
+            <h2>Car Types Available in {area.name}</h2>
+            <ul>
+              {carTypes.map((t) => (
+                <li key={t.slug}><Link href={`/cities/${city.slug}/${t.slug}`}>{t.name} Rental in {area.name}</Link></li>
+              ))}
+            </ul>
+
+            <h2>Popular Cars in {area.name}, {city.name}</h2>
+            <ul>
+              {popularCars.map((car) => (
+                <li key={car.slug}><Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} Self Drive in {city.name} — ₹{car.pricePerDay}/day</Link></li>
+              ))}
+            </ul>
+
+            <h2>Why Choose MM Miles in {area.name}?</h2>
+            <ul>
+              <li>Doorstep delivery to {area.name} — no hub visit needed</li>
+              <li>Zero security deposit — no money blocked</li>
+              <li>Unlimited km — drive to {city.popularDestinations[0]?.name} and back</li>
+              <li>Fully insured fleet — drive worry-free</li>
+              <li>24/7 roadside assistance across {city.name}</li>
+            </ul>
+
+            <h2>Popular Road Trips from {area.name}, {city.name}</h2>
+            <ul>
+              {city.popularDestinations.map(({ name, distance, time }) => (
+                <li key={name}>{area.name} to {name} — {distance} ({time})</li>
+              ))}
+            </ul>
+
+            <h2>Car Rental in Nearby Areas of {city.name}</h2>
+            <ul>
+              {nearbyAreas.map((a) => (
+                <li key={a.slug}><Link href={`/cities/${city.slug}/${a.slug}`}>Car Rental {a.name}, {city.name}</Link></li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <>
+            <h1>{typeData.name} Rental in {city.name} | Self Drive</h1>
+            <p>Rent {typeData.name.toLowerCase()} cars in {city.name} starting from ₹{city.priceFrom}/day. Zero deposit, unlimited km, home delivery across {city.name}.</p>
+
+            <h2>All {typeData.name} Cars in {city.name}</h2>
+            <ul>
+              {typeCars.map((car) => (
+                <li key={car.slug}><Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} in {city.name} — ₹{car.pricePerDay}/day · {car.seats} Seats</Link></li>
+              ))}
+            </ul>
+
+            <h2>Other Car Types in {city.name}</h2>
+            <ul>
+              {otherTypes.map(({ slug, name }) => (
+                <li key={slug}><Link href={`/cities/${city.slug}/${slug}`}>{name} Rental in {city.name}</Link></li>
+              ))}
+            </ul>
+
+            <h2>{typeData.name} Rental by Area in {city.name}</h2>
+            <ul>
+              {city.areas.map((a) => (
+                <li key={a.slug}><Link href={`/cities/${city.slug}/${a.slug}`}>{typeData.name} Rental {a.name}</Link></li>
+              ))}
+            </ul>
+          </>
         )}
+      </section>
 
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 32 }}>
-          {[`Delivery to ${area.name}`, "Zero Deposit", "Unlimited KM", "Fully Insured", "24/7 Support"].map((u) => (
-            <span key={u} style={{ background: "#f0f0f0", borderRadius: 99, padding: "5px 14px", fontSize: 13, fontWeight: 500 }}>{u}</span>
-          ))}
-        </div>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Car Types Available in {area.name}</h2>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-            {[["suv","SUV Rental"],["automatic","Automatic Cars"],["cheap","Budget Cars"],["electric","Electric Cars"]].map(([slug, label]) => (
-              <Link key={slug} href={`/cities/${city.slug}/${slug}`} style={{ border: "1px solid #ddd", borderRadius: 8, padding: "7px 16px", textDecoration: "none", color: "#333", fontSize: 14 }}>{label}</Link>
-            ))}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Popular Self Drive Cars in {area.name}, {city.name}</h2>
-          <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-            {popularCars.map((car) => (
-              <li key={car.slug}>
-                <Link href={`/rent/${car.slug}/${city.slug}`}>{car.name} Self Drive in {city.name}</Link>
-                {" "}— ₹{car.pricePerDay}/day
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Why Choose MM Miles in {area.name}?</h2>
-          <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-            <li>Doorstep delivery to {area.name} — no hub visit needed</li>
-            <li>Zero security deposit — no money blocked</li>
-            <li>Unlimited km — drive to {city.popularDestinations[0]?.name} and back</li>
-            <li>Fully insured fleet — drive worry-free</li>
-            <li>24/7 roadside assistance across {city.name}</li>
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Popular Road Trips from {area.name}, {city.name}</h2>
-          <ul style={{ paddingLeft: 20, lineHeight: 2.2 }}>
-            {city.popularDestinations.map(({ name, distance, time }) => (
-              <li key={name}>{area.name} to {name} — {distance} ({time})</li>
-            ))}
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>Car Rental in Nearby Areas of {city.name}</h2>
-          <ul style={{ paddingLeft: 20, columns: 2, lineHeight: 2.2 }}>
-            {nearbyAreas.map((a) => (
-              <li key={a.slug}>
-                <Link href={`/cities/${city.slug}/${a.slug}`}>Car Rental {a.name}, {city.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section style={{ marginBottom: 32 }}>
-          <h2>FAQs — Car Rental in {area.name}</h2>
-          {[
-            { q: `Does MM Miles offer car rental in ${area.name}?`, a: `Yes. Home delivery in ${area.name}, ${city.name}. Zero deposit, unlimited km.` },
-            { q: `What is the price for car rental in ${area.name}?`, a: `Starts from ₹${city.priceFrom}/day. No security deposit.` },
-            { q: `Can I get a car delivered to my home in ${area.name}?`, a: `Yes. We deliver to your door in ${area.name} within 2 hours.` },
-            { q: `Are cars available with unlimited km in ${area.name}?`, a: `Yes. All MM Miles self drive cars include unlimited km.` },
-          ].map(({ q, a }) => (
-            <details key={q} style={{ marginBottom: 12, borderBottom: "1px solid #eee", paddingBottom: 12 }}>
-              <summary style={{ fontWeight: 600, cursor: "pointer" }}>{q}</summary>
-              <p style={{ marginTop: 8, color: "#555" }}>{a}</p>
-            </details>
-          ))}
-        </section>
-
-        <section style={{ background: "#f5f5f5", borderRadius: 12, padding: 24, textAlign: "center" }}>
-          <h2>Book Car Rental in {area.name} Now</h2>
-          <p>Delivered to your door · Zero deposit · Unlimited km</p>
-          <Link href="/car" style={{ display: "inline-block", marginTop: 12, background: "#000", color: "#fff", padding: "12px 32px", borderRadius: 8, textDecoration: "none", fontWeight: 600 }}>Browse All Cars →</Link>
-        </section>
+      {/* ── YOUR HOMEPAGE COMPONENTS — exactly what users see ───────────────── */}
+      <main>
+        <Hero />
+        <HomeContent />
+        <AdvantageSection />
+        <OffersSection />
+        <DriveDiscoverSection />
+        <BookingSteps />
+        <GuidePage />
+        <ReviewSlider />
+        <ReviewSection />
+        <BecomeHost />
+        <FAQSection />
       </main>
     </>
   );

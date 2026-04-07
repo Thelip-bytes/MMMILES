@@ -1,0 +1,741 @@
+/* ═══════════════════════════════════════════════════════════════
+   MM Miles — Blog CSS
+   Matches carDetail.module.css design system exactly:
+   - Background: #FEF9F5
+   - Gold: #BF9860 / #E5C18E
+   - Cards: gradient #fff9ef → #f5e5cc
+   - Font: Inter + Poppins
+   - Border: #d9d5d1
+═══════════════════════════════════════════════════════════════ */
+
+/* ─── BLOG LISTING PAGE ─────────────────────────────────────── */
+
+.blogListContainer {
+  background: #FEF9F5;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  font-family: "Inter", sans-serif;
+}
+
+.blogListInner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 40px;
+}
+
+.blogListBreadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.blogListBreadcrumb a {
+  color: #888;
+  text-decoration: none;
+}
+
+.blogListBreadcrumb a:hover {
+  color: #BF9860;
+}
+
+.blogListTitle {
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.blogListSubtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+/* ─── Blog Card ────────────────────────────────────────────── */
+
+.blogGrid {
+  display: grid;
+  gap: 24px;
+}
+
+.blogCard {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d9d5d1;
+  border-radius: 15px;
+  padding: 28px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blogCard:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 15px 30px rgba(191, 152, 96, 0.3);
+}
+
+.blogCardTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.blogCardTag {
+  font-size: 11px;
+  padding: 3px 12px;
+  background: #f0dec3;
+  border: 1px solid #d8b480;
+  border-radius: 99px;
+  color: #7a5c2e;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+.blogCardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f1f1f;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  text-decoration: none;
+  display: block;
+}
+
+.blogCardTitle:hover {
+  background: linear-gradient(to right, #e5c18e, #5b4d39, #443621);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.blogCardExcerpt {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.blogCardMeta {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.blogCardDate {
+  font-size: 12px;
+  color: #999;
+  font-family: "Poppins", sans-serif;
+}
+
+.blogCardReadTime {
+  font-size: 12px;
+  color: #999;
+  font-family: "Poppins", sans-serif;
+}
+
+.blogCardReadMore {
+  font-size: 13px;
+  font-weight: 700;
+  color: #BF9860;
+  text-decoration: none;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+
+.blogCardReadMore:hover {
+  color: #5b4d39;
+}
+
+/* ─── BLOG POST PAGE ────────────────────────────────────────── */
+
+.postContainer {
+  background: #FEF9F5;
+  min-height: 100vh;
+  padding-bottom: 80px;
+  font-family: "Inter", sans-serif;
+}
+
+.postInner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 40px;
+}
+
+/* Breadcrumb */
+.postBreadcrumb {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.postBreadcrumb a {
+  color: #888;
+  text-decoration: none;
+}
+
+.postBreadcrumb a:hover {
+  color: #BF9860;
+}
+
+/* Tags */
+.postTags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.postTag {
+  font-size: 11px;
+  padding: 3px 12px;
+  background: #f0dec3;
+  border: 1px solid #d8b480;
+  border-radius: 99px;
+  color: #7a5c2e;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Title */
+.postTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f1f1f;
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+
+/* Meta bar */
+.postMeta {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Cover image */
+.postCoverImage {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 36px;
+  object-fit: cover;
+  max-height: 420px;
+  border: 1px solid #d9d5d1;
+}
+
+/* ─── CONTENT BLOCKS ────────────────────────────────────────── */
+
+/* Intro paragraph */
+.blockIntro {
+  font-size: 17px;
+  line-height: 1.85;
+  color: #333;
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+
+/* H2 */
+.blockH2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f1f1f;
+  margin-top: 44px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid #d8b480;
+  background: linear-gradient(to right, #e5c18e, #5b4d39, #443621);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* H3 */
+.blockH3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2a2929;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+/* Paragraph */
+.blockParagraph {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+/* List */
+.blockList {
+  padding-left: 22px;
+  margin-bottom: 22px;
+}
+
+.blockList li {
+  font-size: 15px;
+  line-height: 2.1;
+  color: #555;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 28px;
+  border-radius: 12px;
+  border: 1px solid #d9d5d1;
+}
+
+.blockTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-family: "Poppins", sans-serif;
+}
+
+.blockTable thead tr th {
+  padding: 12px 16px;
+  background: linear-gradient(to right, #f0dec3, #e8d0aa);
+  text-align: left;
+  font-weight: 700;
+  color: #2a2929;
+  border-bottom: 2px solid #d8b480;
+}
+
+.blockTable tbody tr:nth-child(even) {
+  background: #fffaf4;
+}
+
+.blockTable tbody tr:nth-child(odd) {
+  background: #fff;
+}
+
+.blockTable tbody td {
+  padding: 11px 16px;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+/* Tip box */
+.blockTip {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d8b480;
+  border-left: 4px solid #BF9860;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.blockTipIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.blockTipText {
+  font-size: 14px;
+  color: #5b4d39;
+  line-height: 1.7;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+/* Warning box */
+.blockWarning {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-left: 4px solid #f97316;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.blockWarningText {
+  font-size: 14px;
+  color: #9a3412;
+  line-height: 1.7;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Car cards */
+.carCardGrid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.carCard {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d9d5d1;
+  border-radius: 15px;
+  padding: 18px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(191, 152, 96, 0.3);
+}
+
+.carCardName {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f1f1f;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+.carCardName:hover {
+  background: linear-gradient(to right, #e5c18e, #5b4d39);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.carCardReason {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.carCardButton {
+  display: inline-block;
+  background: #000;
+  color: #b99564;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 20px;
+  border-radius: 33px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.carCardButton:hover {
+  color: #fff;
+  box-shadow: 0 0 10px rgba(191, 152, 96, 0.4);
+  transform: scale(1.04);
+}
+
+/* Image block */
+.blockFigure {
+  margin: 28px 0;
+}
+
+.blockFigureImg {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #d9d5d1;
+}
+
+.blockFigureCaption {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  margin-top: 8px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* CTA block */
+.blockCta {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d8b480;
+  border-radius: 15px;
+  padding: 32px 28px;
+  text-align: center;
+  margin: 36px 0;
+  box-shadow: 0 8px 20px rgba(191, 152, 96, 0.2);
+}
+
+.blockCtaText {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 18px;
+  line-height: 1.6;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.blockCtaButton {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #000;
+  color: #b99564;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 33px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.blockCtaButton:hover {
+  color: #fff;
+  transform: scale(1.04);
+  box-shadow: 0 0 10px rgba(191, 152, 96, 0.4);
+}
+
+/* ─── FAQ SECTION ────────────────────────────────────────────── */
+
+.faqSection {
+  margin-top: 44px;
+  padding-top: 36px;
+  border-top: 1px solid #d9d5d1;
+}
+
+.faqSectionTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  background: linear-gradient(to right, #e5c18e, #5b4d39, #443621);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.faqItem {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d9d5d1;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.faqItem:hover {
+  box-shadow: 0 8px 20px rgba(191, 152, 96, 0.2);
+}
+
+.faqItem summary {
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 16px 20px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #2a2929;
+}
+
+.faqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.faqItem summary::after {
+  content: "+";
+  font-size: 20px;
+  color: #BF9860;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.faqItem[open] summary::after {
+  content: "−";
+}
+
+.faqItem p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.75;
+  padding: 0 20px 16px;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ─── BOOK YOUR CAR SECTION ─────────────────────────────────── */
+
+.bookSection {
+  margin-top: 44px;
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d8b480;
+  border-radius: 15px;
+  padding: 24px;
+  box-shadow: 0 8px 20px rgba(191, 152, 96, 0.2);
+}
+
+.bookSectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #2a2929;
+}
+
+.bookLinks {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bookLink {
+  border: 1px solid #d8b480;
+  border-radius: 33px;
+  padding: 8px 18px;
+  text-decoration: none;
+  color: #5b4d39;
+  font-size: 14px;
+  font-weight: 600;
+  background: #fff;
+  transition: all 0.3s ease;
+  font-family: "Poppins", sans-serif;
+}
+
+.bookLink:hover {
+  background: #000;
+  color: #b99564;
+  border-color: #000;
+}
+
+/* ─── MORE POSTS SECTION ─────────────────────────────────────── */
+
+.morePostsSection {
+  margin-top: 52px;
+  padding-top: 36px;
+  border-top: 1px solid #d9d5d1;
+}
+
+.morePostsTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2a2929;
+  margin-bottom: 20px;
+}
+
+.morePostsGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.morePostCard {
+  display: block;
+  padding: 18px 20px;
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d9d5d1;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.morePostCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(191, 152, 96, 0.25);
+}
+
+.morePostCardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f1f1f;
+  margin-bottom: 6px;
+}
+
+.morePostCardExcerpt {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.6;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .blogListInner {
+    padding: 24px 20px;
+  }
+
+  .postInner {
+    padding: 24px 20px;
+  }
+
+  .blogListTitle {
+    font-size: 1.8rem;
+  }
+
+  .postTitle {
+    font-size: 1.5rem;
+  }
+
+  .blockH2 {
+    font-size: 19px;
+    margin-top: 32px;
+  }
+
+  .blockH3 {
+    font-size: 16px;
+  }
+
+  .blockIntro {
+    font-size: 15px;
+  }
+
+  .blogCard {
+    padding: 18px;
+  }
+
+  .blockCta {
+    padding: 22px 18px;
+  }
+
+  .blockCtaButton {
+    padding: 12px 28px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blogListTitle {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .postTitle {
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .postMeta {
+    font-size: 11px;
+    gap: 12px;
+  }
+
+  .blockH2 {
+    font-size: 18px;
+    margin-top: 28px;
+  }
+
+  .blockH3 {
+    font-size: 15px;
+  }
+
+  .carCardButton {
+    font-size: 12px;
+    padding: 7px 16px;
+  }
+
+  .blockCtaButton {
+    padding: 12px 24px;
+    font-size: 13px;
+  }
+
+  .faqItem summary {
+    font-size: 14px;
+    padding: 14px 16px;
+  }
+
+  .bookLink {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+}

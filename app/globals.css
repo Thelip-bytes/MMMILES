@@ -35,3 +35,13 @@ body {
 body.hide-footer #global-footer {
   display: none !important;
 }
+
+/* Hide header and footer for portal */
+body.hide-nav-footer .navbar,
+body.hide-nav-footer #global-footer {
+  display: none !important;
+}
+
+body.hide-nav-footer {
+  padding-top: 0 !important;
+}

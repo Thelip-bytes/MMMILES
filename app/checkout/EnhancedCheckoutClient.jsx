@@ -715,76 +715,56 @@ export default function EnhancedCheckoutPage() {
       const startIso = formatDateTimeForDB(start);
       const endIso = formatDateTimeForDB(end);
 
-      console.log('🗄️ Fetching existing bookings for vehicle:', car.id);
+      console.log('🗄️ Checking availability using unified RPC/fallback...');
 
-      const response = await fetch(
-        `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&select=id,start_time,end_time,pickup_datetime_raw,return_datetime_raw`,
+      const { data: overlaps, error: rpcErr } = await makeAuthenticatedRequest(
+        "POST",
+        "rpc/check_car_overlap",
         {
-          headers: {
-            apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-            "Content-Type": "application/json",
-          },
+          body: JSON.stringify({
+            p_vehicle_id: car.id,
+            p_start_time: startIso,
+            p_end_time: endIso
+          })
         }
-      );
+      ).then(d => ({ data: d, error: null })).catch(e => ({ data: null, error: e }));
 
-      if (!response.ok) {
-        throw new Error('Failed to check existing bookings');
+      if (!rpcErr && overlaps === true) {
+        console.log('🚫 OVERLAP DETECTED! (via RPC)');
+        setUnavailableData({
+          type: 'booked',
+          title: 'Car Unavailable',
+          message: `This car has an existing booking or is under maintenance for the selected time range. Please choose another slot or vehicle.`
+        });
+        setBookingCheckStatus({ checking: false, overlaps: true, error: null });
+        return false;
       }
 
-      const existingBookings = await response.json();
-      console.log('📋 Existing bookings found:', existingBookings.length, existingBookings);
+      // Fallback manual check if RPC fails
+      if (rpcErr) {
+        console.warn('⚠️ RPC check failed, using fallback check...');
+        
+        // Check bookings table
+        const bookingsRes = await fetch(
+          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&start_time=lt.${endIso}&end_time=gt.${startIso}&select=id`,
+          { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY } }
+        );
+        const bookingData = await bookingsRes.json();
 
-      // Check for time overlap using PostgreSQL range logic
-      for (const booking of existingBookings) {
-        const existingStart = new Date(booking.start_time);
-        const existingEnd = new Date(booking.end_time);
+        // Check maintenance table
+        const maintenanceRes = await fetch(
+          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/maintenance_logs?vehicle_id=eq.${car.id}&start_time=lt.${endIso}&end_time=gt.${startIso}&select=id`,
+          { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY } }
+        );
+        const maintenanceData = await maintenanceRes.json();
 
-        console.log('⏰ Checking overlap with booking:', {
-          bookingId: booking.id,
-          existingStart: existingStart.toISOString(),
-          existingEnd: existingEnd.toISOString(),
-          requestedStart: start.toISOString(),
-          requestedEnd: end.toISOString(),
-          startTime: start.getTime(),
-          endTime: end.getTime(),
-          existingStartTime: existingStart.getTime(),
-          existingEndTime: existingEnd.getTime(),
-          condition1: `start < existingEnd: ${start.toISOString()} < ${existingEnd.toISOString()} = ${start < existingEnd}`,
-          condition2: `existingStart < end: ${existingStart.toISOString()} < ${end.toISOString()} = ${existingStart < end}`,
-          overlapCheck: `start < existingEnd: ${start < existingEnd}, existingStart < end: ${existingStart < end}`
-        });
-
-        // Two time ranges overlap if: start1 < end2 AND start2 < end1
-        const condition1 = start < existingEnd;
-        const condition2 = existingStart < end;
-
-        console.log('🔍 Detailed overlap analysis:', {
-          bookingId: booking.id,
-          willOverlap: condition1 && condition2,
-          condition1: `${condition1} (${start.toISOString()} < ${existingEnd.toISOString()})`,
-          condition2: `${condition2} (${existingStart.toISOString()} < ${end.toISOString()})`
-        });
-
-        if (condition1 && condition2) {
-          console.log('🚫 OVERLAP DETECTED! Blocking payment');
-
-          const formatDate = (date) => {
-            return date.toLocaleString('en-IN', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            });
-          };
-
-          // Show Unavailability Card instead of Alert
+        if (bookingData.length > 0 || maintenanceData.length > 0) {
+          console.log('🚫 OVERLAP DETECTED! (via fallback)');
           setUnavailableData({
             type: 'booked',
-            title: 'Car Already Booked',
-            message: `This car is booked from ${formatDate(existingStart)} to ${formatDate(existingEnd)}. Creating a new search for you...`
+            title: 'Car Unavailable',
+            message: `This car has an existing booking or is under maintenance for the selected time range.`
           });
-
           setBookingCheckStatus({ checking: false, overlaps: true, error: null });
           return false;
         }

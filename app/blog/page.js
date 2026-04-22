@@ -62,7 +62,7 @@ export default function BlogPage() {
                 </span>
                 <span className={styles.blogCardReadTime}>{post.readTime}</span>
                 <Link href={`/blog/${post.slug}`} className={styles.blogCardReadMore}>
-                  Read More →
+                  Read More 
                 </Link>
               </div>
 

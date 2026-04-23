@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { allPosts, getPostBySlug } from "@/lib/posts/index";
 import styles from "../blog.module.css";
@@ -29,6 +30,31 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// ─── URL Auto-Linker ───────────────────────────────────────────────────────────
+// Finds URLs in paragraph text and converts them to clickable links
+// Works for both https://... and plain domain.com/path formats
+function linkifyText(text) {
+  const urlRegex = /(https?:\/\/[^\s,]+|[a-z0-9-]+\.[a-z]{2,}\/[^\s,]+)/gi;
+  const parts = text.split(urlRegex);
+  return parts.map((part, i) => {
+    if (urlRegex.test(part)) {
+      const href = part.startsWith("http") ? part : `https://${part}`;
+      return (
+        <a
+          key={i}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#BF9860", textDecoration: "underline" }}
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 // ─── Content Block Renderer ────────────────────────────────────────────────────
 function Block({ block, s }) {
   switch (block.type) {
@@ -42,8 +68,13 @@ function Block({ block, s }) {
     case "h3":
       return <h3 className={s.blockH3}>{block.text}</h3>;
 
+    // ── paragraph — auto-links any URLs inside the text ──────────────────────
     case "paragraph":
-      return <p className={s.blockParagraph}>{block.text}</p>;
+      return (
+        <p className={s.blockParagraph}>
+          {linkifyText(block.text)}
+        </p>
+      );
 
     case "list":
       return (
@@ -105,11 +136,33 @@ function Block({ block, s }) {
         </div>
       );
 
+    // ── image — Next.js Image component for automatic optimisation ────────────
+    // Converts JPG/PNG to WebP/AVIF automatically
+    // Serves correct size per device (mobile gets small, desktop gets large)
+    // Lazy loads — only loads when user scrolls to it
+    // Shows blurred placeholder while loading
     case "image":
       return (
         <figure className={s.blockFigure}>
-          <img src={block.src} alt={block.alt} className={s.blockFigureImg} />
-          {block.caption && <figcaption className={s.blockFigureCaption}>{block.caption}</figcaption>}
+          <Image
+            src={block.src}
+            alt={block.alt}
+            width={1200}
+            height={630}
+            quality={80}
+            style={{
+              width: "100%",
+              height: "auto",
+              borderRadius: "12px",
+              display: "block",
+            }}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+          />
+          {block.caption && (
+            <figcaption className={s.blockFigureCaption}>
+              {block.caption}
+            </figcaption>
+          )}
         </figure>
       );
 
@@ -120,6 +173,21 @@ function Block({ block, s }) {
           <Link href={block.buttonLink} className={s.blockCtaButton}>
             {block.buttonText}
           </Link>
+        </div>
+      );
+
+    // ── quickstats — visual stat cards shown at top of post ──────────────────
+    // Used in Chennai-Coimbatore blog and all future blogs
+    // Renders 4 stat cards in a horizontal row
+    case "quickstats":
+      return (
+        <div className={s.quickStatsGrid}>
+          {block.items.map((item, i) => (
+            <div key={i} className={s.quickStatCard}>
+              <div className={s.quickStatValue}>{item.value}</div>
+              <div className={s.quickStatLabel}>{item.label}</div>
+            </div>
+          ))}
         </div>
       );
 
@@ -136,7 +204,7 @@ export default async function BlogPostPage({ params }) {
 
   const otherPosts = allPosts.filter((x) => x.slug !== post.slug).slice(0, 3);
 
-  // Schemas
+  // ── Schemas ─────────────────────────────────────────────────────────────────
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -145,7 +213,11 @@ export default async function BlogPostPage({ params }) {
     image: post.coverImage ? `https://www.mmmiles.com${post.coverImage}` : undefined,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
-    author: { "@type": "Organization", name: "MM Miles", url: "https://www.mmmiles.com" },
+    author: {
+      "@type": "Person",
+      name: post.author,
+      description: post.authorBio || "",
+    },
     publisher: {
       "@type": "Organization",
       name: "MM Miles",
@@ -155,6 +227,9 @@ export default async function BlogPostPage({ params }) {
       "@type": "WebPage",
       "@id": `https://www.mmmiles.com/blog/${post.slug}`,
     },
+    // Word count and article section from post metadata
+    ...(post.wordCount && { wordCount: post.wordCount }),
+    ...(post.articleSection && { articleSection: post.articleSection }),
   };
 
   const faqSchema = post.faqs?.length > 0
@@ -181,6 +256,7 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <>
+      {/* JSON-LD Schemas */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -207,7 +283,7 @@ export default async function BlogPostPage({ params }) {
             {post.title.replace(" | MM Miles", "")}
           </h1>
 
-          {/* Meta */}
+          {/* Meta — author, date, read time */}
           <div className={styles.postMeta}>
             <span>By {post.author}</span>
             <span>
@@ -218,11 +294,23 @@ export default async function BlogPostPage({ params }) {
             <span>{post.readTime}</span>
           </div>
 
-          {/* Cover Image */}
+          {/* Cover Image — Next.js Image for auto optimisation */}
           {post.coverImage && (
-            <img
+            <Image
               src={post.coverImage}
-              alt={post.coverImageAlt}
+              alt={post.coverImageAlt || post.title}
+              width={1200}
+              height={630}
+              quality={85}
+              priority={true}
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: "16px",
+                marginBottom: "32px",
+                display: "block",
+              }}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
               className={styles.postCoverImage}
             />
           )}
@@ -233,6 +321,19 @@ export default async function BlogPostPage({ params }) {
               <Block key={i} block={block} s={styles} />
             ))}
           </article>
+
+          {/* Author Bio — shows if authorBio exists in post data */}
+          {post.authorBio && (
+            <div className={styles.authorBio}>
+              <div className={styles.authorBioAvatar}>
+                {post.author.charAt(0)}
+              </div>
+              <div className={styles.authorBioContent}>
+                <div className={styles.authorBioName}>{post.author}</div>
+                <div className={styles.authorBioText}>{post.authorBio}</div>
+              </div>
+            </div>
+          )}
 
           {/* FAQ Section */}
           {post.faqs?.length > 0 && (
@@ -254,6 +355,12 @@ export default async function BlogPostPage({ params }) {
               {post.relatedCity && (
                 <Link href={`/cities/${post.relatedCity.slug}`} className={styles.bookLink}>
                   Self Drive Cars in {post.relatedCity.name} →
+                </Link>
+              )}
+              {/* Second city if post covers two cities */}
+              {post.relatedCityTwo && (
+                <Link href={`/cities/${post.relatedCityTwo.slug}`} className={styles.bookLink}>
+                  Self Drive Cars in {post.relatedCityTwo.name} →
                 </Link>
               )}
               {post.relatedCars?.map((car) => (

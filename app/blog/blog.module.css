@@ -739,3 +739,96 @@
     padding: 7px 14px;
   }
 }
+
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ADD THESE TO THE BOTTOM OF YOUR EXISTING blog.module.css
+   Do not replace the whole file — just paste these at the end
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Quick Stats Grid ─────────────────────────────────────────────────────── */
+/* Renders 4 stat cards in a row at top of blog post                          */
+/* Used by the "quickstats" content block type                                */
+.quickStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 28px 0;
+}
+
+.quickStatCard {
+  background: linear-gradient(to right bottom, #fff9ef, #f5e5cc);
+  border: 1px solid #d9d5d1;
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.quickStatValue {
+  font-size: 20px;
+  font-weight: 600;
+  color: #BF9860;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.quickStatLabel {
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Mobile — stack to 2 columns on small screens */
+@media (max-width: 600px) {
+  .quickStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Author Bio ───────────────────────────────────────────────────────────── */
+/* Shown below article content, above FAQ section                             */
+/* Builds Google E-E-A-T author entity signals                                */
+.authorBio {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: #faf8f5;
+  border: 1px solid #e8e4df;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 40px 0 32px;
+}
+
+.authorBioAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #BF9860, #e5c18e);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.authorBioContent {
+  flex: 1;
+}
+
+.authorBioName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c2c2a;
+  margin-bottom: 6px;
+}
+
+.authorBioText {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}

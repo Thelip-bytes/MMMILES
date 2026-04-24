@@ -354,13 +354,13 @@ export default async function BlogPostPage({ params }) {
             <div className={styles.bookLinks}>
               {post.relatedCity && (
                 <Link href={`/cities/${post.relatedCity.slug}`} className={styles.bookLink}>
-                  Self Drive Cars in {post.relatedCity.name} →
+                  Self Drive Cars in {post.relatedCity.name} 
                 </Link>
               )}
               {/* Second city if post covers two cities */}
               {post.relatedCityTwo && (
                 <Link href={`/cities/${post.relatedCityTwo.slug}`} className={styles.bookLink}>
-                  Self Drive Cars in {post.relatedCityTwo.name} →
+                  Self Drive Cars in {post.relatedCityTwo.name} 
                 </Link>
               )}
               {post.relatedCars?.map((car) => (
@@ -369,7 +369,7 @@ export default async function BlogPostPage({ params }) {
                   href={`/rent/${car.slug}/${post.relatedCity?.slug || "chennai"}`}
                   className={styles.bookLink}
                 >
-                  Rent {car.name} →
+                  Rent {car.name}
                 </Link>
               ))}
             </div>

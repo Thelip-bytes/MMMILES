@@ -130,7 +130,7 @@ export async function POST(request) {
     }
 
     const vehicle = vehicles[0];
-    const bufferHours = vehicle.buffer_hours || 4;
+    const bufferHours = vehicle.buffer_hours || 3;
 
     // 2. Calculate next available time (end_time + buffer_hours)
     const endTime = new Date(booking.end_time);

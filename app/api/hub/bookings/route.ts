@@ -91,6 +91,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "End time must be after start time" }, { status: 400 });
     }
 
+    // Calculate end with 3-hour buffer for consistency with DB constraint
+    const start = new Date(isoStart);
+    const end = new Date(isoEnd);
+    const endWithBuffer = new Date(end.getTime() + (3 * 60 * 60 * 1000));
+    const isoEndWithBuffer = endWithBuffer.toISOString();
+
     // Check for overlapping bookings (both online and offline)
     const { data: overlaps, error: overlapErr } = await supabase
       .rpc("check_car_overlap", {
@@ -102,19 +108,20 @@ export async function POST(req: Request) {
     if (overlapErr) {
       console.error("Overlap check error:", overlapErr);
       // Fallback: manual overlap check for both tables
+      // Use booking_range for bookings to account for existing buffers
       const { data: bookingOverlaps } = await supabase
         .from("bookings")
         .select("id")
         .eq("vehicle_id", vehicle_id)
         .eq("status", "confirmed")
-        .lt("start_time", isoEnd)
-        .gt("end_time", isoStart);
+        .filter('booking_range', 'ov', `[${isoStart},${isoEndWithBuffer})`);
 
+      // For maintenance, check if our buffered range overlaps with their simple range
       const { data: maintenanceOverlaps } = await supabase
         .from("maintenance_logs")
         .select("id")
         .eq("vehicle_id", vehicle_id)
-        .lt("start_time", isoEnd)
+        .lt("start_time", isoEndWithBuffer)
         .gt("end_time", isoStart);
 
       if ((bookingOverlaps && bookingOverlaps.length > 0) || (maintenanceOverlaps && maintenanceOverlaps.length > 0)) {

@@ -36,6 +36,7 @@ const formatDuration = (totalHours) => {
   if (!totalHours) return "0 Hours";
   const days = Math.floor(totalHours / 24);
   const hours = totalHours % 24;
+  const bufferHours = 3;
 
   if (days > 0) {
     return `${days} Day${days > 1 ? 's' : ''} ${hours > 0 ? ` ${hours} Hour${hours > 1 ? 's' : ''}` : ''}`;
@@ -714,8 +715,15 @@ export default function EnhancedCheckoutPage() {
 
       const startIso = formatDateTimeForDB(start);
       const endIso = formatDateTimeForDB(end);
+      // Calculate end with 3-hour buffer for consistency with DB constraint
+      const endWithBuffer = new Date(end.getTime() + (3 * 60 * 60 * 1000));
+      const endWithBufferIso = formatDateTimeForDB(endWithBuffer);
 
-      console.log('🗄️ Checking availability using unified RPC/fallback...');
+      console.log('🗄️ Checking availability using unified RPC/fallback...', {
+        startIso,
+        endIso,
+        endWithBufferIso
+      });
 
       const { data: overlaps, error: rpcErr } = await makeAuthenticatedRequest(
         "POST",
@@ -744,17 +752,28 @@ export default function EnhancedCheckoutPage() {
       if (rpcErr) {
         console.warn('⚠️ RPC check failed, using fallback check...');
         
-        // Check bookings table
-        const bookingsRes = await fetch(
-          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&start_time=lt.${endIso}&end_time=gt.${startIso}&select=id`,
-          { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY } }
+        // Check bookings using the range overlap operator to account for the 6-hour buffer
+        const bookingRes = await fetch(
+          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/bookings?vehicle_id=eq.${car.id}&status=eq.confirmed&booking_range=ov.(%5B${startIso},${endWithBufferIso}%29)&select=id`,
+          {
+            headers: {
+              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${token}`
+            }
+          }
         );
-        const bookingData = await bookingsRes.json();
+        const bookingData = await bookingRes.json();
 
-        // Check maintenance table
+        // Check maintenance table - maintenance doesn't have booking_range column, 
+        // so we check if maintenance window overlaps with our buffered range
         const maintenanceRes = await fetch(
-          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/maintenance_logs?vehicle_id=eq.${car.id}&start_time=lt.${endIso}&end_time=gt.${startIso}&select=id`,
-          { headers: { apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY } }
+          `${typeof window !== 'undefined' ? '/api/sb' : process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/maintenance_logs?vehicle_id=eq.${car.id}&start_time=lt.${endWithBufferIso}&end_time=gt.${startIso}&select=id`,
+          {
+            headers: {
+              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+              'Authorization': `Bearer ${token}`
+            }
+          }
         );
         const maintenanceData = await maintenanceRes.json();
 

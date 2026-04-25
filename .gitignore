@@ -39,6 +39,7 @@
 **/pip-log.txt
 **/pip-delete-this-directory.txt
 .user-input-details
+.context
 # Unit test / coverage reports
 **/htmlcov/
 **/.tox/

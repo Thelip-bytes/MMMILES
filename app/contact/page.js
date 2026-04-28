@@ -76,7 +76,7 @@ export default function ContactPage() {
         
         <div className={styles.cmainImageContainer}>
           {/* Use Image for the main car photo */}
-          <Image src="/car-on-phone.jpg" alt="Car on Phone" layout="responsive" width={500} height={400} />
+          <Image src="/car-on-phone.webp" alt="Car on Phone" layout="responsive" width={500} height={400} />
         </div>
         
       </div>

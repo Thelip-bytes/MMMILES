@@ -110,7 +110,7 @@
 
 @media (max-width: 480px) {
   .HoststepsImage {
-    content: url("/host-mobile.jpg"); /* <-- your mobile image */
+    content: url("/host-mobile.webp"); /* <-- your mobile image */
   }
 }
 @media (max-width: 480px) {

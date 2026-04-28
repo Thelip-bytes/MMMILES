@@ -24,7 +24,7 @@ export default function Hero() {
       <section className="heroabout">
         <div className="hero-fit">
           <Image
-            src="/about-hero-final.jpg"
+            src="/about-hero-final.webp"
             alt="Top View Car"
             width={1920}
             height={1080}
@@ -97,7 +97,7 @@ export default function Hero() {
           <h1>Our commitment to UNSDG Goals</h1>
           <div className="unsdg-strip">
             <Image
-              src="/images/unsdg1.gif"
+              src="/images/unsdg1.webp"
               alt="UNSDG Goals"
               width={840}
               height={200}

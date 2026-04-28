@@ -6,8 +6,8 @@ import styles from "./OffersSection.module.css";
 
 const offers = [
   { img: "/long-offer.png", alt: "Luxury Apartments" },
-  { img: "/short-offer.png", alt: "Premium Villas" },
-  { img: "/offer.png", alt: "Exclusive Homes" },
+  { img: "/short-offer.webp", alt: "Premium Villas" },
+  { img: "/offer.webp", alt: "Exclusive Homes" },
 ];
 
 export default function OffersSection() {

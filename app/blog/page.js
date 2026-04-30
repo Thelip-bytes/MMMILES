@@ -30,8 +30,7 @@ export default function BlogPage() {
 
         <h1 className={styles.blogListTitle}>Self Drive Car Rental Blog</h1>
         <p className={styles.blogListSubtitle}>
-          Road trip guides, destination tips and self drive advice for Chennai,
-          Coimbatore and Bangalore.
+          Know the What other's facing
         </p>
 
         <div className={styles.blogGrid}>
@@ -62,7 +61,7 @@ export default function BlogPage() {
                 </span>
                 <span className={styles.blogCardReadTime}>{post.readTime}</span>
                 <Link href={`/blog/${post.slug}`} className={styles.blogCardReadMore}>
-                  Read More →
+                  Read More 
                 </Link>
               </div>
 

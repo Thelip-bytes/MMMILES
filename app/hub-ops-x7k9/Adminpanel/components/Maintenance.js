@@ -12,9 +12,7 @@ import {
   ChevronRight,
   Trash2,
   Settings,
-  Globe,
-  RefreshCw,
-  Phone
+  RefreshCw
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -50,19 +48,15 @@ function buildDateTimeLocal(date, hour, minute, ampm) {
 const HOURS = Array.from({ length: 12 }, (_, i) => i + 1);
 const MINUTES = ["00", "15", "30", "45"];
 
-export default function OfflineBooking() {
+export default function Maintenance() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const [activeTab, setActiveTab] = useState("offline");
-  const [offlineBookings, setOfflineBookings] = useState([]);
-  const [onlineBookings, setOnlineBookings] = useState([]);
-  const [offlinePage, setOfflinePage] = useState(1);
-  const [onlinePage, setOnlinePage] = useState(1);
-  const [hasMoreOffline, setHasMoreOffline] = useState(false);
-  const [hasMoreOnline, setHasMoreOnline] = useState(false);
+  const [Maintenances, setMaintenances] = useState([]);
+  const [maintenancePage, setmaintenancePage] = useState(1);
+  const [hasMoremaintenance, setHasMoremaintenance] = useState(false);
   const [isFetchingLogs, setIsFetchingLogs] = useState(false);
 
   const [startDate, setStartDate] = useState("");
@@ -86,83 +80,43 @@ export default function OfflineBooking() {
   const fetchAllLogs = (token = sessionStorage.getItem("admin_token")) => {
     if (!token) return;
     
-    const offlineCache = sessionStorage.getItem('ap_offline_bookings');
-    if (offlineCache) {
+    const maintenanceCache = sessionStorage.getItem('ap_maintenance_bookings');
+    if (maintenanceCache) {
       try {
-        const parsed = JSON.parse(offlineCache);
-        setOfflineBookings(parsed.data || []);
-        setOfflinePage(parsed.page || 1);
-        setHasMoreOffline(parsed.hasMore || false);
+        const parsed = JSON.parse(maintenanceCache);
+        setMaintenances(parsed.data || []);
+        setmaintenancePage(parsed.page || 1);
+        setHasMoremaintenance(parsed.hasMore || false);
       } catch (e) {}
     } else {
-      setOfflinePage(1);
+      setmaintenancePage(1);
     }
     
-    const onlineCache = sessionStorage.getItem('ap_online_bookings');
-    if (onlineCache) {
-      try {
-        const parsed = JSON.parse(onlineCache);
-        setOnlineBookings(parsed.data || []);
-        setOnlinePage(parsed.page || 1);
-        setHasMoreOnline(parsed.hasMore || false);
-      } catch (e) {}
-    } else {
-      setOnlinePage(1);
-    }
-
     // Always background sync page 1
-    fetchOfflineBookings(token, 1, false);
-    fetchOnlineBookings(token, 1, false);
+    fetchMaintenances(token, 1, false);
   };
 
-  const fetchOfflineBookings = async (token = sessionStorage.getItem("admin_token"), page = 1, showLoading = true) => {
-    if (showLoading && !sessionStorage.getItem('ap_offline_bookings')) setIsFetchingLogs(true);
+  const fetchMaintenances = async (token = sessionStorage.getItem("admin_token"), page = 1, showLoading = true) => {
+    if (showLoading && !sessionStorage.getItem('ap_maintenance_bookings')) setIsFetchingLogs(true);
     try {
-      const res = await fetch(`/api/hub/bookings?page=${page}&limit=10`, {
+      const res = await fetch(`/api/hub/bookings?reason=MAINTENANCE&page=${page}&limit=10`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok) {
-        setOfflineBookings(data.bookings || []);
-        setHasMoreOffline(data.hasMore);
-        setOfflinePage(page);
-        sessionStorage.setItem('ap_offline_bookings', JSON.stringify({
+        setMaintenances(data.bookings || []);
+        setHasMoremaintenance(data.hasMore);
+        setmaintenancePage(page);
+        sessionStorage.setItem('ap_maintenance_bookings', JSON.stringify({
           data: data.bookings || [],
           page: page,
           hasMore: data.hasMore
         }));
       } else {
-        toast.error(data.error || "Failed to fetch offline bookings");
+        toast.error(data.error || "Failed to fetch Maintenances");
       }
     } catch (err) {
       console.error(err);
-    } finally {
-      if (showLoading) setIsFetchingLogs(false);
-    }
-  };
-
-  const fetchOnlineBookings = async (token = sessionStorage.getItem("admin_token"), page = 1, showLoading = true) => {
-    if (showLoading && !sessionStorage.getItem('ap_online_bookings')) setIsFetchingLogs(true);
-    try {
-      const res = await fetch(`/api/hub/online-bookings?page=${page}&limit=10`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.error || "Failed to fetch online bookings");
-      } else {
-        setOnlineBookings(data.bookings || []);
-        setHasMoreOnline(data.hasMore);
-        setOnlinePage(page);
-        sessionStorage.setItem('ap_online_bookings', JSON.stringify({
-          data: data.bookings || [],
-          page: page,
-          hasMore: data.hasMore
-        }));
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Network error fetching online bookings");
     } finally {
       if (showLoading) setIsFetchingLogs(false);
     }
@@ -170,11 +124,7 @@ export default function OfflineBooking() {
 
   const handlePageChange = (newPage) => {
     if (newPage < 1) return;
-    if (activeTab === "offline") {
-      fetchOfflineBookings(sessionStorage.getItem("admin_token"), newPage);
-    } else {
-      fetchOnlineBookings(sessionStorage.getItem("admin_token"), newPage);
-    }
+    fetchMaintenances(sessionStorage.getItem("admin_token"), newPage);
   };
 
   useEffect(() => {
@@ -225,6 +175,7 @@ export default function OfflineBooking() {
         },
         body: JSON.stringify({
           vehicle_id: selectedVehicle.id,
+          reason: "MAINTENANCE",
           start_time: start,
           end_time: end,
         }),
@@ -233,7 +184,7 @@ export default function OfflineBooking() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Offline booking created!");
+        toast.success("Maintenance log created!");
         setStartDate(""); setEndDate("");
         setStartHour("10"); setStartMinute("00"); setStartAmpm("AM");
         setEndHour("6"); setEndMinute("00"); setEndAmpm("PM");
@@ -244,7 +195,7 @@ export default function OfflineBooking() {
       } else if (res.status === 409) {
         toast.error(data.error || "Time overlap detected!", { icon: "⚠️", duration: 5000 });
       } else {
-        toast.error(data.error || "Failed to create booking");
+        toast.error(data.error || "Failed to create log");
       }
     } catch {
       toast.error("Network error");
@@ -266,14 +217,14 @@ export default function OfflineBooking() {
     
     setIsSubmitting(true);
     try {
-      const res = await fetch(`/api/hub/bookings?id=${deleteModal.id}`, {
+      const res = await fetch(`/api/hub/bookings?id=${deleteModal.id}&reason=MAINTENANCE`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${sessionStorage.getItem("admin_token")}` },
       });
       if (res.ok) {
         toast.success("Log deleted");
         setDeleteModal({ isOpen: false, id: null, reg: "" });
-        fetchOfflineBookings(sessionStorage.getItem("admin_token"), offlinePage);
+        fetchMaintenances(sessionStorage.getItem("admin_token"), maintenancePage);
       } else {
         toast.error("Failed to delete");
       }
@@ -291,9 +242,9 @@ export default function OfflineBooking() {
 
   return (
     <div className="portal-grid">
-      {/* Left: Create Offline Booking */}
+      {/* Left: Create Maintenance */}
       <section className="portal-panel">
-        <h2 className="panel-title"><Plus size={20} /> New Offline Booking</h2>
+        <h2 className="panel-title"><Plus size={20} /> New Maintenance Log</h2>
         <div className="portal-form-group">
           <label className="portal-label">Search Vehicle (Reg No.)</label>
           <div style={{ position: "relative" }}>
@@ -357,121 +308,64 @@ export default function OfflineBooking() {
             </div>
             <div className="portal-form-group">
               <label className="portal-label">Reason</label>
-              <div className="reason-badge"><AlertTriangle size={14} /> OFFLINE BOOKING</div>
+              <div className="reason-badge" style={{ backgroundColor: '#fff3cd', color: '#856404', borderColor: '#ffeeba' }}>
+                <Settings size={14} /> MAINTENANCE
+              </div>
             </div>
-            <button className="portal-btn" type="submit" disabled={isSubmitting}>{isSubmitting ? "Processing..." : "Confirm Booking"}</button>
+            <button className="portal-btn" type="submit" disabled={isSubmitting}>{isSubmitting ? "Processing..." : "Confirm Maintenance"}</button>
           </form>
         )}
       </section>
 
-      {/* Right: Booking Logs with Tabs */}
+      {/* Right: Maintenance Logs */}
       <section className="portal-panel">
         <div className="panel-header-row" style={{ marginBottom: "1.5rem" }}>
-          <div className="log-tabs">
-            <button className={`log-tab ${activeTab === 'offline' ? 'active' : ''}`} onClick={() => setActiveTab('offline')}>
-              <Settings size={16} /> Offline Logs
-            </button>
-            <button className={`log-tab ${activeTab === 'online' ? 'active' : ''}`} onClick={() => setActiveTab('online')}>
-              <Globe size={16} /> Online Bookings
-            </button>
-          </div>
-          <button className="refresh-btn" onClick={() => activeTab === 'offline' ? fetchOfflineBookings() : fetchOnlineBookings()} title="Refresh">
+          <h2 className="panel-title" style={{ margin: 0 }}><Settings size={20} /> Maintenance Logs</h2>
+          <button className="refresh-btn" onClick={() => fetchMaintenances()} title="Refresh">
             <RefreshCw size={16} />
           </button>
         </div>
 
         {isFetchingLogs ? (
-           <div className="empty-state"><p>Loading bookings...</p></div>
-        ) : activeTab === "offline" ? (
-          /* OFFLINE TABLE */
-          offlineBookings.length === 0 ? (
-            <div className="empty-state"><Calendar size={48} style={{ opacity: 0.15 }} /><p>No offline bookings found</p></div>
-          ) : (
-            <div className="bookings-table-container">
-              <table className="bookings-table">
-                <thead><tr><th>Vehicle</th><th>Duration</th><th>Created</th><th></th></tr></thead>
-                <tbody>
-                  {offlineBookings.map((b) => (
-                    <tr key={b.id}>
-                      <td><div className="cell-vehicle"><span className="cell-name">{b.vehicles?.make} {b.vehicles?.model}</span><span className="reg-badge">{b.vehicles?.registration_number}</span></div></td>
-                      <td><div className="cell-time"><Clock size={12} /> {parseFaceValueTime(b.start_time)}</div><div className="cell-time"><ArrowRight size={12} /> {parseFaceValueTime(b.end_time)}</div></td>
-                      <td className="cell-created">{parseFaceValueTime(b.created_at)?.split(" ").slice(0, 1).join("")}</td>
-                      <td><button className="delete-btn" onClick={() => handleDeleteBooking(b.id, b.vehicles?.registration_number)} title="Delete"><Trash2 size={15} /></button></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              
-              {(offlinePage > 1 || hasMoreOffline) && (
-                <div className="pagination-controls">
-                  <button 
-                    className="pagination-btn" 
-                    onClick={() => handlePageChange(offlinePage - 1)}
-                    disabled={offlinePage === 1 || isFetchingLogs}
-                  >
-                    <ChevronLeft size={16} /> Previous
-                  </button>
-                  <span className="page-indicator">Page {offlinePage}</span>
-                  <button 
-                    className="pagination-btn" 
-                    onClick={() => handlePageChange(offlinePage + 1)}
-                    disabled={!hasMoreOffline || isFetchingLogs}
-                  >
-                    Next <ChevronRight size={16} />
-                  </button>
-                </div>
-              )}
-            </div>
-          )
+           <div className="empty-state"><p>Loading logs...</p></div>
+        ) : Maintenances.length === 0 ? (
+          <div className="empty-state"><Calendar size={48} style={{ opacity: 0.15 }} /><p>No Maintenance logs found</p></div>
         ) : (
-          /* ONLINE TABLE */
-          onlineBookings.length === 0 ? (
-            <div className="empty-state"><Globe size={48} style={{ opacity: 0.15 }} /><p>No online bookings found</p></div>
-          ) : (
-            <div className="bookings-table-container">
-              <table className="bookings-table">
-                <thead><tr><th>Vehicle</th><th>Customer</th><th>Trip</th><th>Status</th></tr></thead>
-                <tbody>
-                  {onlineBookings.map((b) => (
-                    <tr key={b.id}>
-                      <td><div className="cell-vehicle"><span className="cell-name">{b.vehicles?.make} {b.vehicles?.model}</span><span className="reg-badge">{b.vehicles?.registration_number}</span></div></td>
-                      <td>
-                        <div className="cell-customer">
-                            <span className="cell-name">{b.customers?.first_name} {b.customers?.last_name}</span>
-                            <span className="cell-subtext"><Phone size={10} /> {b.customers?.phone}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="cell-time"><Clock size={12} /> {parseFaceValueTime(b.start_time)}</div>
-                        <div className="cell-time"><ArrowRight size={12} /> {parseFaceValueTime(b.end_time)}</div>
-                      </td>
-                      <td><span className={`status-badge ${b.status}`}>{b.status}</span></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {(onlinePage > 1 || hasMoreOnline) && (
-                <div className="pagination-controls">
-                  <button 
-                    className="pagination-btn" 
-                    onClick={() => handlePageChange(onlinePage - 1)}
-                    disabled={onlinePage === 1 || isFetchingLogs}
-                  >
-                    <ChevronLeft size={16} /> Previous
-                  </button>
-                  <span className="page-indicator">Page {onlinePage}</span>
-                  <button 
-                    className="pagination-btn" 
-                    onClick={() => handlePageChange(onlinePage + 1)}
-                    disabled={!hasMoreOnline || isFetchingLogs}
-                  >
-                    Next <ChevronRight size={16} />
-                  </button>
-                </div>
-              )}
-            </div>
-          )
+          <div className="bookings-table-container">
+            <table className="bookings-table">
+              <thead><tr><th>Vehicle</th><th>Duration</th><th>Created</th><th></th></tr></thead>
+              <tbody>
+                {Maintenances.map((b) => (
+                  <tr key={b.id}>
+                    <td><div className="cell-vehicle"><span className="cell-name">{b.vehicles?.make} {b.vehicles?.model}</span><span className="reg-badge">{b.vehicles?.registration_number}</span></div></td>
+                    <td><div className="cell-time"><Clock size={12} /> {parseFaceValueTime(b.start_time)}</div><div className="cell-time"><ArrowRight size={12} /> {parseFaceValueTime(b.end_time)}</div></td>
+                    <td className="cell-created">{parseFaceValueTime(b.created_at)?.split(" ").slice(0, 1).join("")}</td>
+                    <td><button className="delete-btn" onClick={() => handleDeleteBooking(b.id, b.vehicles?.registration_number)} title="Delete"><Trash2 size={15} /></button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            
+            {(maintenancePage > 1 || hasMoremaintenance) && (
+              <div className="pagination-controls">
+                <button 
+                  className="pagination-btn" 
+                  onClick={() => handlePageChange(maintenancePage - 1)}
+                  disabled={maintenancePage === 1 || isFetchingLogs}
+                >
+                  <ChevronLeft size={16} /> Previous
+                </button>
+                <span className="page-indicator">Page {maintenancePage}</span>
+                <button 
+                  className="pagination-btn" 
+                  onClick={() => handlePageChange(maintenancePage + 1)}
+                  disabled={!hasMoremaintenance || isFetchingLogs}
+                >
+                  Next <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </section>
 
@@ -481,7 +375,7 @@ export default function OfflineBooking() {
           <div className="modal-card">
             <div className="modal-header-danger">
               <AlertTriangle size={32} />
-              <h3>Delete Booking Log</h3>
+              <h3>Delete Maintenance Log</h3>
             </div>
             <div className="modal-body">
               <div className="v-pill-large">{deleteModal.reg}</div>

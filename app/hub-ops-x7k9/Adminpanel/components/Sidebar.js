@@ -6,8 +6,7 @@ export default function Sidebar({ activeSection, onNavigate, onLogout }) {
     { key: "cars", label: "Cars" },
     { key: "bookings", label: "Bookings" },
     { key: "offline", label: "Offline Booking" },
-    { key: "maintainance", label: "Maintainance" },
-    { key: "paused", label: "Paused Cars" },
+    { key: "maintenance", label: "Maintenance" },
   ];
 
   return (

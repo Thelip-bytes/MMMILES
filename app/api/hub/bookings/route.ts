@@ -36,6 +36,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
+    const reason = searchParams.get("reason") || "OFFLINE BOOKING";
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
@@ -49,7 +50,7 @@ export async function GET(req: Request) {
         created_at,
         vehicles (make, model, registration_number)
       `, { count: "exact" })
-      .eq("reason", "OFFLINE BOOKING")
+      .eq("reason", reason)
       .order("created_at", { ascending: false })
       .range(from, to);
 
@@ -77,7 +78,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { vehicle_id, start_time, end_time } = await req.json();
+    const { vehicle_id, start_time, end_time, reason } = await req.json();
 
     if (!vehicle_id || !start_time || !end_time) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
@@ -142,7 +143,7 @@ export async function POST(req: Request) {
           vehicle_id,
           start_time: isoStart,
           end_time: isoEnd,
-          reason: "OFFLINE BOOKING"
+          reason: reason || "OFFLINE BOOKING"
         }
       ])
       .select();
@@ -167,6 +168,7 @@ export async function DELETE(req: Request) {
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
+    const reason = searchParams.get("reason") || "OFFLINE BOOKING";
 
     if (!id) {
       return NextResponse.json({ error: "ID required" }, { status: 400 });
@@ -176,7 +178,7 @@ export async function DELETE(req: Request) {
       .from("maintenance_logs")
       .delete()
       .eq("id", id)
-      .eq("reason", "OFFLINE BOOKING");
+      .eq("reason", reason);
 
     if (error) throw error;
 

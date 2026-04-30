@@ -10,8 +10,7 @@ import HomeSection from "./components/Home";
 import Cars from "./components/Cars";
 import Bookings from "./components/Bookings";
 import OfflineBooking from "./components/OfflineBooking";
-import Maintainance from "./components/Maintainance";
-import Paused from "./components/Paused";
+import Maintenance from "./components/Maintenance";
 
 import "./styles/hub-portal.css";
 
@@ -218,12 +217,11 @@ export default function HubPortalPage() {
           </div>
         </header>
 
-        {activeSection === "home" && <HomeSection />}
+        {activeSection === "home" && <HomeSection onNavigate={setActiveSection} />}
         {activeSection === "cars" && <Cars />}
         {activeSection === "bookings" && <Bookings />}
         {activeSection === "offline" && <OfflineBooking />}
-        {activeSection === "maintainance" && <Maintainance />}
-        {activeSection === "paused" && <Paused />}
+        {activeSection === "maintenance" && <Maintenance />}
       </div>
     </div>
   );

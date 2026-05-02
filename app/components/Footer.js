@@ -14,7 +14,7 @@ export default function Footer() {
             <div className={styles.logoWrapper}>
               <Image
                 src="/goldlogo.png"
-                alt="Urban Drive Logo"
+                alt="MMMiles Logo"
                 width={250}
                 height={60}
                 className={styles.footerLogo}

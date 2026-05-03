@@ -89,7 +89,7 @@ export default function Home({ onNavigate }) {
     <div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 className="ap-title" style={{ margin: 0 }}>Welcome To Admin Dashboard</h1>
+        <h1 className="title" style={{ margin: 0 }}>Welcome To Admin Dashboard</h1>
         <button 
           onClick={() => fetchStats(true)} 
           disabled={isRefreshing}
@@ -124,55 +124,55 @@ export default function Home({ onNavigate }) {
       `}</style>
 
       {/* TOP SECTION */}
-      <div className="ap-top-grid">
+      <div className="top-grid">
 
-        <div className="ap-card ap-revenue">
-          <p className="ap-gold">Total Revenue</p>
+        <div className="card revenue">
+          <p className="gold">Total Revenue</p>
           <h2>{isLoading ? 'Loading...' : `Rs. ${formattedRevenue}`}</h2>
           <span>Is the revenue in {revenueTab}</span>
 
-          <div className="ap-tabs">
+          <div className="tabs">
             <span 
-              className={revenueTab === "Last Day" ? "ap-active" : ""} 
+              className={revenueTab === "Last Day" ? "active" : ""} 
               onClick={() => setRevenueTab("Last Day")}
               style={{ cursor: "pointer" }}
             >Last Day</span>
             <span 
-              className={revenueTab === "Last Week" ? "ap-active" : ""} 
+              className={revenueTab === "Last Week" ? "active" : ""} 
               onClick={() => setRevenueTab("Last Week")}
               style={{ cursor: "pointer" }}
             >Last Week</span>
             <span 
-              className={revenueTab === "Last Month" ? "ap-active" : ""} 
+              className={revenueTab === "Last Month" ? "active" : ""} 
               onClick={() => setRevenueTab("Last Month")}
               style={{ cursor: "pointer" }}
             >Last Month</span>
           </div>
         </div>
 
-        <div className="ap-card ap-small ap-green">
-          <p className="ap-smallp">Last Transaction</p>
+        <div className="card small green">
+          <p className="smallp">Last Transaction</p>
           <h3>{isLoading ? '...' : `Rs. ${lastTransaction}`}</h3>
           <span>Was the last amount received.</span>
           <button onClick={() => onNavigate && onNavigate('bookings')}>Know More</button>
         </div>
 
-        <div className="ap-card ap-small ap-green">
-          <p className="ap-smallp">in Hub</p>
+        <div className="card small green">
+          <p className="smallp">in Hub</p>
           <h3>{isLoading ? '...' : inventoryStats.available_vehicles}</h3>
           <span>Cars available in our website.</span>
           <button onClick={() => onNavigate && onNavigate('cars')}>Know More</button>
         </div>
 
-        <div className="ap-card ap-small ap-green">
-          <p className="ap-smallp">in Use</p>
+        <div className="card small green">
+          <p className="smallp">in Use</p>
           <h3>{isLoading ? '...' : occupancyStats.cars_on_trip_now}</h3>
           <span>Cars are currently in on road.</span>
           <button onClick={() => onNavigate && onNavigate('bookings')}>Know More</button>
         </div>
 
-        <div className="ap-card ap-small ap-green">
-          <p className="ap-smallp">Upcoming</p>
+        <div className="card small green">
+          <p className="smallp">Upcoming</p>
           <h3>{isLoading ? '...' : occupancyStats.future_booked_cars}</h3>
           <span>cars pre-booked in this month.</span>
           <button onClick={() => onNavigate && onNavigate('bookings')}>Know More</button>
@@ -181,23 +181,23 @@ export default function Home({ onNavigate }) {
       </div>
 
       {/* BOTTOM SECTION */}
-      <div className="ap-bottom-grid">
+      <div className="bottom-grid">
 
         {/* BOOKINGS */}
-        <div className="ap-split">
-          <div className="ap-split-top">TOTAL NUMBER OF BOOKINGS</div>
-          <div className="ap-split-bottom">
-            <h2 className="ap-green-text">{isLoading ? '...' : getDisplayBookings()}</h2>
+        <div className="split">
+          <div className="split-top">TOTAL NUMBER OF BOOKINGS</div>
+          <div className="split-bottom">
+            <h2 className="split-maintainance">{isLoading ? '...' : getDisplayBookings()}</h2>
             <p>Sales {bookingsTab === "This Week" ? "in this week" : "in last month"}</p>
 
-            <div className="ap-tabs">
+            <div className="tabs">
               <span 
-                className={bookingsTab === "This Week" ? "ap-active" : ""}
+                className={bookingsTab === "This Week" ? "active" : ""}
                 onClick={() => setBookingsTab("This Week")}
                 style={{ cursor: "pointer" }}
               >This Week</span>
               <span 
-                className={bookingsTab === "Last Month" ? "ap-active" : ""}
+                className={bookingsTab === "Last Month" ? "active" : ""}
                 onClick={() => setBookingsTab("Last Month")}
                 style={{ cursor: "pointer" }}
               >Last Month</span>
@@ -206,9 +206,9 @@ export default function Home({ onNavigate }) {
         </div>
 
         {/* MAINTENANCE */}
-        <div className="ap-split">
-          <div className="ap-split-top">CARS UNDER MAINTENANCE</div>
-          <div className="ap-split-bottom">
+        <div className="split">
+          <div className="split-top">CARS UNDER MAINTENANCE</div>
+          <div className="split-bottom">
             <h2>{isLoading ? '...' : occupancyStats.cars_in_maintenance_now}</h2>
             <p>Cars in Maintenance</p>
             <button onClick={() => onNavigate && onNavigate('maintenance')}>Know More</button>
@@ -216,13 +216,13 @@ export default function Home({ onNavigate }) {
         </div>
 
         {/* ✅ ADD CARS (UPDATED) */}
-        <div className="ap-add-card">
+        <div className="add-card">
 
-          <div className="ap-add-left">
-            <img src="/add-car.png" className="ap-add-img" />
+          <div className="add-left">
+            <img src="/add-car.png" className="add-img" />
           </div>
 
-          <div className="ap-add-right">
+          <div className="add-right">
             <h3>ADD CARS</h3>
             <p>Add when you have all data about Car and Host</p>
             <button>Click to Add</button>
@@ -231,7 +231,7 @@ export default function Home({ onNavigate }) {
         </div>
 
         {/* HOST REQUEST */}
-        <div className="ap-host-card">
+        <div className="host-card">
           <h3>HOST REQUEST</h3>
           <p>Know more about Host Requests</p>
           <button>Click to View</button>

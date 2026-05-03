@@ -24,6 +24,11 @@ export async function GET(request) {
           id,
           full_name,
           phone
+        ),
+        vehicle_images (
+          id,
+          image_url,
+          is_primary
         )
       `)
       .order('created_at', { ascending: false });

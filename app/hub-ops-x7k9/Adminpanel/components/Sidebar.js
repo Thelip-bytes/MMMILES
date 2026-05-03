@@ -20,10 +20,10 @@ export default function Sidebar({ activeSection, onNavigate, onLogout }) {
   return (
     <>
       {/* ── MOBILE TOP NAV BAR ── */}
-      <div className="ap-mobile-nav">
-        <img src="/mlogo.png" className="ap-logo-img ap-mobile-logo" alt="Logo" />
+      <div className="mobile-nav">
+        <img src="/mlogo.png" className="logo-img mobile-logo" alt="Logo" />
         <div
-          className={`ap-hamburger ${open ? "active" : ""}`}
+          className={`hamburger ${open ? "active" : ""}`}
           onClick={() => setOpen(!open)}
         >
           <span></span>
@@ -33,17 +33,17 @@ export default function Sidebar({ activeSection, onNavigate, onLogout }) {
       </div>
 
       {/* ── SIDEBAR (desktop always visible, mobile slide-in) ── */}
-      <div className={`ap-sidebar ${open ? "open" : ""}`}>
+      <div className={`sidebar ${open ? "open" : ""}`}>
         <div>
-          <div className="ap-logo ap-desktop-logo">
-            <img src="/mlogo.png" className="ap-logo-img" alt="Logo" />
+          <div className="logo desktop-logo">
+            <img src="/mlogo.png" className="logo-img" alt="Logo" />
           </div>
 
-          <div className="ap-menu">
+          <div className="menu">
             {items.map((item) => (
               <button
                 key={item.key}
-                className={`ap-menu-item ${activeSection === item.key ? "active" : ""}`}
+                className={`item ${activeSection === item.key ? "active" : ""}`}
                 onClick={() => handleNav(item.key)}
               >
                 {item.label}
@@ -52,13 +52,13 @@ export default function Sidebar({ activeSection, onNavigate, onLogout }) {
           </div>
         </div>
 
-        <button className="ap-logout-btn" style={{ marginTop: "auto" }} onClick={onLogout}>
+        <button className="logout" style={{ marginTop: "auto" }} onClick={onLogout}>
           Logout
         </button>
       </div>
 
       {/* ── OVERLAY (mobile only) ── */}
-      {open && <div className="ap-overlay" onClick={() => setOpen(false)} />}
+      {open && <div className="overlay" onClick={() => setOpen(false)} />}
     </>
   );
 }

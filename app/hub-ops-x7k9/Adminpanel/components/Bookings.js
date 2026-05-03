@@ -92,9 +92,9 @@ export default function Bookings() {
   }, []);
 
   return (
-    <div className="ap-booking-container">
+    <div className="booking-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 className="ap-booking-title" style={{ margin: 0 }}>Bookings</h1>
+        <h1 className="booking-title" style={{ margin: 0 }}>Bookings</h1>
         <button 
           onClick={() => fetchBookings(true, page)} 
           disabled={isRefreshing}
@@ -128,7 +128,7 @@ export default function Bookings() {
         @keyframes spin { 100% { transform: rotate(360deg); } }
       `}</style>
 
-      <div className="ap-booking-search">
+      <div className="booking-search">
         <input placeholder="Type name, number plate, etc" />
         <span>🔍</span>
       </div>
@@ -136,19 +136,19 @@ export default function Bookings() {
       {isLoading ? (
         <p style={{ padding: "20px" }}>Loading bookings...</p>
       ) : (
-        <div className="ap-booking-list">
+        <div className="booking-list">
         {bookings.map((b, index) => (
-          <div className="ap-booking-row" key={b.id}>
-            <div className="ap-booking-left">
-              <span className="ap-col ap-index">{index + 1}.</span>
-              <span className="ap-col ap-name">{b.name}</span>
-              <span className="ap-col ap-phone">{b.phone}</span>
-              <span className="ap-col ap-duration">{b.duration}</span>
-              <span className="ap-col ap-car">{b.car}</span>
-              <span className="ap-col ap-price">{b.price}</span>
+          <div className="booking-row" key={b.id}>
+            <div className="booking-left">
+              <span className="col index">{index + 1}.</span>
+              <span className="col name">{b.name}</span>
+              <span className="col phone">{b.phone}</span>
+              <span className="col duration">{b.duration}</span>
+              <span className="col car">{b.car}</span>
+              <span className="col price">{b.price}</span>
             </div>
-            <div className="ap-booking-actions">
-              <button className="ap-btn view" onClick={() => { 
+            <div className="booking-actions">
+              <button className="btn view" onClick={() => { 
                 setViewBooking(b); 
                 // Format dates to datetime-local format (YYYY-MM-DDThh:mm)
                 const sDate = new Date(b.start_time);
@@ -165,10 +165,10 @@ export default function Bookings() {
                   setToDate("");
                 }
               }}>View Date</button>
-              <button className={`ap-btn status ${b.status}`}>
+              <button className={`btn status ${b.status}`}>
                 {b.status === "completed" ? "Finished" : b.status === "ongoing" ? "Ongoing" : "Upcoming"}
               </button>
-              <button className="ap-btn contact">Contact Host</button>
+              <button className="btn contact">Contact Host</button>
             </div>
           </div>
         ))}
@@ -198,25 +198,25 @@ export default function Bookings() {
 
       {/* VIEW POPUP */}
       {viewBooking && (
-        <div className="ap-popup-overlay" onClick={() => setViewBooking(null)}>
-          <div className="ap-popup-box ap-date-popup" onClick={(e) => e.stopPropagation()}>
-            <h3 className="ap-popup-title">Car Number : <span>{viewBooking.car}</span></h3>
-            <div className="ap-date-row" style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', width: '100%', boxSizing: 'border-box' }}>
-              <div className="ap-date-field" style={{ flex: 1, minWidth: '130px', maxWidth: '100%' }}>
+        <div className="popup-overlay" onClick={() => setViewBooking(null)}>
+          <div className="popup-box date-view-popup" onClick={(e) => e.stopPropagation()}>
+            <h3 className="popup-title">Car Number : <span>{viewBooking.car}</span></h3>
+            <div className="date-row" style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', width: '100%', boxSizing: 'border-box' }}>
+              <div className="date-field" style={{ flex: 1, minWidth: '130px', maxWidth: '100%' }}>
                 <label>FROM</label>
                 <div style={{ background: '#e8e6e1', padding: '10px 12px', borderRadius: '8px', color: '#333', fontSize: '14px', fontWeight: '500', width: '100%', boxSizing: 'border-box', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {fromDate ? new Date(fromDate).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '') : 'N/A'}
                 </div>
               </div>
-              <div className="ap-date-field" style={{ flex: 1, minWidth: '130px', maxWidth: '100%' }}>
+              <div className="date-field" style={{ flex: 1, minWidth: '130px', maxWidth: '100%' }}>
                 <label>TO</label>
                 <div style={{ background: '#e8e6e1', padding: '10px 12px', borderRadius: '8px', color: '#333', fontSize: '14px', fontWeight: '500', width: '100%', boxSizing: 'border-box', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {toDate ? new Date(toDate).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', '') : 'N/A'}
                 </div>
               </div>
             </div>
-            <div className="ap-popup-buttons">
-              <button className="ap-btn-cancel" onClick={() => setViewBooking(null)}>Cancel</button>
+            <div className="popup-buttons">
+              <button className="btn cancel" onClick={() => setViewBooking(null)}>Cancel</button>
             </div>
           </div>
         </div>

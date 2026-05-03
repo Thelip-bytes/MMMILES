@@ -7,13 +7,13 @@ import styles from "./DriveDiscoverSection.module.css";
 
 const DriveDiscoverSection = () => {
   const trips = [
-    { src: "/ecr1.png", label: "ECR" },
-    { src: "/mahabalipuram1.jpg", label: "MAHABALIPURAM" },
-    { src: "/kodai1.jpg", label: "KODAIKANAL" },
-    { src: "/kothagiri1.jpg", label: "KOTHAGIRI" },
-    { src: "/ooty11.jpg", label: "OOTY" },
-    { src: "/yercaud1.jpg", label: "YERCAUD" },
-    { src: "/pondi.jpg", label: "PONDICHERY" },
+    { src: "/ecr1.webp", label: "ECR" },
+    { src: "/mahabalipuram1.webp", label: "MAHABALIPURAM" },
+    { src: "/kodai1.webp", label: "KODAIKANAL" },
+    { src: "/kothagiri1.webp", label: "KOTHAGIRI" },
+    { src: "/ooty11.webp", label: "OOTY" },
+    { src: "/yercaud1.webp", label: "YERCAUD" },
+    { src: "/pondi.webp", label: "PONDICHERY" },
   ];
 
   return (

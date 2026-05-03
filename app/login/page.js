@@ -140,14 +140,14 @@ export default function LoginPage() {
         {/* Left section */}
         <div className="login-left">
           <Image
-            src="/login banner.png"
+            src="/login banner.webp"
             alt="Banner"
             width={400}
             height={150}
             className="banner-image"
           />
           <Image
-            src="/our car2.png"
+            src="/our car2.webp"
             alt="Car"
             width={400}
             height={300}

@@ -73,7 +73,7 @@
 
 @media (max-width: 480px) {
   .stepsImage {
-    content: url("/5step-mobile.png"); /* your mobile image */
+    content: url("/5step-mobile.webp"); /* your mobile image */
   }
 }
 

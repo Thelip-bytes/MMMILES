@@ -20,17 +20,30 @@ export default function Cars() {
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
-          const mappedCars = json.data.map(car => ({
-            id: car.id,
-            name: `${car.make} ${car.model}`,
-            year: car.model_year,
-            plate: car.registration_number,
-            status: car.available_status ? 'live' : 'blocked',
-            hostId: car.host_id || 'N/A',
-            hostName: car.hosts?.full_name || 'N/A',
-            hostPhone: car.hosts?.phone || 'N/A',
-            address: car.location_name || 'Location not provided'
-          }));
+          const STORAGE_BASE_URL = "/api/sb/storage/v1/object/public/car-images/";
+          const mappedCars = json.data.map(car => {
+            const images = car.vehicle_images || [];
+            const primaryImage = images.find((img) => img.is_primary) || images[0];
+            let imgUrl = "/cars.jpg";
+            if (primaryImage?.image_url) {
+              imgUrl = primaryImage.image_url.startsWith("http")
+                ? primaryImage.image_url
+                : `${STORAGE_BASE_URL}${primaryImage.image_url}`;
+            }
+
+            return {
+              id: car.id,
+              name: `${car.make} ${car.model}`,
+              year: car.model_year,
+              plate: car.registration_number,
+              status: car.available_status ? 'live' : 'blocked',
+              hostId: car.host_id || 'N/A',
+              hostName: car.hosts?.full_name || 'N/A',
+              hostPhone: car.hosts?.phone || 'N/A',
+              address: car.location_name || 'Location not provided',
+              img: imgUrl
+            };
+          });
           setCars(mappedCars);
           sessionStorage.setItem('ap_cars', JSON.stringify(mappedCars));
         }
@@ -56,9 +69,9 @@ export default function Cars() {
   }, []);
 
   return (
-    <div className="ap-container">
+    <div className="container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 className="ap-title" style={{ margin: 0 }}>Cars</h1>
+        <h1 className="title" style={{ margin: 0 }}>Cars</h1>
         <button 
           onClick={() => fetchCars(true)} 
           disabled={isRefreshing}
@@ -95,22 +108,22 @@ export default function Cars() {
       {isLoading ? (
         <p style={{ padding: "20px" }}>Loading cars...</p>
       ) : (
-        <div className="ap-cars-grid">
+        <div className="cars-grid">
           {cars.map((car) => (
-            <div className="ap-car-card" key={car.id}>
-              <div className="ap-car-top">
-                <img src="/cars.jpg" className="ap-car-img" />
-                <div className="ap-car-right">
-                  <h3 className="ap-car-title">
+            <div className="car-card" key={car.id}>
+              <div className="car-top-section">
+                <img src={car.img} className="car-img" alt={car.name} />
+                <div className="car-right">
+                  <h3 className="car-title">
                     {car.name} <span>( {car.year} )</span>
                   </h3>
-                  <span className="ap-plate">{car.plate}</span>
-                  <div className="ap-status-row">
-                    <span className={`ap-status ${car.status}`}>
+                  <span className="plate">{car.plate}</span>
+                  <div className="status-row">
+                    <span className={`status ${car.status}`}>
                       {car.status}
                     </span>
                     <span
-                      className="ap-menu-dot"
+                      className="menu-dot"
                       onClick={() => {
                         setSelectedCar(car);
                         setActionType(null);
@@ -121,14 +134,14 @@ export default function Cars() {
                   </div>
                 </div>
               </div>
-              <div className="ap-divider"></div>
-              <div className="ap-car-details">
-                <div className="ap-details-left">
+              <div className="divider"></div>
+              <div className="car-details">
+                <div className="details-col left">
                   <p><b>Host ID:</b> #{car.hostId}</p>
                   <p><b>Host Name:</b> {car.hostName}</p>
                   <p><b>Host Phone:</b> {car.hostPhone}</p>
                 </div>
-                <div className="ap-details-right">
+                <div className="details-col right">
                   <p>
                     <b>Host Address:</b> {car.address}
                   </p>
@@ -141,24 +154,24 @@ export default function Cars() {
 
       {/* ================= POPUP 1 ================= */}
       {selectedCar && !actionType && (
-        <div className="ap-popup-overlay" onClick={() => setSelectedCar(null)}>
-          <div className="ap-popup-box" onClick={(e) => e.stopPropagation()}>
-            <h3 className="ap-popup-title">
+        <div className="popup-overlay" onClick={() => setSelectedCar(null)}>
+          <div className="popup-box" onClick={(e) => e.stopPropagation()}>
+            <h3 className="popup-title">
               {selectedCar.name} <span>( {selectedCar.year} )</span>
             </h3>
-            <div className="ap-popup-plate">
+            <div className="popup-plate">
               {selectedCar.plate}
             </div>
-            <div className="ap-popup-actions">
-              <div className="ap-popup-item">
+            <div className="popup-actions">
+              <div className="popup-item">
                 <img src="/block.png" />
                 <span>BLOCK</span>
               </div>
-              <div className="ap-popup-item" onClick={() => setActionType("maintain")}>
+              <div className="popup-item" onClick={() => setActionType("maintain")}>
                 <img src="/maintain.png" />
                 <span>MAINTENANCE</span>
               </div>
-              <div className="ap-popup-item" onClick={() => setActionType("pause")}>
+              <div className="popup-item" onClick={() => setActionType("pause")}>
                 <img src="/pause.png" />
                 <span>PAUSE</span>
               </div>
@@ -169,29 +182,29 @@ export default function Cars() {
 
       {/* ================= POPUP 2 ================= */}
       {selectedCar && actionType && (
-        <div className="ap-popup-overlay" onClick={() => setActionType(null)}>
-          <div className="ap-form-popup" onClick={(e) => e.stopPropagation()}>
-            <div className="ap-form-header">
-              <img src={actionType === "pause" ? "/pause.png" : "/maintain.png"} className="ap-form-icon" />
+        <div className="popup-overlay" onClick={() => setActionType(null)}>
+          <div className="form-popup" onClick={(e) => e.stopPropagation()}>
+            <div className="form-header">
+              <img src={actionType === "pause" ? "/pause.png" : "/maintain.png"} className="form-icon" />
               <h3>{actionType === "pause" ? "PAUSE" : "MAINTENANCE"}</h3>
             </div>
-            <div className="ap-form-row">
-              <div className="ap-form-group">
+            <div className="form-row">
+              <div className="form-group">
                 <label>FROM</label>
                 <input type="datetime-local" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
               </div>
-              <div className="ap-form-group">
+              <div className="form-group">
                 <label>TO</label>
                 <input type="datetime-local" value={toDate} onChange={(e) => setToDate(e.target.value)} />
               </div>
             </div>
-            <div className="ap-form-group full">
+            <div className="form-group full">
               <label>DESC</label>
               <input type="text" />
             </div>
-            <div className="ap-form-actions">
-              <button className="ap-form-cancel" onClick={() => setActionType(null)}>Cancel</button>
-              <button className="ap-form-submit" onClick={() => setShowConfirm(true)}>Submit</button>
+            <div className="form-actions">
+              <button className="cancel" onClick={() => setActionType(null)}>Cancel</button>
+              <button className="submit" onClick={() => setShowConfirm(true)}>Submit</button>
             </div>
           </div>
         </div>
@@ -199,11 +212,11 @@ export default function Cars() {
 
       {/* ================= CONFIRM POPUP ================= */}
       {showConfirm && (
-        <div className="ap-popup-overlay" onClick={() => setShowConfirm(false)}>
-          <div className="ap-confirm-box" onClick={(e) => e.stopPropagation()}>
+        <div className="popup-overlay" onClick={() => setShowConfirm(false)}>
+          <div className="confirm-box" onClick={(e) => e.stopPropagation()}>
             <h3>SUCCESS</h3>
             <p>Request submitted successfully</p>
-            <div className="ap-confirm-details">
+            <div className="confirm-details">
               <div>
                 <span>FROM</span>
                 <p>{new Date(fromDate).toLocaleString()}</p>

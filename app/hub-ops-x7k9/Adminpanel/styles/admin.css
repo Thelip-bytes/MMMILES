@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 /* =========================
    RESET + BASE
 ========================= */
+body, h1, h2, h3, h4, h5, h6, p, span, button, input, select, div {
+  font-family: 'Poppins', sans-serif !important;
+}
+
 body {
   margin: 0;
-  font-family: 'Poppins';
   background: #000000;
 }
 
@@ -36,8 +41,10 @@ body {
 
 }
 
-.logo-img{
-  width: 130px;
+.logo-img {
+  width: 130px !important;
+  height: auto !important;
+  display: block !important;
   margin-left: 14px;
 }
 /* =========================
@@ -427,8 +434,9 @@ button {
 }
 
 .title {
-  font-family: Georgia, serif;
-  font-size: 28px;
+  font-family: poppins;
+  font-size: 24px;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
@@ -1860,10 +1868,321 @@ button {
 }
 
 @media (max-width: 480px) {
+  .frame {
+    margin: 0 !important;
+    background: none !important;
+    border-radius: 40px;
+    padding: 0px !important;
+    display: flex;
+  }
+  .panel {
+    flex: 1 1;
+    background: #e9e4d8;
+    border-radius: 30px;
+    padding: 20px 6px 10px !important;
+    margin-left: 0px !important;
+  }
   .small { width: auto; }
   .small h3 { font-size: 18px; }
   .smallp { font-size: 12px; margin-bottom: 16px; }
   .split-bottom h2 { font-size: 22px; }
   .booking-left { gap: 4px; }
   .col { font-size: 9px; }
+}
+
+
+/* =========================================
+   MOBILE NAVBAR (TOP ROW)
+========================================= */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px 12px 5px;
+    background: #2f2f2f;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  }
+  .mobile-logo {
+    height: 28px;
+    width: 90px;
+  }
+}
+
+
+/* =========================================
+   HAMBURGER ANIMATION
+========================================= */
+.hamburger {
+  width: 24px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.hamburger span {
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+
+/* =========================================
+   SIDEBAR MOBILE (SLIDE)
+========================================= */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 95%;
+    background: linear-gradient(to bottom right, #2f2f2f, #5e5d5c);
+    transition: 0.35s ease;
+    z-index: 1001;
+    padding: 30px 20px;
+    border-radius: 0px 12px 12px 0px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  .menu {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .item {
+    font-size: 18px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    color: #dcdcdc;
+    transition: 0.25s;
+  }
+  .item.active {
+    background: rgba(255,255,255,0.08);
+    color: white;
+  }
+  .item:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  .desktop-logo {
+    display: none;
+  }
+  .menu {
+    margin-top: 20px;
+  }
+  .item {
+    display: block;
+    padding: 10px;
+    font-size: 14px;
+  }
+  .logout {
+    width: 100%;
+    padding: 14px;
+    border-radius: 20px;
+    background: #c6a76e;
+    font-weight: 600;
+  }
+
+  /* Frame & Panel mobile */
+  .frame {
+    flex-direction: column;
+    margin: 0 !important;
+    background: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh;
+  }
+  .panel {
+    flex: 1 1;
+    background: #e9e4d8;
+    border-radius: 0;
+    padding: 20px 12px 10px !important;
+    margin-left: 0 !important;
+    margin-top: 56px;
+  }
+}
+
+
+/* =========================================
+   OVERLAY
+========================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+
+/* =========================================
+   BOOKINGS / MAINT ROW → CARD (mobile)
+========================================= */
+@media (max-width: 768px) {
+  .booking-row,
+  .maint2-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+  .booking-row {
+    gap: 8px !important;
+  }
+}
+
+
+/* =========================================
+   GRID → STACK (mobile)
+========================================= */
+@media (max-width: 768px) {
+  .maint2-grid {
+    display: flex;
+    gap: 16px;
+  }
+  .booking-left {
+    display: flex;
+    gap: 13px;
+  }
+  .maint2-row {
+    width: 90% !important;
+    max-width: 700px;
+    display: flex;
+    justify-content: space-between;
+    background: #EAE5D9;
+    padding: 14px 18px 14px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .col {
+    font-size: 10px !important;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+}
+
+
+/* =========================================
+   BUTTONS FULL WIDTH (mobile)
+========================================= */
+@media (max-width: 768px) {
+  .booking-actions,
+  .maint2-actions {
+    width: 100%;
+    display: flex;
+    gap: 7px;
+  }
+  .maint2-btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 9px;
+  }
+  .maint2-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: -25px;
+    margin-bottom: 10px;
+  }
+  .btn {
+    flex: 1 1;
+    padding: 6px 4px;
+    font-size: 8px;
+  }
+}
+
+
+/* =========================================
+   SEARCH + BUTTON STACK (mobile)
+========================================= */
+@media (max-width: 768px) {
+  .maint2-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+  .maint2-gridp {
+    font-size: 10px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+  .maint2-search {
+    width: 260px;
+    display: flex;
+    align-items: left;
+    background: #f3efe7;
+    border-radius: 20px;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    margin-left: 0px;
+  }
+  .maint2-btn.add {
+    width: 100%;
+    margin-top: -15px;
+  }
+}
+
+
+/* =========================================
+   POPUP MOBILE
+========================================= */
+@media (max-width: 768px) {
+  .maint2-popup-box {
+    width: 95%;
+    border-radius: 20px;
+  }
+  .maint2-date-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .custom-datepicker {
+    width: 100%;
+  }
+  .maint2-popup-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .maint2-popup-buttons button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================
+   SUCCESS POPUP MOBILE
+========================================= */
+@media (max-width: 768px) {
+  .success-box {
+    padding: 25px 15px;
+  }
+  .success-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
+  }
 }

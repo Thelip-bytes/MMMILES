@@ -11,8 +11,8 @@ import Cars from "./components/Cars";
 import Bookings from "./components/Bookings";
 import OfflineBooking from "./components/OfflineBooking";
 import Maintenance from "./components/Maintenance";
+import "./styles/admin.css";
 
-import "./styles/hub-portal.css";
 
 export default function HubPortalPage() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -201,14 +201,14 @@ export default function HubPortalPage() {
 
   // Admin Dashboard View
   return (
-    <div className="ap-frame">
+    <div className="frame">
       <Sidebar 
         activeSection={activeSection} 
         onNavigate={setActiveSection} 
         onLogout={handleLogout} 
       />
 
-      <div className="ap-panel">
+      <div className="panel">
         <header className="portal-header" style={{ background: 'transparent', boxShadow: 'none', padding: '0 0 20px 0' }}>
           <div className="portal-header-left">
             <span className="portal-admin-tag">

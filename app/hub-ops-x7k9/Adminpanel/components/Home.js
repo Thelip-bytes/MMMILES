@@ -151,7 +151,7 @@ export default function Home({ onNavigate }) {
         </div>
 
         <div className="card small green">
-          <p className="smallp">Last Transaction</p>
+          <p className="smallp">Last </p>
           <h3>{isLoading ? '...' : `Rs. ${lastTransaction}`}</h3>
           <span>Was the last amount received.</span>
           <button onClick={() => onNavigate && onNavigate('bookings')}>Know More</button>

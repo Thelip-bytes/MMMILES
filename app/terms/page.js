@@ -20,7 +20,7 @@ export default function TermsPage() {
       <section className="terms-section">
         <h2>1. Eligibility & Documentation</h2>
         <ul>
-          <li>Minimum driver age is 21 years.</li>
+          <li>Minimum driver age is 18 years.</li>
           <li>Renter must present a valid driving license and government-issued ID proof (Aadhar/Passport/PAN).</li>
           <li>Only drivers listed at the time of booking are authorized to drive. Unauthorized driving will void insurance and attract penalties.</li>
         </ul>
@@ -30,7 +30,7 @@ export default function TermsPage() {
         <h2>2. Booking, Payment & Security Deposit</h2>
         <ul>
           <li>A booking is confirmed only after full payment of rental charges and security deposit.</li>
-          <li>Security deposit is refundable, subject to deductions for damages, fuel shortage, fines, tolls, or late returns.</li>
+          <li>Security deposit is Zero, subject to deductions for damages, fuel shortage, fines, tolls, or late returns.</li>
           <li>Extension of booking is subject to availability and must be approved in advance.</li>
         </ul>
       </section>

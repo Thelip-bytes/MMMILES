@@ -18,7 +18,7 @@ export default function FAQPage() {
     },
     {
       question: "What is the minimum age to rent a car?",
-      answer: "The minimum age is 21 years.",
+      answer: "The minimum age is 18 years.",
     },
     {
       question: "Do I need to pay a security deposit?",

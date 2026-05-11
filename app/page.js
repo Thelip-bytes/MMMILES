@@ -176,7 +176,7 @@ export default function HomePage() {
         name: "Is there a security deposit for car rental in Chennai?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No. MM Miles charges zero security deposit for self drive car rental in Chennai. You only pay the rental fee. No money is blocked at any stage.",
+          text: "No. MM Miles does not require any security deposit at any stage of the booking or trip. You only pay the rental fee.",
         },
       },
       {
@@ -200,7 +200,7 @@ export default function HomePage() {
         name: "Are self drive cars available with unlimited km in Chennai?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. All MM Miles self drive cars in Chennai include unlimited km. Drive within the city or go outstation to Pondicherry, Ooty, Kodaikanal or Bangalore — no extra charges.",
+          text: "Most MM Miles cars include unlimited km. Kilometer limits apply only to select premium cars and will be mentioned clearly during booking.",
         },
       },
       {
@@ -208,7 +208,7 @@ export default function HomePage() {
         name: "What is the minimum age to rent a car in Chennai?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "The minimum age to rent a self drive car in Chennai at MM Miles is 18 years with a valid Indian driving license.",
+          text: "The minimum age to rent a self drive car at MM Miles is 18 years with a valid Indian driving license.",
         },
       },
     ],

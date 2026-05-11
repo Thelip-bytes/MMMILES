@@ -29,6 +29,7 @@ const nextConfig = {
   allowedDevOrigins: ["172.16.2.42"],
 
   images: {
+    unoptimized: true,
     // ✅ FIX: qualities array — required for Next.js 16 compatibility
     // Declares every quality value used across the codebase
     // page.js uses quality={80} and quality={85} — both listed here

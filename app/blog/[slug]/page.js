@@ -136,11 +136,9 @@ function Block({ block, s }) {
         </div>
       );
 
-    // ── image — Next.js Image component for automatic optimisation ────────────
-    // Converts JPG/PNG to WebP/AVIF automatically
-    // Serves correct size per device (mobile gets small, desktop gets large)
+    // ── image — Next.js Image component (Unoptimized to save Vercel quota) ──────────
+    // Serves original image as-is without Vercel processing
     // Lazy loads — only loads when user scrolls to it
-    // Shows blurred placeholder while loading
     case "image":
       return (
         <figure className={s.blockFigure}>
@@ -149,14 +147,12 @@ function Block({ block, s }) {
             alt={block.alt}
             width={1200}
             height={630}
-            quality={80}
             style={{
               width: "100%",
               height: "auto",
               borderRadius: "12px",
               display: "block",
             }}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
           />
           {block.caption && (
             <figcaption className={s.blockFigureCaption}>
@@ -294,15 +290,13 @@ export default async function BlogPostPage({ params }) {
             <span>{post.readTime}</span>
           </div>
 
-          {/* Cover Image — Next.js Image for auto optimisation */}
+          {/* Cover Image — Unoptimized to save Vercel quota */}
           {post.coverImage && (
             <Image
               src={post.coverImage}
               alt={post.coverImageAlt || post.title}
               width={1200}
               height={630}
-              quality={85}
-              priority={true}
               style={{
                 width: "100%",
                 height: "auto",
@@ -310,7 +304,6 @@ export default async function BlogPostPage({ params }) {
                 marginBottom: "32px",
                 display: "block",
               }}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
               className={styles.postCoverImage}
             />
           )}

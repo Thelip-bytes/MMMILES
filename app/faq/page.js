@@ -23,7 +23,7 @@ export default function FAQPage() {
     {
       question: "Do I need to pay a security deposit?",
       answer:
-        "No. We do not require any security deposit at any stage of the booking or trip.",
+        "No Deposit",
     },
     {
       question: "How does fuel policy work?",
@@ -33,7 +33,7 @@ export default function FAQPage() {
     {
       question: "Is there a kilometer limit?",
       answer:
-        "Most cars have unlimited kms. Kilometer limits apply only to select premium cars and will be mentioned during booking.",
+        "Every cars have unlimited kms.",
     },
     {
       question: "What happens if I return the car late?",

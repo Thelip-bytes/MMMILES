@@ -26,10 +26,10 @@ export default function CarPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Enforce Chennai-only logic
+  // Enforce Chennai/Coimbatore-only logic
   useEffect(() => {
     const city = searchParams.get("city");
-    if (city && city !== "Chennai") {
+    if (city && city !== "Chennai" && city !== "Coimbatore") {
       router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
     }
   }, [searchParams, router]);

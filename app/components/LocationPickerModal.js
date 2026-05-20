@@ -67,7 +67,7 @@ const loadGoogleMapsAPI = () => {
   });
 };
 
-const CITIES = ["Chennai", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
+const CITIES = ["Chennai", "Coimbatore", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
 
 export default function LocationPickerModal({ isOpen, onClose, onLocationSelect, currentAddress }) {
   const [searchInput, setSearchInput] = useState("");

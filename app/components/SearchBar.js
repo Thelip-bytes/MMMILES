@@ -22,7 +22,7 @@ import styles from "./SearchBar.module.css";
 import CitySelector from "./CitySelector";
 import CalendarModal from "./CalendarModal";
 
-const CITIES = ["Chennai", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
+const CITIES = ["Chennai", "Coimbatore", "Bengaluru", "Kochi", "Hyderabad", "Mumbai"];
 const LOCATION_PLACEHOLDER = "Select Your Place";
 
 // Google Maps API configuration
@@ -210,7 +210,7 @@ export default function SearchBar() {
   }, []);
 
   const handleCitySelect = (city) => {
-    if (city !== "Chennai") {
+    if (city !== "Chennai" && city !== "Coimbatore") {
       router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
       return;
     }
@@ -315,7 +315,7 @@ export default function SearchBar() {
 
     // Check if detected city matches any city in our CITIES array
     if (detectedCity) {
-      if (detectedCity !== "Chennai") {
+      if (detectedCity !== "Chennai" && detectedCity !== "Coimbatore") {
           // If detected city is not Chennai, we don't auto-set it in location state to avoid confusion,
           // OR we could redirect immediately. The request implies "auto city selector... wen selected... direct to coming soon".
           // If we auto-select here, it might be better to just let the user see "Chennai" or "Select" 

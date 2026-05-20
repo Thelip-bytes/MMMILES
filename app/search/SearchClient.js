@@ -22,14 +22,14 @@ function useDebounce(value, delay = 400) {
   return debounced;
 }
 
-// Enforce Chennai-only logic
+// Enforce Chennai/Coimbatore-only logic
 function useCityEnforcement() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const city = searchParams.get("city");
-    if (city && city !== "Chennai") {
+    if (city && city !== "Chennai" && city !== "Coimbatore") {
       router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
     }
   }, [searchParams, router]);
@@ -497,7 +497,7 @@ export default function SearchPage() {
   const handleLocationSelect = (location) => {
     const newCity = location.city || city;
     
-    if (newCity && newCity !== "Chennai") {
+    if (newCity && newCity !== "Chennai" && newCity !== "Coimbatore") {
       router.push(`/comingsoon?city=${encodeURIComponent(newCity)}`);
       return;
     }

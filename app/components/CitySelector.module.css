@@ -122,15 +122,15 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    width: 90px;
+    width: 100px;
     padding: 8px;
     border-radius: 8px;
     transition: all 0.2s ease;
 }
 
 .cityIconWrapper {
-    width: 60px;
-    height: 60px;
+    width: 76px;
+    height: 76px;
     margin-bottom: 8px;
     display: flex;
     align-items: center;

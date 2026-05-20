@@ -18,14 +18,14 @@ import { testAuth } from "../../lib/authTest";
 import { parseDate, formatDateTimeForDB, parseBookingRawDateTime } from "../../lib/dateUtils";
 import styles from "./EnhancedCheckout.module.css";
 
-// Enforce Chennai-only logic
+// Enforce Chennai/Coimbatore-only logic
 function useCityEnforcement() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
     const city = searchParams.get("city");
-    if (city && city !== "Chennai") {
+    if (city && city !== "Chennai" && city !== "Coimbatore") {
       router.push(`/comingsoon?city=${encodeURIComponent(city)}`);
     }
   }, [searchParams, router]);

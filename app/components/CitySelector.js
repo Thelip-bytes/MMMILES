@@ -8,11 +8,11 @@ import styles from "./CitySelector.module.css";
 
 const CITY_DATA = [
     { name: "Chennai", image: "/icons/chen.avif" },
+    { name: "Coimbatore", image: "/icons/coimbatore.avif" },
     { name: "Bengaluru", image: "/icons/bang.avif" },
     { name: "Kochi", image: "/icons/koch.avif" },
     { name: "Hyderabad", image: "/icons/hyd.png" },
     { name: "Mumbai", image: "/icons/mumbai.avif" },
-    
 ];
 
 export default function CitySelector({ isOpen, onClose, onSelect, selectedCity }) {
@@ -84,8 +84,8 @@ export default function CitySelector({ isOpen, onClose, onSelect, selectedCity }
                                     <Image
                                         src={city.image}
                                         alt={city.name}
-                                        width={40}
-                                        height={40}
+                                        width={54}
+                                        height={54}
                                         style={{ objectFit: 'contain' }}
                                     />
                                 </div>

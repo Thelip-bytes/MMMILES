@@ -94,7 +94,7 @@ export default function Footer() {
                 <a href="https://www.thrillophilia.com/places-to-visit-in-south-india">
                   Explore Places
                 </a>
-                <Link href="/steps">Steps to Book</Link>
+                <Link href="/host-registration">Become a Host</Link>
                 <Link href="/top-cars">Top Rented Cars</Link>
               </div>
             </div>

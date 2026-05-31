@@ -11,7 +11,7 @@ export default function BecomeHost() {
         
         <div className={styles.HostimageWrapper}>
           <Image
-            src="/hostt.png"     // <-- put your image path here
+            src="/hostt.webp"     // <-- put your image path here
             alt="Car booking steps illustration"
             width={1921}                 // large natural size
             height={600}                 // height in proportion

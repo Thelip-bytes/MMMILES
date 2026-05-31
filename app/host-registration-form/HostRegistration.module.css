@@ -1,0 +1,682 @@
+
+.hregSection{
+  width:100%;
+
+  background:#FEF9F5;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 20px;
+  margin-top: -60px;
+}
+
+.hregContainer{
+  width:100%;
+  max-width:1000px;
+
+  background:#ffffff;
+
+  border-radius:24px;
+
+  padding:40px;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+
+  box-shadow: 0px 0px 5.8px rgba(0, 0, 0, 0.25);
+}
+
+/* LEFT */
+
+.hregLeftCard{
+  position:relative;
+  
+  width:100%;
+  min-height:400px;
+
+  overflow:hidden;
+
+  border-radius:8px;
+}
+
+.hregPreviewImage{
+  object-fit:cover;
+}
+
+/* RIGHT */
+
+.hregRightCard{
+  width:100%;
+
+  background:#ffffff;
+
+  box-shadow: 0px 0px 3.8px rgba(0, 0, 0, 0.25);
+
+  border-radius:4px;
+
+  padding:32px 36px;
+
+  display:flex;
+  flex-direction:column;
+}
+
+.hregHeader{
+  display:flex;
+  align-items:flex-start;
+
+  gap:14px;
+
+  margin-bottom:30px;
+}
+
+.hregIconBox{
+  width:64px;
+  height:64px;
+
+  border-radius:8px;
+
+  background:#ececec;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  flex-shrink:0;
+}
+
+.hregHeader h2{
+  font-size:28px;
+  font-family: var(--font-ibm-plex);
+  line-height:1;
+  letter-spacing: 1%;
+
+  font-weight:700;
+
+  color:#111;
+
+  margin:0 0 7px;
+}
+
+.hregHeader p{
+  font-size:16px;
+  font-family: poppins;
+  color:#8c8c8c;
+  padding-left: 2px;
+  margin:0;
+}
+
+.hregField{
+  margin-bottom:24px;
+}
+
+.hregField label{
+  display:block;
+
+  font-size:15px;
+  font-family: poppins;
+  font-weight:600;
+
+  color:#707070;
+
+  margin-bottom:7px;
+}
+
+.hregField input{
+  width:100%;
+
+  height:54px;
+
+  border:1px solid #d8d8d8;
+
+  border-radius:12px;
+  font-weight: 600;
+  font-family: poppins;
+  background:#fff;
+  color: #707070;
+  padding:0 16px;
+
+  font-size:15px;
+
+  outline:none;
+}
+
+.hregField input:focus{
+  border-color:#c7c7c7;
+}
+
+.hregVerifyBtn{
+  width:320px;
+
+  max-width:100%;
+
+  height:45px;
+
+  margin:15px auto 0;
+
+  border:none;
+
+  border-radius:40px;
+
+  background:#f2f2f2;
+
+  color:#000000;
+  font-family: poppins;
+  font-size:15px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  box-shadow: 0px 0px 3.8px rgba(0, 0, 0, 0.25);
+}
+
+.hregVerifyBtn:hover{
+  background:#F4F4F4;
+   transform:scale(1.03);
+}
+
+
+/* TABLET */
+
+@media(max-width:992px){
+
+  .hregContainer{
+    grid-template-columns:1fr;
+
+    max-width:700px;
+  }
+
+  .hregLeftCard{
+    min-height:350px;
+  }
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .hregSection{
+    padding:20px 12px;
+  }
+
+  .hregContainer{
+    padding:16px;
+    gap:20px;
+  }
+
+  .hregLeftCard{
+    display:none;
+  }
+
+  .hregRightCard{
+    padding:18px;
+  }
+
+  .hregHeader{
+    gap:12px;
+
+    margin-bottom:20px;
+  }
+
+  .hregIconBox{
+    width:44px;
+    height:44px;
+  }
+
+  .hregHeader h2{
+    font-size:22px;
+    margin-bottom:4px;
+  }
+
+  .hregHeader p{
+    font-size:12px;
+  }
+
+  .hregField{
+    margin-bottom:16px;
+  }
+
+  .hregField label{
+    font-size:12px;
+    margin-bottom:6px;
+  }
+
+  .hregField input{
+    height:40px;
+    border-radius:10px;
+    font-size:13px;
+  }
+
+  .hregVerifyBtn{
+    width:160px;
+    height:40px;
+
+    font-size:11px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* DIGILOCKER */
+
+.hregDigiLockerBox{
+  border:2px dashed #6a6a6a;
+
+  border-radius:16px;
+
+  padding:24px 19px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:40px;
+
+  margin-top:10px;
+}
+
+.hregDigiLockerLeft{
+  display:flex;
+  justify-content:center;
+}
+
+.hregDigiLockerRight p{
+  margin:0 0 5px;
+
+  font-size:14px;
+
+  font-family:poppins;
+
+  color:#555;
+
+  font-weight:600;
+}
+
+.hregDigiLockerRight button{
+  width:120px;
+  height:40px;
+
+  border:none;
+
+  border-radius:30px;
+
+  background:#f5f5f5;
+
+  color:#6c4cff;
+
+  font-weight:700;
+  margin-top: 5px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0px 0px 3.8px rgba(0,0,0,.25);
+}
+
+.hregDigiLockerRight button:hover{
+  background:#F4F4F4;
+   transform:scale(1.03);
+}
+
+.hregKycText{
+  text-align:center;
+
+  margin:14px 0 26px;
+
+  font-size:13px;
+
+  color:#06c100;
+
+  font-family:poppins;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.hregKycFailed{
+  text-align:center;
+
+  margin-top:14px;
+
+  font-size:12px;
+
+  color:#7d7d7d;
+
+  font-family:poppins;
+}
+
+.hregFailedButtons{
+  display:flex;
+
+  justify-content:center;
+
+  gap:22px;
+
+  margin-top:10px;
+}
+
+.hregFailedButtons button{
+  width:120px;
+
+  height:38px;
+
+  border:none;
+
+  border-radius:30px;
+
+  background:#f5f5f5;
+
+  color:#333;
+
+  font-size:12px;
+
+  font-weight:600;
+
+  font-family:poppins;
+
+  cursor:pointer;
+
+  box-shadow:
+    0px 0px 3.8px rgba(0,0,0,0.25);
+}
+
+.hregFailedButtons button:hover{
+  transform:scale(1.03);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* TERMS */
+
+.hregTermsRow{
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:10px;
+
+  margin-top:-5px;
+
+  margin-bottom:12px;
+}
+
+.hregTermsRow input{
+  margin-top:3px;
+  border:5px solid #333;
+  width:18px;
+  height:18px;
+}
+
+.hregTermsRow label{
+  font-size:13px;
+  
+  line-height:1.5;
+
+  color:#555;
+
+  font-family:poppins;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   SUCCESS PAGE
+========================= */
+
+.hregSuccessSection{
+  min-height:100vh;
+
+  background:#FEF9F5;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:10px 30px;
+  margin-top: -60px;
+}
+
+.hregSuccessCard{
+  width:100%;
+  max-width:1600px;
+
+  background:#fff;
+
+  text-align:center;
+
+  padding:30px 40px;
+
+  border-radius:6px;
+}
+
+.hregSuccessImage{
+  margin:0 auto 20px;
+}
+
+.hregSuccessCard h1{
+  font-size:40px;
+
+  font-weight:700;
+
+  color:#000;
+
+  margin-bottom:12px;
+
+  font-family:var(--font-ibm-plex);
+}
+
+.hregSuccessCard h3{
+  font-size:20px;
+
+  font-weight:500;
+
+  color:#555;
+
+  margin-bottom:30px;
+
+  font-family:poppins;
+}
+
+.hregSuccessButtons{
+  display:flex;
+
+  justify-content:center;
+
+  gap:40px;
+
+  margin-bottom:39px;
+}
+
+.hregExploreBtn{
+  width:247px;
+  height:54px;
+
+  border:none;
+
+  border-radius:22px;
+
+  background:#f5f5f5;
+
+  font-size:14px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  box-shadow:
+  0px 0px 5px rgba(0,0,0,.15);
+}
+
+.hregDownloadBtn{
+  width:247px;
+  height:54px;
+
+  border:none;
+
+  border-radius:22px;
+
+  background:#D6AF6D;
+
+  color:#000;
+
+  font-size:14px;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.hregSuccessText{
+  max-width:1000px;
+
+  margin:auto;
+
+  font-size:16px;
+
+  line-height:1.8;
+
+  color:#555;
+
+  font-family:poppins;
+}
+
+/* MOBILE */
+
+@media(max-width:480px){
+
+  .hregSuccessSection{
+    min-height:60vh;
+    background:#FEF9F5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:10px 30px;
+    margin-top: -60px;
+  }
+  .hregSuccessImage{
+    width: 160px;
+    height: 90px;
+  }
+  .hregSuccessH1{
+    font-size: 25px !important;
+  }
+  .hregSuccessH3{
+    font-size: 15px !important;
+  }
+
+  .hregSuccessButtons{
+    display:flex;
+    flex-direction: row !important;
+    justify-content:center;
+    gap:40px;
+    margin-bottom:39px;
+  }
+
+  .hregExploreBtn {
+    width:130px !important;
+    height:34px !important;
+    font-size: 10px !important;
+  }
+  .hregDownloadBtn{
+    width:130px !important;
+    height:34px !important;
+    font-size: 10px !important;
+  }
+  .hregSuccessText{
+    max-width:1000px;
+    margin:auto;
+    font-size:12px !important;
+    line-height:1.6;
+    font-weight: 500;
+    color:#858585;
+    font-family:poppins;
+  }
+}
+
+@media(max-width:768px){
+
+  .hregSuccessCard{
+    padding:40px 20px;
+  }
+
+  .hregSuccessCard h1{
+    font-size:42px;
+  }
+
+  .hregSuccessCard h3{
+    font-size:18px;
+  }
+
+  .hregSuccessButtons{
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:20px;
+  }
+
+  .hregExploreBtn,
+  .hregDownloadBtn{
+    width:100%;
+    max-width:320px;
+    height:58px;
+
+    font-size:16px;
+  }
+
+  .hregSuccessText{
+    font-size:16px;
+    line-height:1.7;
+  }
+
+}

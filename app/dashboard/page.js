@@ -1054,10 +1054,10 @@ function DashboardContent() {
       >
         <picture>
           {/* Mobile Image (shown below 768px) */}
-          <source media="(max-width: 768px)" srcSet="/images/dash-host-mobile-new.png" />
+          <source media="(max-width: 768px)" srcSet="/host-dash-mobile.webp" />
           {/* Desktop Image (default) */}
           <img 
-            src="/images/host-dash.png" 
+            src="/hpanel-host.webp" 
             alt="Work Process Flow" 
             className={styles.processMainImage} 
           />

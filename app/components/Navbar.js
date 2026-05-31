@@ -92,6 +92,7 @@ export default function Navbar() {
           <li><Link href="/reviews">Reviews</Link></li>
           <li><Link href="/faq">FAQ&apos;s</Link></li>
           <li><Link href="/contact">Contact Us</Link></li>
+          <li><Link href="/host-registration"> Become a Host</Link></li>
           
         </ul>
 
@@ -145,6 +146,7 @@ export default function Navbar() {
                   { name: "About Us", link: "/about" },
                   { name: "Reviews", link: "/reviews" },
                   { name: "FAQ's", link: "/faq" },
+                  { name: "Become a Host", link: "/host-registration" },
                   { name: "Contact Us", link: "/contact" },
                 ].map((item, index) => (
                   <motion.li

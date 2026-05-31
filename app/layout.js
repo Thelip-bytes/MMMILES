@@ -1,5 +1,6 @@
 import "./../styles/reset.css";
 import "./globals.css";
+import LayoutWrapper from "./components/LayoutWrapper";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -10,7 +11,9 @@ import {
   Darker_Grotesque,
   Sanchez,
   Poppins,
+  IBM_Plex_Sans,
 } from "next/font/google";
+
 
 /* =========================
    Fonts — UNCHANGED
@@ -37,6 +40,11 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
+});
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex",
 });
 
 /* =========================
@@ -134,9 +142,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${frankRuhl.variable} ${darkerGrotesque.variable} ${sanchez.variable} ${poppins.variable}`}
+        className={`${frankRuhl.variable} ${darkerGrotesque.variable} ${ibmPlexSans.variable} ${sanchez.variable} ${poppins.variable}`}
       >
-        <Navbar />
+        <LayoutWrapper>
 
         {children}
 
@@ -156,9 +164,10 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        <div id="global-footer">
-          <Footer />
-        </div>
+        
+           </LayoutWrapper>
+           
+        
       </body>
     </html>
   );

@@ -470,7 +470,7 @@ export default function HostLanding() {
       </h1>
 
       <p className={styles.hpanelSubText}>
-        we cap commission upto <span>20%</span>
+        We cap commission upto <span>20%</span>
       </p>
       <button
         className={styles.hpanelHeroBtn}

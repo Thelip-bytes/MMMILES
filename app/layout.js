@@ -1,6 +1,7 @@
 import "./../styles/reset.css";
 import "./globals.css";
 import LayoutWrapper from "./components/LayoutWrapper";
+import ChatSupport from "./components/ChatSupport";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -147,6 +148,7 @@ export default function RootLayout({ children }) {
         <LayoutWrapper>
 
         {children}
+        <ChatSupport />
 
         <Toaster
           position="top-center"

@@ -52,7 +52,7 @@ export default function ChatSupport() {
         onClick={() => setIsOpen(true)}
       >
         <Image
-          src="/Chat-bot.webp"
+          src="/Chat-bot.png"
           alt="Chat Support"
           width={70}
           height={70}

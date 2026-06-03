@@ -17,7 +17,7 @@ export default function HostRegistrationForm() {
 
         <div className={styles.hregLeftCard}>
           <Image
-            src="/registration-left-image.png"
+            src="/Best-car-hosting-registration1.webp"
             alt="Registration"
             fill
             priority

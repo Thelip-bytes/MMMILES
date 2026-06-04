@@ -114,11 +114,14 @@
     #f8fcfa 0%,
     #ffffff 100%
   );
+  display: flex;
+  flex-direction: column;
 }
 
 /* BOT MESSAGE */
 
 .chatBotMessage{
+  align-self: flex-start;
   max-width:90%;
   background:#ffffff;
   border:1px solid #dfeee7;
@@ -131,6 +134,61 @@
   font-family:poppins;
   font-size:14px;
   line-height:1.7;
+}
+
+/* USER MESSAGE */
+
+.chatUserMessage{
+  align-self: flex-end;
+  max-width:90%;
+  background:#76b89d;
+  color:#ffffff;
+  border-radius:18px 18px 6px 18px;
+  padding:14px;
+  margin-bottom:20px;
+  box-shadow:
+  0 8px 20px rgba(118,184,157,.12);
+  font-family:poppins;
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* TYPING INDICATOR */
+.typingIndicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  align-self: flex-start;
+  background: #ffffff;
+  border: 1px solid #dfeee7;
+  border-radius: 18px 18px 18px 6px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(118,184,157,.12);
+}
+
+.typingDot {
+  width: 8px;
+  height: 8px;
+  background-color: #76b89d;
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.typingDot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typingDot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typingBounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 40% { 
+    transform: scale(1.0);
+  }
 }
 
 /* WELCOME TITLE */

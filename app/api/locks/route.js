@@ -1,20 +1,28 @@
 // app/api/locks/route.js
 import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '../../../lib/auth.js';
+import crypto from 'crypto';
+import { getUserFromRequest } from '../../../lib/auth.js';
 
 // Configuration for lock durations (in minutes)
 const LOCK_DURATION_MINUTES = 15;
 const LOCK_EXTENSION_MINUTES = 10;
 
+function getAuthToken(request) {
+  return request.cookies?.get?.("auth_token")?.value || 
+         request.headers?.get?.("cookie")?.match(/auth_token=([^;]+)/)?.[1] ||
+         request.headers?.get?.("authorization")?.split?.(" ")?.[1] || "";
+}
+
 // GET /api/locks?vehicle_id=123 - Check locks for a vehicle
 export async function GET(request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const vehicleId = searchParams.get('vehicle_id');
+    const vehicleId = new URL(request.url).searchParams.get('vehicle_id');
     
     if (!vehicleId) {
       return Response.json({ error: 'Vehicle ID is required' }, { status: 400 });
     }
+
+    const token = getAuthToken(request);
 
     // Check for existing active locks
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -25,7 +33,7 @@ export async function GET(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': request.headers.get('authorization'),
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -50,7 +58,7 @@ export async function GET(request) {
 // POST /api/locks - Create a new lock
 export async function POST(request) {
   try {
-    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    const user = getUserFromRequest(request);
     if (!user) {
       return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
     }
@@ -63,6 +71,7 @@ export async function POST(request) {
       }, { status: 400 });
     }
 
+    const token = getAuthToken(request);
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
@@ -72,7 +81,7 @@ export async function POST(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -97,7 +106,7 @@ export async function POST(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -109,7 +118,6 @@ export async function POST(request) {
     const userLocks = await userLockResponse.json();
     
     if (userLocks.length > 0) {
-      // User already has a lock, return existing lock
       return Response.json({ 
         message: 'User already has an active lock for this vehicle',
         lock: userLocks[0],
@@ -136,7 +144,7 @@ export async function POST(request) {
       method: 'POST',
       headers: {
         'apikey': supabaseKey,
-        'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+        'Authorization': token ? `Bearer ${token}` : '',
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       },
@@ -161,10 +169,10 @@ export async function POST(request) {
   }
 }
 
-// PATCH /api/locks - Extend lock by 20 minutes
+// PATCH /api/locks - Extend lock
 export async function PATCH(request) {
   try {
-    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    const user = getUserFromRequest(request);
     if (!user) {
       return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
     }
@@ -177,6 +185,7 @@ export async function PATCH(request) {
       }, { status: 400 });
     }
 
+    const token = getAuthToken(request);
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
@@ -186,7 +195,7 @@ export async function PATCH(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -205,10 +214,8 @@ export async function PATCH(request) {
     }
 
     const currentLock = currentLocks[0];
-    
-    // Calculate new expiry time: current expires_at + 10 minutes
     const currentExpiresAt = new Date(currentLock.expires_at);
-    const newExpiresAt = new Date(currentExpiresAt.getTime() + LOCK_EXTENSION_MINUTES * 60 * 1000); // Add extension minutes
+    const newExpiresAt = new Date(currentExpiresAt.getTime() + LOCK_EXTENSION_MINUTES * 60 * 1000);
 
     // Update the lock with new expiry time
     const updateResponse = await fetch(
@@ -217,7 +224,7 @@ export async function PATCH(request) {
         method: 'PATCH',
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json',
           'Prefer': 'return=representation'
         },
@@ -235,7 +242,7 @@ export async function PATCH(request) {
     const updatedLock = await updateResponse.json();
     
     return Response.json({ 
-      message: 'Lock extended by 20 minutes',
+      message: 'Lock extended successfully',
       lock: Array.isArray(updatedLock) ? updatedLock[0] : updatedLock,
       extended: true,
       previous_expires_at: currentExpiresAt.toISOString(),
@@ -251,18 +258,18 @@ export async function PATCH(request) {
 // DELETE /api/locks?vehicle_id=123 - Remove lock for current user
 export async function DELETE(request) {
   try {
-    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    const user = getUserFromRequest(request);
     if (!user) {
       return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url);
-    const vehicleId = searchParams.get('vehicle_id');
+    const vehicleId = new URL(request.url).searchParams.get('vehicle_id');
     
     if (!vehicleId) {
       return Response.json({ error: 'Vehicle ID is required' }, { status: 400 });
     }
 
+    const token = getAuthToken(request);
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
@@ -273,7 +280,7 @@ export async function DELETE(request) {
         method: 'DELETE',
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );

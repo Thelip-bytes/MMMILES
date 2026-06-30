@@ -44,12 +44,24 @@ function DashboardContent() {
 
   // Authentication Check
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
-    if (!token) {
-      router.push("/login?redirect=/dashboard");
-    } else {
-      setIsCheckingAuth(false);
-    }
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated) {
+            setIsCheckingAuth(false);
+          } else {
+            router.push("/login?redirect=/dashboard");
+          }
+        } else {
+          router.push("/login?redirect=/dashboard");
+        }
+      } catch (e) {
+        router.push("/login?redirect=/dashboard");
+      }
+    };
+    checkSession();
   }, [router]);
 
   // Handle tab query parameter on mount
@@ -1178,7 +1190,8 @@ function DashboardContent() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     localStorage.removeItem("auth_token");
     localStorage.removeItem("user_profile");
 

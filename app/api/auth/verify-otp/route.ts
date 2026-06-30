@@ -9,52 +9,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY! // Service role key
 );
 
-// Rate limiting configuration
-const MAX_VERIFY_ATTEMPTS = 5;
-const LOCKOUT_MINUTES = 15;
-
-// In-memory store for rate limiting (use Redis in production)
-const verifyAttempts = new Map<string, { count: number; firstAttempt: number }>();
-
 function hashOTP(otp: string) {
   return crypto.createHash("sha256").update(otp).digest("hex");
-}
-
-function checkRateLimit(phone: string): { allowed: boolean; remaining: number } {
-  const now = Date.now();
-  const lockoutMs = LOCKOUT_MINUTES * 60 * 1000;
-  const attempts = verifyAttempts.get(phone);
-
-  if (!attempts) {
-    return { allowed: true, remaining: MAX_VERIFY_ATTEMPTS };
-  }
-
-  // Reset if lockout period has passed
-  if (now - attempts.firstAttempt > lockoutMs) {
-    verifyAttempts.delete(phone);
-    return { allowed: true, remaining: MAX_VERIFY_ATTEMPTS };
-  }
-
-  if (attempts.count >= MAX_VERIFY_ATTEMPTS) {
-    return { allowed: false, remaining: 0 };
-  }
-
-  return { allowed: true, remaining: MAX_VERIFY_ATTEMPTS - attempts.count };
-}
-
-function recordFailedAttempt(phone: string) {
-  const now = Date.now();
-  const attempts = verifyAttempts.get(phone);
-
-  if (!attempts) {
-    verifyAttempts.set(phone, { count: 1, firstAttempt: now });
-  } else {
-    attempts.count++;
-  }
-}
-
-function clearAttempts(phone: string) {
-  verifyAttempts.delete(phone);
 }
 
 export async function POST(req: Request) {
@@ -75,16 +31,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid OTP format" }, { status: 400 });
     }
 
-    // SECURITY: Rate limiting check
-    const rateLimitCheck = checkRateLimit(phone);
-    if (!rateLimitCheck.allowed) {
-      console.warn(`Rate limit exceeded for OTP verification: ${phone.slice(-4)}`);
-      return NextResponse.json(
-        { error: `Too many failed attempts. Please try again in ${LOCKOUT_MINUTES} minutes.` },
-        { status: 429 }
-      );
-    }
-
     // 1️⃣ Fetch latest OTP record
     const { data: records, error: otpErr } = await supabase
       .from("otp_events")
@@ -94,7 +40,6 @@ export async function POST(req: Request) {
       .limit(1);
 
     if (otpErr || !records?.length) {
-      recordFailedAttempt(phone);
       return NextResponse.json({ error: "No OTP found" }, { status: 400 });
     }
 
@@ -102,26 +47,37 @@ export async function POST(req: Request) {
 
     // Validate OTP expiry
     if (new Date(record.expires_at) < new Date()) {
-      recordFailedAttempt(phone);
       return NextResponse.json({ error: "OTP expired" }, { status: 400 });
     }
-
-    // Validate OTP hash
-    if (hashOTP(otp) !== record.otp_hash) {
-      recordFailedAttempt(phone);
-      const remaining = checkRateLimit(phone).remaining;
-      return NextResponse.json({
-        error: "Invalid OTP",
-        attemptsRemaining: remaining
-      }, { status: 400 });
-    }
-
-    // Success - clear rate limit tracking
-    clearAttempts(phone);
 
     // Already used?
     if (record.consumed) {
       return NextResponse.json({ error: "OTP already used" }, { status: 400 });
+    }
+
+    // Validate OTP hash with 3-strikes lock
+    if (hashOTP(otp) !== record.otp_hash) {
+      (global as any).otpAttempts = (global as any).otpAttempts || {};
+      const attempts = ((global as any).otpAttempts[record.id] || 0) + 1;
+      (global as any).otpAttempts[record.id] = attempts;
+
+      if (attempts >= 3) {
+        // Lock OTP permanently in DB by marking consumed
+        await supabase.from("otp_events").update({ consumed: true }).eq("id", record.id);
+        delete (global as any).otpAttempts[record.id];
+        return NextResponse.json({ 
+          error: "Invalid OTP. This verification code has been locked due to too many failed attempts." 
+        }, { status: 400 });
+      }
+
+      return NextResponse.json({ 
+        error: `Invalid OTP. ${3 - attempts} attempt(s) remaining.` 
+      }, { status: 400 });
+    }
+
+    // Success - clear rate limit tracking
+    if ((global as any).otpAttempts) {
+      delete (global as any).otpAttempts[record.id];
     }
 
     // Mark consumed
@@ -171,21 +127,32 @@ export async function POST(req: Request) {
       {
         aud: "authenticated",
         role: "authenticated",
-        sub: user.id, // 🔥 MOST IMPORTANT — REAL UUID (enables auth.uid())
+        sub: user.id, // REAL UUID (enables auth.uid())
         phone_number: user.phone,
-        iat: now, // Issued at timestamp (recommended by Supabase)
+        iat: now,
         exp: now + 7 * 24 * 60 * 60, // 7 days expiration
       },
       process.env.SUPABASE_JWT_SECRET!
     );
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
-      token,
+      token, // Keep token in body for client backward compatibility
       user_id: user.id,
       phone: user.phone,
       message: "OTP verified successfully",
     });
+
+    // Set secure HttpOnly cookie
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60, // 7 days
+    });
+
+    return response;
   } catch (err) {
     console.error("verify-otp error:", err);
     return NextResponse.json(

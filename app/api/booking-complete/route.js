@@ -1,6 +1,10 @@
-// app/api/booking-complete/route.js
-import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '../../../lib/auth.js';
+import { getUserFromRequest } from '../../../lib/auth.js';
+
+function getAuthToken(request) {
+  return request.cookies?.get?.("auth_token")?.value || 
+         request.headers?.get?.("cookie")?.match(/auth_token=([^;]+)/)?.[1] ||
+         request.headers?.get?.("authorization")?.split?.(" ")?.[1] || "";
+}
 import { calculatePricing } from '../../../lib/pricing.js';
 
 // Razorpay SDK for payment verification
@@ -14,10 +18,11 @@ const razorpay = new Razorpay({
 // POST /api/booking-complete - Handle post-booking tasks like buffer time and lock conversion
 export async function POST(request) {
   try {
-    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    const user = getUserFromRequest(request);
     if (!user) {
       return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
     }
+    const token = getAuthToken(request);
 
     const { vehicle_id, booking_id, payment_id, expected_amount } = await request.json();
 
@@ -36,7 +41,7 @@ export async function POST(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': `Bearer ${request.headers.get('authorization').split(' ')[1]}`,
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -115,7 +120,7 @@ export async function POST(request) {
       {
         headers: {
           'apikey': supabaseKey,
-          'Authorization': request.headers.get('authorization'),
+          'Authorization': token ? `Bearer ${token}` : '',
         },
       }
     );
@@ -143,7 +148,7 @@ export async function POST(request) {
         method: 'PATCH',
         headers: {
           'apikey': supabaseKey,
-          'Authorization': request.headers.get('authorization'),
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json',
           'Prefer': 'return=minimal'
         },
@@ -169,7 +174,7 @@ export async function POST(request) {
         method: 'PATCH',
         headers: {
           'apikey': supabaseKey,
-          'Authorization': request.headers.get('authorization'),
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json',
           'Prefer': 'return=minimal'
         },
@@ -197,7 +202,7 @@ export async function POST(request) {
           method: 'PATCH',
           headers: {
             'apikey': supabaseKey,
-            'Authorization': request.headers.get('authorization'),
+            'Authorization': token ? `Bearer ${token}` : '',
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal'
           },
@@ -217,7 +222,7 @@ export async function POST(request) {
           method: 'POST',
           headers: {
             'apikey': supabaseKey,
-            'Authorization': request.headers.get('authorization'),
+            'Authorization': token ? `Bearer ${token}` : '',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ coupon_code: appliedCouponCode.trim() })
@@ -236,7 +241,7 @@ export async function POST(request) {
         method: 'POST',
         headers: {
           'apikey': supabaseKey,
-          'Authorization': request.headers.get('authorization'),
+          'Authorization': token ? `Bearer ${token}` : '',
           'Content-Type': 'application/json'
         }
       });
@@ -252,7 +257,7 @@ export async function POST(request) {
         {
           headers: {
              'apikey': supabaseKey,
-             'Authorization': request.headers.get('authorization')
+             'Authorization': token ? `Bearer ${token}` : ''
           }
         }
       );

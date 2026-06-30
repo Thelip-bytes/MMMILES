@@ -1,6 +1,12 @@
 // app/api/create-order/route.js
 import { NextRequest } from 'next/server';
-import { getUserFromAuthHeader } from '../../../lib/auth.js';
+import { getUserFromRequest } from '../../../lib/auth.js';
+
+function getAuthToken(request) {
+  return request.cookies?.get?.("auth_token")?.value || 
+         request.headers?.get?.("cookie")?.match(/auth_token=([^;]+)/)?.[1] ||
+         request.headers?.get?.("authorization")?.split?.(" ")?.[1] || "";
+}
 import { calculatePricing } from '../../../lib/pricing.js';
 
 // Razorpay SDK imports
@@ -13,11 +19,11 @@ const razorpay = new Razorpay({
 
 export async function POST(request) {
     try {
-        // Authentication check
-        const user = getUserFromAuthHeader(request.headers.get('authorization'));
+        const user = getUserFromRequest(request);
         if (!user) {
             return Response.json({ error: 'Invalid or missing authentication' }, { status: 401 });
         }
+        const token = getAuthToken(request);
 
         const { carId, pickupTime, returnTime, couponCode } = await request.json();
 
@@ -37,7 +43,7 @@ export async function POST(request) {
             {
                 headers: {
                     'apikey': supabaseKey,
-                    'Authorization': request.headers.get('authorization'),
+                    'Authorization': token ? `Bearer ${token}` : '',
                 },
             }
         );
@@ -107,7 +113,7 @@ export async function POST(request) {
                     {
                         headers: {
                             'apikey': supabaseKey,
-                            'Authorization': request.headers.get('authorization'),
+                            'Authorization': token ? `Bearer ${token}` : '',
                         },
                     }
                 );
@@ -136,7 +142,7 @@ export async function POST(request) {
                           try {
                             const bookingsRes = await fetch(
                                `${supabaseUrl}/rest/v1/bookings?user_id=eq.${user.sub}&select=id,applied_coupon&status=in.(confirmed,completed)`,
-                               { headers: { 'apikey': supabaseKey, 'Authorization': request.headers.get('authorization') } }
+                               { headers: { 'apikey': supabaseKey, 'Authorization': token ? `Bearer ${token}` : '' } }
                             );
                             if (bookingsRes.ok) {
                               const pastBookings = await bookingsRes.json();

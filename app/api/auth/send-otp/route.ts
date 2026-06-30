@@ -35,6 +35,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid phone format" }, { status: 400 });
     }
 
+    // Cooldown check: Limit OTP requests to once every 60 seconds per phone number
+    const { data: lastOtp } = await supabase
+      .from("otp_events")
+      .select("created_at")
+      .eq("phone", phone)
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    if (lastOtp && lastOtp.length > 0) {
+      const timeDiff = Date.now() - new Date(lastOtp[0].created_at).getTime();
+      if (timeDiff < 60000) {
+        const waitTime = Math.ceil((60000 - timeDiff) / 1000);
+        return NextResponse.json(
+          { error: `Please wait ${waitTime} seconds before requesting a new OTP.` },
+          { status: 429 }
+        );
+      }
+    }
+
     // SECURITY: Rate limiting - check recent OTP requests
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const { count, error: countError } = await supabase

@@ -16,23 +16,16 @@ export default function Navbar() {
   useEffect(() => {
     setMounted(true);
 
-    const checkToken = () => {
-      const token = localStorage.getItem("auth_token");
-      if (!token) return setIsLoggedIn(false);
-
+    const checkToken = async () => {
       try {
-        const payload = JSON.parse(
-          atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
-        );
-        const now = Math.floor(Date.now() / 1000);
-        if (payload?.exp && payload.exp > now) {
-          setIsLoggedIn(true);
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          setIsLoggedIn(!!data.authenticated);
         } else {
-          localStorage.removeItem("auth_token");
           setIsLoggedIn(false);
         }
-      } catch {
-        localStorage.removeItem("auth_token");
+      } catch (e) {
         setIsLoggedIn(false);
       }
     };

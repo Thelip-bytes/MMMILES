@@ -46,6 +46,15 @@ async function proxyRequest(request, context, method) {
       const val = request.headers.get(key);
       if (val) headers[key] = val;
     }
+
+    // Support HttpOnly cookies by reading auth_token and setting it as Authorization header
+    if (!headers["authorization"]) {
+      const cookieHeader = request.headers.get("cookie") || "";
+      const match = cookieHeader.match(/auth_token=([^;]+)/);
+      if (match) {
+        headers["authorization"] = `Bearer ${match[1]}`;
+      }
+    }
     
     // Build fetch options
     const fetchOptions = {

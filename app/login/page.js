@@ -12,24 +12,22 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // ✅ Redirect only if token exists AND is valid
+  // ✅ Redirect only if cookie session exists AND is valid
   useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    if (!token) return;
-
-    try {
-      const payload = JSON.parse(
-        atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
-      );
-      const now = Math.floor(Date.now() / 1000);
-      if (payload?.exp && payload.exp > now) {
-        router.push("/dashboard");
-      } else {
-        localStorage.removeItem("auth_token");
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated) {
+            router.push("/dashboard");
+          }
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch {
-      localStorage.removeItem("auth_token");
-    }
+    };
+    checkSession();
   }, [router]);
 
   const handleContinue = async () => {
@@ -76,8 +74,9 @@ export default function LoginPage() {
         body: JSON.stringify({ phone: `91${phone}`, otp: entered }),
       });
       const data = await res.json();
-      if (res.ok && data.token) {
-        localStorage.setItem("auth_token", data.token);
+      if (res.ok) {
+        // Clear any legacy local storage token
+        localStorage.removeItem("auth_token");
 
         // 🔔 Notify Navbar instantly
         window.dispatchEvent(new Event("auth-change"));

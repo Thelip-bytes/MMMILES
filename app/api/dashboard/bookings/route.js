@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getUserFromAuthHeader } from '../../../../lib/auth.js';
+import { getUserFromRequest } from '../../../../lib/auth.js';
 
 // Supabase storage base URL for car images
 const STORAGE_BASE_URL = "/api/sb/storage/v1/object/public/car-images/";
@@ -14,7 +14,7 @@ const getFullImageUrl = (imageUrl) => {
 export async function GET(request) {
   try {
     // SECURITY: Verify authentication
-    const user = getUserFromAuthHeader(request.headers.get('authorization'));
+    const user = getUserFromRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -23,8 +23,9 @@ export async function GET(request) {
     const userId = user.sub;
 
     // Get the user's token for RLS-compatible queries
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.split(' ')[1];
+    const token = request.cookies?.get?.("auth_token")?.value || 
+                  request.headers?.get?.("cookie")?.match(/auth_token=([^;]+)/)?.[1] ||
+                  request.headers?.get?.("authorization")?.split?.(" ")?.[1];
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL,

@@ -37,14 +37,22 @@ export async function GET(request: Request) {
       return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Missing code or state`);
     }
 
-    // 2. CSRF Validation
+    // 2. CSRF and PKCE Validation
     const cookieHeader = request.headers.get("cookie") || "";
     const stateMatch = cookieHeader.match(/digilocker_oauth_state=([^;]+)/);
     const savedState = stateMatch ? stateMatch[1] : null;
 
+    const codeVerifierMatch = cookieHeader.match(/digilocker_code_verifier=([^;]+)/);
+    const savedCodeVerifier = codeVerifierMatch ? codeVerifierMatch[1] : null;
+
     if (!savedState || savedState !== state) {
       console.error("CSRF state token mismatch or expired");
       return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Invalid request session`);
+    }
+
+    if (!savedCodeVerifier) {
+      console.error("Missing PKCE code verifier");
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Invalid PKCE session`);
     }
 
     // 3. User Authentication: Identify the logged-in user
@@ -78,6 +86,7 @@ export async function GET(request: Request) {
       client_id: clientId,
       client_secret: clientSecret,
       redirect_uri: redirectUri,
+      code_verifier: savedCodeVerifier,
     });
 
     const tokenResponse = await fetch(tokenUrl, {
@@ -201,8 +210,9 @@ export async function GET(request: Request) {
     // Redirect the browser back to verify-profile page with status=success
     const response = NextResponse.redirect(`${frontendVerifyUrl}?status=success`);
     
-    // Clear temporary CSRF state cookie
+    // Clear temporary CSRF state and PKCE cookies
     response.cookies.delete("digilocker_oauth_state");
+    response.cookies.delete("digilocker_code_verifier");
     return response;
 
   } catch (error: any) {

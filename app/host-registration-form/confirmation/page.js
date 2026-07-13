@@ -175,11 +175,11 @@ export default function ConfirmationPage() {
                     </div>
                     <div style={{ fontSize: "12px", display: "flex", justifyContent: "space-between" }}>
                       <span style={{ color: "#777" }}>PAN status:</span>
-                      <span style={{ fontWeight: "600", color: "#333" }}>{kycData?.pan_number}</span>
+                      <span style={{ fontWeight: "600", color: "#28a745" }}>{kycData?.pan_number ? "✅ Verified" : "Not Provided"}</span>
                     </div>
                     <div style={{ fontSize: "12px", display: "flex", justifyContent: "space-between" }}>
                       <span style={{ color: "#777" }}>DL status:</span>
-                      <span style={{ fontWeight: "600", color: "#333" }}>{kycData?.driving_licence}</span>
+                      <span style={{ fontWeight: "600", color: "#28a745" }}>{kycData?.driving_licence ? "✅ Verified" : "Not Provided"}</span>
                     </div>
                   </div>
                 </div>

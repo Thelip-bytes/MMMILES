@@ -17,17 +17,28 @@ export default function HostRegistrationForm() {
   // and ensure user is authenticated
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("auth_token");
-      if (!token) {
-        // Redirect to login if user is not authenticated
-        router.push("/login?redirect=/host-registration-form");
-        return;
-      }
-      
       setFullName(localStorage.getItem("hreg_full_name") || "");
       setEmail(localStorage.getItem("hreg_email") || "");
       setAddress(localStorage.getItem("hreg_address") || "");
     }
+
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const data = await res.json();
+          if (!data.authenticated) {
+            router.push("/login?redirect=/host-registration-form");
+          }
+        } else {
+          router.push("/login?redirect=/host-registration-form");
+        }
+      } catch (e) {
+        console.error("Auth check failed", e);
+        router.push("/login?redirect=/host-registration-form");
+      }
+    };
+    checkAuth();
   }, [router]);
 
   const handleNext = () => {

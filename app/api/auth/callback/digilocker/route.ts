@@ -141,6 +141,17 @@ export async function GET(request: Request) {
       }
     }
 
+    // Attempt to extract PAN and DL from the scope string if they are missing or empty
+    const scopeStr = tokenData?.scope || "";
+    if (!verifiedPan) {
+      const panMatch = scopeStr.match(/issued\/in\.gov\.pan-PANCR-([A-Z0-9]+)/i);
+      if (panMatch) verifiedPan = panMatch[1];
+    }
+    if (!verifiedDl) {
+      const dlMatch = scopeStr.match(/issued\/in\.gov\.transport-DRVLC-([A-Z0-9]+)/i);
+      if (dlMatch) verifiedDl = dlMatch[1];
+    }
+
     // 6. Fallback: Fetch user details via /oauth2/1/user endpoint if basic data is missing
     if (!verifiedName || !verifiedDob) {
       try {

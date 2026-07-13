@@ -1,24 +1,42 @@
 "use client";
 
+import { Suspense, useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "../HostRegistration.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function VerifyProfile() {
-    const router = useRouter();
+function VerifyProfileContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const [verificationStatus, setVerificationStatus] = useState("pending"); // pending, success, failed, verifying
+  const [errorMessage, setErrorMessage] = useState("");
+  const [aadharNumber, setAadharNumber] = useState("");
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    const error = searchParams.get("error");
+
+    if (status === "success") {
+      setVerificationStatus("success");
+    } else if (status === "failed") {
+      setVerificationStatus("failed");
+      setErrorMessage(error || "Verification failed. Please try again.");
+    }
+  }, [searchParams]);
+
+  const handleVerifyClick = () => {
+    setVerificationStatus("verifying");
+    // Redirect browser to initiate secure DigiLocker OAuth2 flow
+    window.location.href = "/api/auth/digilocker";
+  };
 
   return (
-
     <div className={styles.hregpage}>
-
       <section className={styles.hregSection}>
-
         <div className={styles.hregContainer}>
-
-          {/* SAME LEFT IMAGE */}
-
+          {/* LEFT PREVIEW IMAGE */}
           <div className={styles.hregLeftCard}>
-
             <Image
               src="/Best-car-hosting-registration2.webp"
               alt="Registration"
@@ -26,115 +44,116 @@ export default function VerifyProfile() {
               priority
               className={styles.hregPreviewImage}
             />
-
           </div>
 
-          {/* NEW RIGHT CARD */}
-
+          {/* RIGHT CARD */}
           <div className={styles.hregRightCard}>
-
             <div className={styles.hregHeader}>
-
               <div className={styles.hregIconBox}>
-
                 <Image
                   src="/verify-profile-icon.svg"
                   alt="Verify"
                   width={28}
                   height={28}
                 />
-
               </div>
-
               <div>
-
                 <h2>Verify Profile</h2>
-
                 <p>Require Govt Identity</p>
-
               </div>
-
             </div>
 
             <div className={styles.hregField}>
-
-              <label>Enter Aadhar Number</label>
-
-              <input type="text" />
-
+              <label>Enter Aadhaar Number</label>
+              <input 
+                type="text" 
+                placeholder="Enter 12-digit Aadhaar Number"
+                value={aadharNumber}
+                onChange={(e) => setAadharNumber(e.target.value)}
+                disabled={verificationStatus === "success" || verificationStatus === "verifying"}
+              />
             </div>
 
             <div className={styles.hregDigiLockerBox}>
-
               <div className={styles.hregDigiLockerLeft}>
-
                 <Image
                   src="/digilocker.webp"
                   alt="Digilocker"
                   width={90}
                   height={102}
                 />
-
               </div>
 
               <div className={styles.hregDigiLockerRight}>
-
-                <p>1. Login With Otp</p>
-
+                <p>1. Login With OTP</p>
                 <p>2. Verify and Start</p>
-
-                <button>
-                  Verify
+                
+                <button 
+                  onClick={handleVerifyClick}
+                  disabled={verificationStatus === "success" || verificationStatus === "verifying"}
+                >
+                  {verificationStatus === "verifying" ? "Redirecting..." : "Verify"}
                 </button>
-
               </div>
-
             </div>
 
-            <p className={styles.hregKycText}>
-              Congratulations! Your KYC verification is complete.
-            </p>
+            {verificationStatus === "success" && (
+              <p className={styles.hregKycText}>
+                ✓ Congratulations! Your KYC verification is complete.
+              </p>
+            )}
 
+            {verificationStatus === "failed" && (
+              <div className={styles.hregKycFailed}>
+                <p style={{ color: "#d9534f", fontWeight: "bold" }}>Verification Failed</p>
+                <p>{errorMessage}</p>
+              </div>
+            )}
 
-            <button
+            {verificationStatus === "verifying" && (
+              <p style={{ textAlign: "center", color: "#6c4cff", fontWeight: "500", marginTop: "14px" }}>
+                Connecting to DigiLocker secure portal...
+              </p>
+            )}
+
+            {verificationStatus === "success" ? (
+              <button
                 className={styles.hregVerifyBtn}
-                onClick={() =>
-                    router.push("/host-registration-form/confirmation")
-                }
-                >
+                onClick={() => router.push("/host-registration-form/confirmation")}
+              >
                 PROCEED
-            </button>
+              </button>
+            ) : (
+              <button
+                className={styles.hregVerifyBtn}
+                style={{ opacity: 0.5, cursor: "not-allowed" }}
+                disabled
+              >
+                PROCEED
+              </button>
+            )}
 
-
-
-            {/*  WE USER FAILED IN UI IT SHOULD COME WITH THESE TWO BUTTONS*/}
-
-
-            {/*<div className={styles.hregFailedButtons}>
-
-                <button
-                    onClick={() => setVerificationStatus("pending")}
-                >
-                    TRY AGAIN
+            {verificationStatus === "failed" && (
+              <div className={styles.hregFailedButtons}>
+                <button onClick={() => setVerificationStatus("pending")}>
+                  TRY AGAIN
                 </button>
-
-                <button
-                    onClick={() => router.push("/contact-us")}
-                >
-                    CONTACT US
+                <button onClick={() => router.push("/contact-us")}>
+                  CONTACT US
                 </button>
-
-            </div>*/}
-
-
+              </div>
+            )}
           </div>
-
         </div>
-
       </section>
-
     </div>
-
   );
+}
 
+export default function VerifyProfile() {
+  return (
+    <Suspense fallback={<div style={{ padding: "40px", textAlign: "center" }}>Loading verification screen...</div>}>
+      <VerifyProfileContent />
+    </Suspense>
+  );
 }

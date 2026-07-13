@@ -1,19 +1,26 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import styles from "../HostRegistration.module.css";
 
 export default function RegistrationSuccess() {
-
   const router = useRouter();
+  const [hostName, setHostName] = useState("Host");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const name = sessionStorage.getItem("registered_host_name");
+      if (name) {
+        setHostName(name);
+      }
+    }
+  }, []);
 
   return (
-
     <section className={styles.hregSuccessSection}>
-
       <div className={styles.hregSuccessCard}>
-
         <Image
           src="/success-mail.webp"
           alt="Success"
@@ -28,11 +35,10 @@ export default function RegistrationSuccess() {
         </h1>
 
         <h3 className={styles.hregSuccessH3}>
-          Congratulations Harisha! Your host account setup is complete.
+          Congratulations {hostName}! Your host account setup is complete.
         </h3>
 
         <div className={styles.hregSuccessButtons}>
-
           <button
             className={styles.hregExploreBtn}
             onClick={() => router.push("/host-panel")}
@@ -45,7 +51,6 @@ export default function RegistrationSuccess() {
           >
             DOWNLOAD APP
           </button>
-
         </div>
 
         <p className={styles.hregSuccessText}>
@@ -55,11 +60,7 @@ export default function RegistrationSuccess() {
           Download the app and take full control of your
           car hosting experience.
         </p>
-
       </div>
-
     </section>
-
   );
-
 }

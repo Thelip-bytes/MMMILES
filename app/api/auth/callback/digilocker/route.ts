@@ -1,0 +1,214 @@
+import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import { verifyToken } from "@/lib/auth";
+import jwt from "jsonwebtoken";
+
+export const dynamic = "force-dynamic";
+
+// Supabase client using service role key to bypass RLS during callback updates
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_KEY!
+);
+
+export async function GET(request: Request) {
+  let frontendVerifyUrl = "/host-registration-form/verify-profile";
+  
+  try {
+    const requestUrl = new URL(request.url);
+    const code = requestUrl.searchParams.get("code");
+    const state = requestUrl.searchParams.get("state");
+    const errorParam = requestUrl.searchParams.get("error");
+    const errorDescription = requestUrl.searchParams.get("error_description");
+
+    const protocol = requestUrl.protocol;
+    const host = requestUrl.host;
+    frontendVerifyUrl = `${protocol}//${host}/host-registration-form/verify-profile`;
+
+    // 1. Check for authorization errors from DigiLocker
+    if (errorParam || errorDescription) {
+      console.error("DigiLocker authorization error:", errorParam, errorDescription);
+      return NextResponse.redirect(
+        `${frontendVerifyUrl}?status=failed&error=${encodeURIComponent(errorDescription || "Verification declined by user")}`
+      );
+    }
+
+    if (!code || !state) {
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Missing code or state`);
+    }
+
+    // 2. CSRF Validation
+    const cookieHeader = request.headers.get("cookie") || "";
+    const stateMatch = cookieHeader.match(/digilocker_oauth_state=([^;]+)/);
+    const savedState = stateMatch ? stateMatch[1] : null;
+
+    if (!savedState || savedState !== state) {
+      console.error("CSRF state token mismatch or expired");
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Invalid request session`);
+    }
+
+    // 3. User Authentication: Identify the logged-in user
+    const authMatch = cookieHeader.match(/auth_token=([^;]+)/);
+    const authToken = authMatch ? authMatch[1] : null;
+    const decodedUser = authToken ? verifyToken(authToken) : null;
+
+    if (!decodedUser || !decodedUser.sub) {
+      console.error("Unauthorized callback: No active user session token found");
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Session expired. Please log in again.`);
+    }
+
+    const userId = decodedUser.sub;
+    const userPhone = decodedUser.phone_number;
+
+    // 4. Token Exchange Request (Authorization Code -> Access Token)
+    // We target the OIDC token endpoint /oauth2/2/token
+    const tokenUrl = "https://digilocker.meripehchaan.gov.in/public/oauth2/2/token";
+    const clientId = process.env.DIGILOCKER_CLIENT_ID;
+    const clientSecret = process.env.DIGILOCKER_CLIENT_SECRET;
+    const redirectUri = process.env.DIGILOCKER_REDIRECT_URI;
+
+    if (!clientId || !clientSecret || !redirectUri) {
+      console.error("DigiLocker config variables missing on server");
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=DigiLocker auth misconfigured`);
+    }
+
+    const tokenParams = new URLSearchParams({
+      code,
+      grant_type: "authorization_code",
+      client_id: clientId,
+      client_secret: clientSecret,
+      redirect_uri: redirectUri,
+    });
+
+    const tokenResponse = await fetch(tokenUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: tokenParams.toString(),
+    });
+
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      console.error("Token exchange failed with response:", errorText);
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Token exchange failed`);
+    }
+
+    const tokenData = await tokenResponse.json();
+    const { access_token, id_token, digilockerid, name: responseName, dob: responseDob, gender: responseGender } = tokenData;
+
+    if (!access_token) {
+      console.error("No access token in token exchange response");
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Empty access token returned`);
+    }
+
+    // 5. Decode the id_token to extract verified OIDC claims (Aadhaar, PAN, DL)
+    let verifiedName = responseName || "Verified Host";
+    let verifiedDob = responseDob || null;
+    let verifiedGender = responseGender || null;
+    let verifiedAadhaarMasked = null;
+    let verifiedPan = null;
+    let verifiedDl = null;
+    let verifiedSsoId = digilockerid || null;
+    let rawPayload: any = { tokenData };
+
+    if (id_token) {
+      try {
+        const decodedIdToken: any = jwt.decode(id_token);
+        if (decodedIdToken) {
+          rawPayload = { ...rawPayload, idTokenClaims: decodedIdToken };
+          
+          // Map standard OpenID claims
+          verifiedName = decodedIdToken.name || decodedIdToken.given_name || verifiedName;
+          verifiedDob = decodedIdToken.birthdate || decodedIdToken.dob || verifiedDob;
+          verifiedGender = decodedIdToken.gender || verifiedGender;
+          verifiedAadhaarMasked = decodedIdToken.masked_aadhaar || decodedIdToken.eaadhaar || null;
+          verifiedPan = decodedIdToken.pan_number || decodedIdToken.pan || null;
+          verifiedDl = decodedIdToken.driving_licence || decodedIdToken.driving_license || null;
+          verifiedSsoId = decodedIdToken.user_sso_id || decodedIdToken.sub || verifiedSsoId;
+        }
+      } catch (jwtErr) {
+        console.error("Error decoding id_token JWT:", jwtErr);
+      }
+    }
+
+    // 6. Fallback: Fetch user details via /oauth2/1/user endpoint if basic data is missing
+    if (!verifiedName || !verifiedDob) {
+      try {
+        const userProfileUrl = "https://digilocker.meripehchaan.gov.in/public/oauth2/1/user";
+        const profileResponse = await fetch(userProfileUrl, {
+          headers: { Authorization: `Bearer ${access_token}` },
+        });
+        if (profileResponse.ok) {
+          const profile = await profileResponse.json();
+          rawPayload = { ...rawPayload, userProfile: profile };
+          verifiedName = profile.name || verifiedName;
+          verifiedDob = profile.dob || verifiedDob;
+          verifiedGender = profile.gender || verifiedGender;
+          verifiedAadhaarMasked = profile.eaadhaar || verifiedAadhaarMasked;
+          verifiedSsoId = profile.digilockerid || verifiedSsoId;
+        }
+      } catch (profileErr: any) {
+        console.error("Profile fallback fetch error:", profileErr.message);
+      }
+    }
+
+    // 7. Persist KYC Verification in Supabase DB
+    const { error: dbError } = await supabase
+      .from("host_kyc_verifications")
+      .upsert({
+        phone: userPhone,
+        aadhaar_name: verifiedName,
+        masked_aadhaar: verifiedAadhaarMasked || "VERIFIED_AADHAAR",
+        pan_number: verifiedPan || "VERIFIED_PAN",
+        driving_licence: verifiedDl || "VERIFIED_DL",
+        dob: verifiedDob,
+        gender: verifiedGender,
+        digilocker_id: verifiedSsoId,
+        raw_payload: rawPayload
+      }, { onConflict: "phone" });
+
+    if (dbError) {
+      console.error("Failed to save KYC status to database:", dbError);
+      return NextResponse.redirect(`${frontendVerifyUrl}?status=failed&error=Database persistence error`);
+    }
+
+    // 8. Update User Verification status to true
+    const { error: userUpdateError } = await supabase
+      .from("users")
+      .update({ verified: true })
+      .eq("id", userId);
+
+    if (userUpdateError) {
+      console.error("Failed to update verified flag on users table:", userUpdateError);
+    }
+
+    // 9. Update Host Verification status if host profile exists
+    if (userPhone) {
+      const { error: hostUpdateError } = await supabase
+        .from("hosts")
+        .update({
+          verified: true,
+          full_name: verifiedName,
+        })
+        .eq("phone", userPhone);
+
+      if (hostUpdateError) {
+        console.error("Failed to update verified flag on hosts table:", hostUpdateError);
+      }
+    }
+
+    // Redirect the browser back to verify-profile page with status=success
+    const response = NextResponse.redirect(`${frontendVerifyUrl}?status=success`);
+    
+    // Clear temporary CSRF state cookie
+    response.cookies.delete("digilocker_oauth_state");
+    return response;
+
+  } catch (error: any) {
+    console.error("DigiLocker callback endpoint exception:", error);
+    return NextResponse.redirect(
+      `${frontendVerifyUrl}?status=failed&error=${encodeURIComponent(error.message || "Unknown callback error")}`
+    );
+  }
+}

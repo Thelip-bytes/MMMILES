@@ -94,7 +94,9 @@ export async function POST(req: Request) {
       .single();
 
     // 3️⃣ Create user if not exists
+    let isFirstTimeLogin = false;
     if (!user) {
+      isFirstTimeLogin = true;
       const { data: newUser, error: createErr } = await supabase
         .from("users")
         .insert([{ phone }])
@@ -151,6 +153,42 @@ export async function POST(req: Request) {
       sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60, // 7 days
     });
+
+    // 6️⃣ Send Marketing Welcome Message for First-Time Users (Non-blocking)
+    if (isFirstTimeLogin) {
+      try {
+        const markApiKey = process.env.MARKGUPSHUP_API_KEY;
+        const markSource = process.env.MARKGUPSHUP_SOURCE;
+        const markAppName = process.env.MARKGUPSHUP_APP_NAME;
+        const markTemplateId = process.env.MARKGUPSHUP_TEMPLATE_ID;
+        
+        if (markApiKey && markSource && markTemplateId) {
+          const formData = new URLSearchParams();
+          formData.append('channel', 'whatsapp');
+          formData.append('source', markSource);
+          formData.append('destination', phone);
+          formData.append('src.name', markAppName || 'MMMilesMarketing');
+          formData.append('template', JSON.stringify({
+            id: markTemplateId,
+            params: []
+          }));
+          
+          fetch('https://api.gupshup.io/wa/api/v1/template/msg', {
+            method: 'POST',
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'apikey': markApiKey,
+            },
+            body: formData.toString()
+          }).then(async res => {
+            if (!res.ok) console.error("Gupshup Marketing failed:", await res.text());
+          }).catch(err => console.error("Gupshup Marketing exception:", err));
+        }
+      } catch (markErr) {
+        console.error("Marketing message setup error:", markErr);
+      }
+    }
 
     return response;
   } catch (err) {

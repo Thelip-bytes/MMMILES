@@ -14,13 +14,21 @@ export default function HostRegistrationForm() {
   const [error, setError] = useState("");
 
   // Load existing data from localStorage upon component mount
+  // and ensure user is authenticated
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        // Redirect to login if user is not authenticated
+        router.push("/login?redirect=/host-registration-form");
+        return;
+      }
+      
       setFullName(localStorage.getItem("hreg_full_name") || "");
       setEmail(localStorage.getItem("hreg_email") || "");
       setAddress(localStorage.getItem("hreg_address") || "");
     }
-  }, []);
+  }, [router]);
 
   const handleNext = () => {
     if (!fullName.trim() || !email.trim() || !address.trim()) {

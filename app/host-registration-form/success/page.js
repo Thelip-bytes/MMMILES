@@ -41,9 +41,9 @@ export default function RegistrationSuccess() {
         <div className={styles.hregSuccessButtons}>
           <button
             className={styles.hregExploreBtn}
-            onClick={() => router.push("/host-panel")}
+            onClick={() => router.push("https://host-dashboard.mmmiles.com")}
           >
-            EXPLORE IN WEB
+            HOST PANEL
           </button>
 
           <button

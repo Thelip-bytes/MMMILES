@@ -93,10 +93,8 @@ export async function POST(req: Request) {
       .eq("phone", phone)
       .single();
 
-    // 3️⃣ Create user if not exists
-    let isFirstTimeLogin = false;
+    // 3️⃣ Create user if not exists (edge case: send-otp already upserts, but guard anyway)
     if (!user) {
-      isFirstTimeLogin = true;
       const { data: newUser, error: createErr } = await supabase
         .from("users")
         .insert([{ phone }])
@@ -113,6 +111,12 @@ export async function POST(req: Request) {
 
       user = newUser;
     }
+
+    // Detect first-time login: send-otp upserts the user row BEFORE OTP verification,
+    // so checking "if (!user)" is unreliable. Instead, check last_login — it's only set
+    // here in verify-otp AFTER successful verification. A NULL last_login means the user
+    // has never completed a login before.
+    const isFirstTimeLogin = user.last_login === null || user.last_login === undefined;
 
     // 4️⃣ Update user row
     await supabase

@@ -95,7 +95,7 @@ export default function Footer() {
                   Explore Places
                 </a>
                 <Link href="/host-registration">Become a Host</Link>
-                <Link href="/top-cars">Top Rented Cars</Link>
+                
               </div>
             </div>
           </div>
